@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -107,13 +104,16 @@ public abstract class GUI implements Listener {
         if (!(event.getPlayer() instanceof Player player)) return;
         GUIView view = this.getView(event.getInventory());
         if (view != null) {
-            this.views.remove(view);
-            this.onClose(player);
-            if (this.views.size() == 0) {
-                HandlerList.unregisterAll(this);
-            }
+            removePlayer(view);
         }
     }
 
+    private void removePlayer(GUIView view) {
+        this.views.remove(view);
+        this.onClose(view.getPlayer());
+        if (this.views.size() == 0) {
+            HandlerList.unregisterAll(this);
+        }
+    }
 
 }

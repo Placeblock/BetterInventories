@@ -78,7 +78,7 @@ public class SimpleGUIPane extends GUIPane {
         this.getGui().update();
     }
 
-    public int getNextEmptySlot() {
+    private int getNextEmptySlot() {
         List<Boolean> hascontentlist = this.getEmptyContentArray(Boolean.class);
         for (Vector2d pos : this.content.keySet()) {
             GUISection child = this.content.get(pos);
