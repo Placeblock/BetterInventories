@@ -5,6 +5,7 @@ import de.placeblock.betterinventories.content.pane.impl.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane
         return this;
     }
 
-    public PaginatorGUIPaneBuilder items(List<GUIItem> items) {
+    public PaginatorGUIPaneBuilder items(Collection<GUIItem> items) {
         this.items.addAll(items);
         return this;
     }

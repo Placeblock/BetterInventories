@@ -41,14 +41,15 @@ public abstract class GUI implements Listener {
         }
     }
 
-    public void showPlayer(Player player) {
+    @SuppressWarnings("UnusedReturnValue")
+    public GUIView showPlayer(Player player) {
         if (this.views.size() == 0) {
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
         GUIView view = new GUIView(player, this.createBukkitInventory());
         view.update(this.content);
         this.views.add(view);
-
+        return view;
     }
 
     private Inventory createBukkitInventory() {
@@ -89,11 +90,20 @@ public abstract class GUI implements Listener {
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
             if (clicked instanceof GUIButton button) {
-                button.onClick(player);
-                if (leftClick) {
-                    button.onLeftClick(player);
+                if (event.isShiftClick()) {
+                    button.onShiftClick(player);
+                    if (leftClick) {
+                        button.onShiftLeftClick(player);
+                    } else {
+                        button.onShiftRightClick(player);
+                    }
                 } else {
-                    button.onRightClick(player);
+                    button.onClick(player);
+                    if (leftClick) {
+                        button.onLeftClick(player);
+                    } else {
+                        button.onRightClick(player);
+                    }
                 }
             }
         }
