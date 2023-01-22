@@ -59,13 +59,13 @@ public class PaginatorGUIPane extends GUIPane {
 
         this.nextButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
             @Override
-            public void onClick(Player player, boolean shift) {
+            public void onClick(Player player) {
                 PaginatorGUIPane.this.nextPage();
             }
         };
         this.prevButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT)) {
             @Override
-            public void onClick(Player player, boolean shift) {
+            public void onClick(Player player) {
                 PaginatorGUIPane.this.previousPage();
             }
         };
@@ -80,6 +80,7 @@ public class PaginatorGUIPane extends GUIPane {
     private void update() {
         this.updateContent();
         this.updateArrows();
+        this.getGui().update();
     }
 
     private void updateArrows() {
@@ -113,7 +114,6 @@ public class PaginatorGUIPane extends GUIPane {
 
     @Override
     public GUISection getSectionAt(Vector2d position) {
-        System.out.println("GETTING SECTION AT ("+this+") " + position);
         if (position.getY() < this.getHeight()-1) {
             return this.contentPane.getSectionAt(position);
         } else {
@@ -132,6 +132,5 @@ public class PaginatorGUIPane extends GUIPane {
     public void setPage(int index) {
         this.currentPage = index;
         this.update();
-        this.getGui().update();
     }
 }

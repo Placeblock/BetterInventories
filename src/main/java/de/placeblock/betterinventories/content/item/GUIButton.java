@@ -14,8 +14,8 @@ public abstract class GUIButton extends GUIItem {
         super(gui, item);
     }
 
-    public void onLeftClick(Player player, boolean shift) {}
-    public void onRightClick(Player player, boolean shift) {}
-    public abstract void onClick(Player player, boolean shift);
+    public void onLeftClick(Player player) {}
+    public void onRightClick(Player player) {}
+    public abstract void onClick(Player player);
 
 }

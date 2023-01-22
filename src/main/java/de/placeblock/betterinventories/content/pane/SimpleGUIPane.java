@@ -10,11 +10,17 @@ import java.util.*;
 /**
  * Author: Placeblock
  */
+@SuppressWarnings("unused")
 public class SimpleGUIPane extends GUIPane {
-    private final Map<Vector2d, GUISection> content = new HashMap<>();
+    private final Map<Vector2d, GUISection> content;
 
     public SimpleGUIPane(GUI gui, int width, int height) {
+        this(gui, width, height, new HashMap<>());
+    }
+
+    public SimpleGUIPane(GUI gui, int width, int height, Map<Vector2d, GUISection> content) {
         super(gui, width, height);
+        this.content = content;
     }
 
     @Override
@@ -28,7 +34,6 @@ public class SimpleGUIPane extends GUIPane {
     }
 
     public GUISection getSectionAt(Vector2d position) {
-        System.out.println("GETTING SECTION AT ("+this+") " + position);
         for (Vector2d pos : this.content.keySet()) {
             GUISection section = this.content.get(pos);
             if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
@@ -49,18 +54,28 @@ public class SimpleGUIPane extends GUIPane {
 
     public void setSectionAt(Vector2d position, GUISection section) {
         this.content.put(position, section);
+        this.getGui().update();
     }
 
+
     public void addSection(GUISection section) {
+        this.addSection(section, true);
+    }
+
+    public void addSection(GUISection section, boolean update) {
         int nextEmptySlot = this.getNextEmptySlot();
         if (nextEmptySlot == -1) return;
         this.content.put(this.slotToVector(nextEmptySlot), section);
+        if (update) {
+            this.getGui().update();
+        }
     }
 
     public void fill(GUISection section) {
         while (this.getNextEmptySlot() != -1) {
-            this.addSection(section);
+            this.addSection(section, false);
         }
+        this.getGui().update();
     }
 
     public int getNextEmptySlot() {

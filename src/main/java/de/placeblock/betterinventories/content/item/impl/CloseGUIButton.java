@@ -21,7 +21,7 @@ public class CloseGUIButton extends GUIButton {
     }
 
     @Override
-    public void onClick(Player player, boolean shift) {
+    public void onClick(Player player) {
         player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
     }
 }

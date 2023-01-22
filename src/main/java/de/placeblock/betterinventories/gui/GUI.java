@@ -92,11 +92,11 @@ public abstract class GUI implements Listener {
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
             if (clicked instanceof GUIButton button) {
-                button.onClick(player, player.isSneaking());
+                button.onClick(player);
                 if (leftClick) {
-                    button.onLeftClick(player, player.isSneaking());
+                    button.onLeftClick(player);
                 } else {
-                    button.onRightClick(player, player.isSneaking());
+                    button.onRightClick(player);
                 }
             }
         }
