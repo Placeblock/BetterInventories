@@ -33,6 +33,7 @@ public class PaginatorGUIPane extends GUIPane {
     private final SimpleGUIPane contentPane;
     private final GUIButton nextButton;
     private final GUIButton prevButton;
+    private boolean showControls;
 
     public PaginatorGUIPane(GUI gui, int width, int height) {
         this(gui, width, height, true);
@@ -54,33 +55,43 @@ public class PaginatorGUIPane extends GUIPane {
         this.repeat = repeat;
         this.controlsPane = new SimpleGUIPane(gui, width, 1);
         this.controlsPane.fill(FILL_ITEM);
-        this.contentPane = new SimpleGUIPane(gui, width, height-1);
+        this.contentPane = new SimpleGUIPane(gui, width, 1);
         this.items = items;
 
         this.nextButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
             @Override
             public void onClick(Player player) {
                 PaginatorGUIPane.this.nextPage();
+                PaginatorGUIPane.this.update();
+                PaginatorGUIPane.this.getGui().update();
             }
         };
         this.prevButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT)) {
             @Override
             public void onClick(Player player) {
                 PaginatorGUIPane.this.previousPage();
+                PaginatorGUIPane.this.update();
+                PaginatorGUIPane.this.getGui().update();
             }
         };
         this.setPage(currentPage);
     }
 
-    public void addItem(GUIItem pane) {
-        this.items.add(pane);
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        this.update();
+    }
+
+    public void addItem(GUIItem item) {
+        this.items.add(item);
         this.update();
     }
 
     private void update() {
+        this.showControls = this.items.size() > this.getSlots();
         this.updateContent();
         this.updateArrows();
-        this.getGui().update();
     }
 
     private void updateArrows() {
@@ -92,6 +103,7 @@ public class PaginatorGUIPane extends GUIPane {
 
     private void updateContent() {
         this.contentPane.clear();
+        this.contentPane.setHeight(this.showControls ? this.getHeight() - 1 : this.getHeight());
         int startIndex = this.contentPane.getSlots()*this.currentPage;
         for (int i = 0; i < this.contentPane.getSlots() && i < (this.items.size() - startIndex); i++) {
             this.contentPane.setSectionAt(i, this.items.get(i+startIndex));
@@ -105,8 +117,8 @@ public class PaginatorGUIPane extends GUIPane {
     @Override
     public List<ItemStack> render() {
         List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
-        if (this.currentPage < this.getPages()) {
-            content = this.renderOnList(new Vector2d(), this.contentPane, content);
+        content = this.renderOnList(new Vector2d(), this.contentPane, content);
+        if (this.showControls) {
             content = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.controlsPane, content);
         }
         return content;
@@ -114,10 +126,10 @@ public class PaginatorGUIPane extends GUIPane {
 
     @Override
     public GUISection getSectionAt(Vector2d position) {
-        if (position.getY() < this.getHeight()-1) {
-            return this.contentPane.getSectionAt(position);
-        } else {
+        if (position.getY() >= this.getHeight()-1 && this.showControls) {
             return this.controlsPane.getSectionAt(position.subtract(new Vector2d(0, this.getHeight()-1)));
+        } else {
+            return this.contentPane.getSectionAt(position);
         }
     }
 
@@ -131,6 +143,5 @@ public class PaginatorGUIPane extends GUIPane {
 
     public void setPage(int index) {
         this.currentPage = index;
-        this.update();
     }
 }

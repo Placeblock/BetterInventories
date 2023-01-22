@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIButton;
+import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Author: Placeblock
  */
+@Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
 
@@ -41,11 +43,16 @@ public abstract class GUI implements Listener {
         }
     }
 
+    public List<Player> getPlayers() {
+        return this.views.stream().map(GUIView::getPlayer).toList();
+    }
+
     @SuppressWarnings("UnusedReturnValue")
     public GUIView showPlayer(Player player) {
         if (this.views.size() == 0) {
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
+        if (this.getPlayers().contains(player)) return null;
         GUIView view = new GUIView(player, this.createBukkitInventory());
         view.update(this.content);
         this.views.add(view);
@@ -67,6 +74,17 @@ public abstract class GUI implements Listener {
             }
         }
         return null;
+    }
+
+    public void reloadViews() {
+        List<Player> players = this.getPlayers();
+        List<GUIView> views = new ArrayList<>(this.getViews());
+        for (GUIView view : views) {
+            this.removePlayer(view);
+        }
+        for (Player player : players) {
+            this.showPlayer(player);
+        }
     }
 
     public abstract int getSize();
@@ -118,7 +136,7 @@ public abstract class GUI implements Listener {
         }
     }
 
-    private void removePlayer(GUIView view) {
+    public void removePlayer(GUIView view) {
         this.views.remove(view);
         this.onClose(view.getPlayer());
         if (this.views.size() == 0) {

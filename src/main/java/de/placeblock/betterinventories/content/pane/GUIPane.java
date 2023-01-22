@@ -15,6 +15,10 @@ public abstract class GUIPane extends GUISection {
         super(gui, width, height);
     }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
         List<ItemStack> childContent = section.render();
         for (int i = 0; i < childContent.size(); i++) {

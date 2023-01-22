@@ -54,28 +54,18 @@ public class SimpleGUIPane extends GUIPane {
 
     public void setSectionAt(Vector2d position, GUISection section) {
         this.content.put(position, section);
-        this.getGui().update();
     }
-
 
     public void addSection(GUISection section) {
-        this.addSection(section, true);
-    }
-
-    public void addSection(GUISection section, boolean update) {
         int nextEmptySlot = this.getNextEmptySlot();
         if (nextEmptySlot == -1) return;
         this.content.put(this.slotToVector(nextEmptySlot), section);
-        if (update) {
-            this.getGui().update();
-        }
     }
 
     public void fill(GUISection section) {
         while (this.getNextEmptySlot() != -1) {
-            this.addSection(section, false);
+            this.addSection(section);
         }
-        this.getGui().update();
     }
 
     private int getNextEmptySlot() {

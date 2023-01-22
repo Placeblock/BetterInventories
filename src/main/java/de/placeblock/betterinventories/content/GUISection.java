@@ -19,8 +19,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUISection {
     private final GUI gui;
-    private int width;
-    private int height;
+    protected int width;
+    protected int height;
 
     public abstract List<ItemStack> render();
 
