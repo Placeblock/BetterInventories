@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "de.placeblock"
-version = "1.0.0b"
+version = "1.0.0c"
 
 repositories {
     maven {

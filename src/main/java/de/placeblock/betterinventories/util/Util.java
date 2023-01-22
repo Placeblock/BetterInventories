@@ -5,6 +5,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import de.placeblock.betterinventories.content.item.ItemBuilder;
 import io.schark.design.texts.Texts;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -15,10 +16,13 @@ import java.util.UUID;
  * Author: Placeblock
  */
 public class Util {
+    public static ItemStack getArrowItem(ArrowDirection direction, TextComponent title) {
+        ItemStack item = new ItemBuilder(title, Material.PLAYER_HEAD).build();
+        return Util.setHeadTexture(item, direction.getTexture());
+    }
 
     public static ItemStack getArrowItem(ArrowDirection direction) {
-        ItemStack item = new ItemBuilder(Texts.primary(direction.getName()), Material.PLAYER_HEAD).build();
-        return Util.setHeadTexture(item, direction.getTexture());
+        return Util.getArrowItem(direction, Texts.primary(direction.getName()));
     }
 
     public static ItemStack setHeadTexture(ItemStack item, String texture) {
