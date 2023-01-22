@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Author: Placeblock
  */
+@SuppressWarnings("unused")
 public abstract class GUIPane extends GUISection {
     public GUIPane(GUI gui, int width, int height) {
         super(gui, width, height);
@@ -17,6 +18,10 @@ public abstract class GUIPane extends GUISection {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {

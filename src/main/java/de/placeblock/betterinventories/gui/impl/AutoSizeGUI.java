@@ -17,7 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class AutoSizeGUI extends GUI {
-    private final PaginatorGUIPane paginator;
+    protected final PaginatorGUIPane paginator;
     private int lastUpdateRows = 1;
     private final int maxHeight;
 
