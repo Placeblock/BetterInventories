@@ -19,8 +19,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUISection {
     private final GUI gui;
-    protected int width;
-    protected int height;
+    protected Vector2d size;
 
     public abstract List<ItemStack> render();
 
@@ -28,14 +27,10 @@ public abstract class GUISection {
         return this.getSectionAt(this.slotToVector(index));
     }
 
-    public GUISection getSectionAt(int x, int y) {
-        return this.getSectionAt(new Vector2d(x, y));
-    }
-
     public abstract GUISection getSectionAt(Vector2d position);
 
     public Vector2d slotToVector(int index) {
-        return Util.slotToPosition(index, this.width);
+        return Util.slotToPosition(index, this.size.getX());
     }
 
     public <T> List<T> getEmptyContentArray(Class<T> clazz) {
@@ -43,14 +38,26 @@ public abstract class GUISection {
     }
 
     public int vectorToSlot(Vector2d position) {
-        return position.getY()*this.width+position.getX();
+        return position.getY()*this.size.getX()+position.getX();
     }
 
     public int getSlots() {
-        return this.width*this.height;
+        return this.size.getX()*this.size.getY();
     }
 
-    public Vector2d getSize() {
-        return new Vector2d(this.width, this.height);
+    public int getHeight() {
+        return this.size.getY();
+    }
+
+    public int getWidth() {
+        return this.size.getX();
+    }
+
+    public void setHeight(int height) {
+        this.size = new Vector2d(this.size.getX(), height);
+    }
+
+    public void setWidth(int width) {
+        this.size = new Vector2d(width, this.size.getY());
     }
 }

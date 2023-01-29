@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Getter
 public class SingleCanvasGUI extends GUI {
-    private final SimpleGUIPane canvas;
+    protected final SimpleGUIPane canvas;
 
     public SingleCanvasGUI(Plugin plugin, TextComponent title, int height) {
         this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
@@ -30,7 +30,8 @@ public class SingleCanvasGUI extends GUI {
 
     private SingleCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
         super(plugin, title, type);
-        this.canvas = new SimpleGUIPane(this, size.getX(), size.getY());
+        System.out.println(size);
+        this.canvas = new SimpleGUIPane(this, size);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SingleCanvasGUI extends GUI {
     }
 
     @Override
-    public List<ItemStack> render() {
+    public List<ItemStack> renderContent() {
         return this.canvas.render();
     }
 

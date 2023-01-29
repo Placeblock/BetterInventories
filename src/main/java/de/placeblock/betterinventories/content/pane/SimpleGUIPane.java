@@ -12,19 +12,19 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 public class SimpleGUIPane extends GUIPane {
-    private final Map<Vector2d, GUISection> content;
+    private final Map<Vector2d, GUISection> content = new HashMap<>();
 
-    public SimpleGUIPane(GUI gui, int width, int height) {
-        this(gui, width, height, new HashMap<>());
+    public SimpleGUIPane(GUI gui, Vector2d size) {
+        this(gui, size, size, size, false);
     }
 
-    public SimpleGUIPane(GUI gui, int width, int height, Map<Vector2d, GUISection> content) {
-        super(gui, width, height);
-        this.content = content;
+    public SimpleGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize) {
+        super(gui, size, maxSize, minSize, autoSize);
     }
 
     @Override
     public List<ItemStack> render() {
+        this.checkUpdateSize();
         List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
         for (Vector2d vector2d : this.content.keySet()) {
             GUISection guiSection = this.content.get(vector2d);
@@ -81,5 +81,21 @@ public class SimpleGUIPane extends GUIPane {
             if (hascontentlist.get(i) == null) return i;
         }
         return -1;
+    }
+
+    @Override
+    protected void updateSize() {
+        for (GUISection section : this.content.values()) {
+            if (section instanceof GUIPane pane) pane.checkUpdateSize();
+        }
+        int newHeight = 0;
+        int newWidth = 0;
+        for (Vector2d pos : this.content.keySet()) {
+            GUISection section = this.content.get(pos);
+            newHeight = Math.max(newHeight, pos.getY()+ section.getHeight());
+            newWidth = Math.max(newWidth, pos.getX()+ section.getWidth());
+        }
+        this.setHeight(newHeight);
+        this.setWidth(newWidth);
     }
 }

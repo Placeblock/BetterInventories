@@ -27,7 +27,7 @@ import java.util.List;
 public class PaginatorGUIPane extends GUIPane {
     public static final GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
     private int currentPage;
-    private final List<GUIItem> items;
+    private final List<GUIItem> items = new ArrayList<>();
     private final boolean repeat;
     private final SimpleGUIPane controlsPane;
     private final SimpleGUIPane contentPane;
@@ -35,34 +35,26 @@ public class PaginatorGUIPane extends GUIPane {
     private final GUIButton prevButton;
     private boolean showControls;
 
-    public PaginatorGUIPane(GUI gui, int width, int height) {
-        this(gui, width, height, true);
+    public PaginatorGUIPane(GUI gui, Vector2d size, boolean repeat) {
+        this(gui, size, size, size, false, repeat, 0);
     }
 
-    public PaginatorGUIPane(GUI gui, int width, int height, boolean repeat) {
-        this(gui, width, height, repeat, new ArrayList<>());
-    }
-
-    public PaginatorGUIPane(GUI gui, int width, int height, boolean repeat, List<GUIItem> pages) {
-        this(gui, width, height, repeat, 0, pages);
-    }
-
-    public PaginatorGUIPane(GUI gui, int width, int height, boolean repeat, int currentPage, List<GUIItem> items) {
-        super(gui, width, height);
-        if (width < 2) {
+    public PaginatorGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage) {
+        super(gui, size, maxSize, minSize, autoSize);
+        if (this.getWidth() < 2) {
             throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum width of 2");
         }
         this.repeat = repeat;
-        this.controlsPane = new SimpleGUIPane(gui, width, 1);
+        Vector2d controlsSize = new Vector2d(this.getWidth(), 1);
+        this.controlsPane = new SimpleGUIPane(gui, controlsSize, controlsSize, controlsSize, false);
         this.controlsPane.fill(FILL_ITEM);
-        this.contentPane = new SimpleGUIPane(gui, width, 1);
-        this.items = items;
+        Vector2d contentSize = new Vector2d(this.getWidth(), 1);
+        this.contentPane = new SimpleGUIPane(gui, contentSize, new Vector2d(this.getWidth(), this.getMaxSize().getY()), contentSize, true);
 
         this.nextButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
             @Override
             public void onClick(Player player) {
                 PaginatorGUIPane.this.nextPage();
-                PaginatorGUIPane.this.update();
                 PaginatorGUIPane.this.getGui().update();
             }
         };
@@ -70,28 +62,14 @@ public class PaginatorGUIPane extends GUIPane {
             @Override
             public void onClick(Player player) {
                 PaginatorGUIPane.this.previousPage();
-                PaginatorGUIPane.this.update();
                 PaginatorGUIPane.this.getGui().update();
             }
         };
         this.setPage(currentPage);
     }
 
-    @Override
-    public void setHeight(int height) {
-        super.setHeight(height);
-        this.update();
-    }
-
     public void addItem(GUIItem item) {
         this.items.add(item);
-        this.update();
-    }
-
-    private void update() {
-        this.showControls = this.items.size() > this.getSlots();
-        this.updateContent();
-        this.updateArrows();
     }
 
     private void updateArrows() {
@@ -116,12 +94,16 @@ public class PaginatorGUIPane extends GUIPane {
 
     @Override
     public List<ItemStack> render() {
-        List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
-        content = this.renderOnList(new Vector2d(), this.contentPane, content);
+        this.checkUpdateSize();
+        this.showControls = this.items.size() > this.getSlots();
+        this.updateContent();
+        this.updateArrows();
+        List<ItemStack> rendered = this.getEmptyContentArray(ItemStack.class);
+        rendered = this.renderOnList(new Vector2d(), this.contentPane, rendered);
         if (this.showControls) {
-            content = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.controlsPane, content);
+            rendered = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.controlsPane, rendered);
         }
-        return content;
+        return rendered;
     }
 
     @Override
@@ -143,5 +125,14 @@ public class PaginatorGUIPane extends GUIPane {
 
     public void setPage(int index) {
         this.currentPage = index;
+    }
+
+
+    @Override
+    protected void updateSize() {
+        int newWidth = Math.min(this.getMaxSize().getX(), this.items.size());
+        int newHeight = (int) Math.ceil(this.items.size()*1F/newWidth);
+        this.setWidth(newWidth);
+        this.setHeight(newHeight);
     }
 }

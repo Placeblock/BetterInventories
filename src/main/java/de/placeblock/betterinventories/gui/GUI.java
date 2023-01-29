@@ -37,7 +37,15 @@ public abstract class GUI implements Listener {
     }
 
     public void update() {
-        this.content = this.render();
+        this.render();
+        this.updateViews();
+    }
+
+    protected void render() {
+        this.content = this.renderContent();
+    }
+
+    protected void updateViews() {
         for (GUIView view : this.views) {
             view.update(this.content);
         }
@@ -88,7 +96,7 @@ public abstract class GUI implements Listener {
     }
 
     public abstract int getSize();
-    public abstract List<ItemStack> render();
+    public abstract List<ItemStack> renderContent();
     public abstract GUISection getClickedSection(int slot);
 
     public void onClose(Player player) {}
