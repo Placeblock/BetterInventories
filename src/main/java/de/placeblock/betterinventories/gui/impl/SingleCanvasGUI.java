@@ -2,10 +2,8 @@ package de.placeblock.betterinventories.gui.impl;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
-import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.InventoryTypeMapper;
 import de.placeblock.betterinventories.util.Vector2d;
-import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -16,22 +14,13 @@ import java.util.List;
 /**
  * Author: Placeblock
  */
-@Getter
-public class SingleCanvasGUI extends GUI {
-    protected final SimpleGUIPane canvas;
-
+public class SingleCanvasGUI extends CanvasGUI<SimpleGUIPane> {
     public SingleCanvasGUI(Plugin plugin, TextComponent title, int height) {
-        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
+        super(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
     }
 
     public SingleCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        this(plugin, title, type, InventoryTypeMapper.getSize(type));
-    }
-
-    private SingleCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
-        super(plugin, title, type);
-        System.out.println(size);
-        this.canvas = new SimpleGUIPane(this, size);
+        super(plugin, title, type, InventoryTypeMapper.getSize(type));
     }
 
     @Override
@@ -47,5 +36,10 @@ public class SingleCanvasGUI extends GUI {
     @Override
     public GUISection getClickedSection(int slot) {
         return this.canvas.getSectionAt(slot);
+    }
+
+    @Override
+    SimpleGUIPane createCanvas(Vector2d size) {
+        return new SimpleGUIPane(this, size);
     }
 }

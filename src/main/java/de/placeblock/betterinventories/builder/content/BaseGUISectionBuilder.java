@@ -15,7 +15,7 @@ public abstract class BaseGUISectionBuilder<G extends GUISection, B extends Base
     private final GUI gui;
     private Vector2d size;
 
-    public B width(Vector2d size) {
+    public B size(Vector2d size) {
         this.size = size;
         return (B) this;
     }
