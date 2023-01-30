@@ -4,6 +4,7 @@ import de.placeblock.betterinventories.builder.content.SimpleGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ItemBuilder;
+import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
 import de.placeblock.betterinventories.content.item.impl.SwitchGUIButton;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -71,7 +72,7 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
 
     public void setBackInventory(GUI backInventory) {
         if (backInventory != null) {
-            this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1, new SwitchGUIButton(this, backInventory));
+            this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1, new BackGUIButton(this, backInventory));
         }
     }
 
