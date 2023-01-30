@@ -117,18 +117,18 @@ public abstract class GUI implements Listener {
             GUISection clicked = this.getClickedSection(slot);
             if (clicked instanceof GUIButton button) {
                 if (event.isShiftClick()) {
-                    button.onShiftClick(player);
+                    button.onShiftClick(player, slot);
                     if (leftClick) {
-                        button.onShiftLeftClick(player);
+                        button.onShiftLeftClick(player, slot);
                     } else {
-                        button.onShiftRightClick(player);
+                        button.onShiftRightClick(player, slot);
                     }
                 } else {
-                    button.onClick(player);
+                    button.onClick(player, slot);
                     if (leftClick) {
-                        button.onLeftClick(player);
+                        button.onLeftClick(player, slot);
                     } else {
-                        button.onRightClick(player);
+                        button.onRightClick(player, slot);
                     }
                 }
             }

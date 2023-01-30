@@ -16,11 +16,13 @@ import java.util.List;
  */
 public class SingleCanvasGUI extends CanvasGUI<SimpleGUIPane> {
     public SingleCanvasGUI(Plugin plugin, TextComponent title, int height) {
-        super(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
+        super(plugin, title, InventoryType.CHEST);
+        this.setCanvas(new SimpleGUIPane(this, new Vector2d(9, height)));
     }
 
     public SingleCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        super(plugin, title, type, InventoryTypeMapper.getSize(type));
+        super(plugin, title, type);
+        this.setCanvas(new SimpleGUIPane(this, InventoryTypeMapper.getSize(type)));
     }
 
     @Override
@@ -36,10 +38,5 @@ public class SingleCanvasGUI extends CanvasGUI<SimpleGUIPane> {
     @Override
     public GUISection getClickedSection(int slot) {
         return this.canvas.getSectionAt(slot);
-    }
-
-    @Override
-    SimpleGUIPane createCanvas(Vector2d size) {
-        return new SimpleGUIPane(this, size);
     }
 }

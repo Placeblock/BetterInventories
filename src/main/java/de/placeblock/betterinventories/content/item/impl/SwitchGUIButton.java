@@ -20,7 +20,7 @@ public class SwitchGUIButton extends GUIButton {
     }
 
     @Override
-    public void onClick(Player player) {
+    public void onClick(Player player, int slot) {
         this.targetGUI.showPlayer(player);
     }
 }

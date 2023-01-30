@@ -53,14 +53,14 @@ public class PaginatorGUIPane extends GUIPane {
 
         this.nextButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
             @Override
-            public void onClick(Player player) {
+            public void onClick(Player player, int slot) {
                 PaginatorGUIPane.this.nextPage();
                 PaginatorGUIPane.this.getGui().update();
             }
         };
         this.prevButton = new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT)) {
             @Override
-            public void onClick(Player player) {
+            public void onClick(Player player, int slot) {
                 PaginatorGUIPane.this.previousPage();
                 PaginatorGUIPane.this.getGui().update();
             }
