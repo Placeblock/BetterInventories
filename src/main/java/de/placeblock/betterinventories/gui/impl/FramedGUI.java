@@ -8,6 +8,7 @@ import de.placeblock.betterinventories.content.item.impl.SwitchGUIButton;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
+import io.schark.design.items.BukkitItems;
 import io.schark.design.texts.Texts;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
@@ -29,7 +30,7 @@ import java.util.Set;
  */
 @Getter
 public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
-    public static final ItemStack FRAME_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.BLUE_STAINED_GLASS_PANE).build();
+    public static final ItemStack FRAME_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.valueOf(BukkitItems.INVENTORY_PLACEHOLDER_MATERIAL)).build();
     public static final ItemStack EASTER_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.CYAN_STAINED_GLASS_PANE).build();
     protected final SimpleGUIPane frame;
     protected final SimpleGUIPane firstFrameBorder;

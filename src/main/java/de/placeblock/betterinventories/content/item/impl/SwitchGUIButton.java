@@ -15,7 +15,7 @@ public class SwitchGUIButton extends GUIButton {
     private final GUI targetGUI;
 
     public SwitchGUIButton(GUI gui, GUI targetGUI) {
-        super(gui, new ItemBuilder(Texts.negativeItem("Zurück"), Material.RED_STAINED_GLASS_PANE).build());
+        super(gui, new ItemBuilder(Texts.BUTTON_BACK_ITEM, Material.RED_STAINED_GLASS_PANE).build());
         this.targetGUI = targetGUI;
     }
 

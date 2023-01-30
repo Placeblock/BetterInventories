@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "de.placeblock"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     maven {
@@ -21,7 +21,7 @@ repositories {
 dependencies {
     paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 
-    compileOnly("io.schark:ScharkDesign:1.4.2a")
+    compileOnly("io.schark:ScharkDesign:1.5.0")
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
