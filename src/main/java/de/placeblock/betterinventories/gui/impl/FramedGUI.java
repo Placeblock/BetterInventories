@@ -5,7 +5,6 @@ import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ItemBuilder;
 import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
-import de.placeblock.betterinventories.content.item.impl.SwitchGUIButton;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
