@@ -42,9 +42,9 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
     private long lastClick = 0;
     private int clicks = 0;
 
-    public FramedGUI(Plugin plugin, TextComponent title, int height, GUI backInventory, boolean vertial) {
+    public FramedGUI(Plugin plugin, TextComponent title, int height, GUI backInventory, boolean vertical) {
         super(plugin, title, InventoryType.CHEST);
-        this.vertical = vertial;
+        this.vertical = vertical;
         if (!this.vertical && height < 3) {
             throw new IllegalArgumentException("Expected minimum size of 3 but got " + height + " in FramedGUI");
         }
