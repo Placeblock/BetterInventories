@@ -8,7 +8,6 @@ import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
-import io.schark.design.items.BukkitItems;
 import io.schark.design.texts.Texts;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
@@ -30,8 +29,8 @@ import java.util.Set;
  */
 @Getter
 public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
-    public static final ItemStack FRAME_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.valueOf(BukkitItems.INVENTORY_PLACEHOLDER_MATERIAL)).build();
     public static final ItemStack EASTER_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.CYAN_STAINED_GLASS_PANE).build();
+    public static final int MAX_CLICK_DELAY = 400;
     protected final SimpleGUIPane frame;
     protected final SimpleGUIPane firstFrameBorder;
     protected final SimpleGUIPane lastFrameBorder;
@@ -109,7 +108,7 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
             @Override
             public void onClick(Player player, int slot) {
                 long time = System.currentTimeMillis();
-                if (time-FramedGUI.this.lastClick > 200) {
+                if (time-FramedGUI.this.lastClick > MAX_CLICK_DELAY) {
                     FramedGUI.this.clicks = 0;
                 } else {
                     FramedGUI.this.clicks++;
@@ -125,14 +124,14 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
 
     private abstract static class FrameBorderItem extends GUIButton {
         public FrameBorderItem(FramedGUI gui) {
-            super(gui, FRAME_BORDER_ITEM);
+            super(gui, PLACEHOLDER_ITEM);
         }
     }
 
     // FOR EASTER EGG
     private void easterAnimation(int slotStart) {
         this.moveAnimation(this.frame.slotToVector(slotStart), EASTER_BORDER_ITEM);
-        Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> this.moveAnimation(this.frame.slotToVector(slotStart), FRAME_BORDER_ITEM), 4);
+        Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> this.moveAnimation(this.frame.slotToVector(slotStart), PLACEHOLDER_ITEM), 4);
     }
 
     private void moveAnimation(Vector2d start, ItemStack item) {

@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class GUIPane extends GUISection {
     private Vector2d maxSize;
     private Vector2d minSize;
+    private Vector2d previousSize;
     private boolean autoSize;
 
     public GUIPane(GUI gui, Vector2d size) {
@@ -26,6 +27,7 @@ public abstract class GUIPane extends GUISection {
 
     public GUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize) {
         super(gui, size);
+        this.previousSize = size;
         this.maxSize = maxSize;
         this.minSize = minSize;
         this.autoSize = autoSize;
@@ -40,19 +42,21 @@ public abstract class GUIPane extends GUISection {
         return content;
     }
 
-    public void checkUpdateSize() {
-        if (!this.autoSize) return;
-        this.updateSize();
-    }
-    protected void updateSize() {}
+    protected void onUpdateSize() {}
 
     @Override
     public void setHeight(int height) {
+        if (height == this.previousSize.getY()) return;
         super.setHeight(Math.max(Math.min(height, this.maxSize.getY()), this.minSize.getY()));
+        this.onUpdateSize();
+        this.previousSize = new Vector2d(this.previousSize.getX(), height);
     }
 
     @Override
     public void setWidth(int width) {
+        if (width == this.previousSize.getX()) return;
         super.setWidth(Math.max(Math.min(width, this.maxSize.getX()), this.minSize.getX()));
+        this.onUpdateSize();
+        this.previousSize = new Vector2d(width, this.previousSize.getY());
     }
 }

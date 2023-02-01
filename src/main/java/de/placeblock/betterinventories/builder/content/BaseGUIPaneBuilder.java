@@ -33,11 +33,11 @@ public abstract class BaseGUIPaneBuilder<G extends GUIPane, B extends BaseGUIPan
     }
 
     protected Vector2d getMaxSize() {
-        return this.maxSize;
+        return this.maxSize == null ? this.getSize() : this.maxSize;
     }
 
     protected Vector2d getMinSize() {
-        return this.minSize;
+        return this.minSize == null ? this.getSize() : this.minSize;
     }
 
     protected boolean getAutoSize() {

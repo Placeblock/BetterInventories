@@ -24,7 +24,6 @@ public class SimpleGUIPane extends GUIPane {
 
     @Override
     public List<ItemStack> render() {
-        this.checkUpdateSize();
         List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
         for (Vector2d vector2d : this.content.keySet()) {
             GUISection guiSection = this.content.get(vector2d);
@@ -48,18 +47,21 @@ public class SimpleGUIPane extends GUIPane {
         this.content.clear();
     }
 
+    public void addSection(GUISection section) {
+        int nextEmptySlot = this.getNextEmptySlot();
+        if (nextEmptySlot == -1) return;
+        this.setSectionAt(nextEmptySlot, section);
+    }
+
     public void setSectionAt(int index, GUISection section) {
         this.setSectionAt(this.slotToVector(index), section);
     }
 
     public void setSectionAt(Vector2d position, GUISection section) {
         this.content.put(position, section);
-    }
-
-    public void addSection(GUISection section) {
-        int nextEmptySlot = this.getNextEmptySlot();
-        if (nextEmptySlot == -1) return;
-        this.content.put(this.slotToVector(nextEmptySlot), section);
+        if (this.isAutoSize()) {
+            this.updateSize();
+        }
     }
 
     public void fill(GUISection section) {
@@ -83,11 +85,7 @@ public class SimpleGUIPane extends GUIPane {
         return -1;
     }
 
-    @Override
-    protected void updateSize() {
-        for (GUISection section : this.content.values()) {
-            if (section instanceof GUIPane pane) pane.checkUpdateSize();
-        }
+    private void updateSize() {
         int newHeight = 0;
         int newWidth = 0;
         for (Vector2d pos : this.content.keySet()) {
