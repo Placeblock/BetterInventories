@@ -30,7 +30,7 @@ public abstract class GUISection {
     public abstract GUISection getSectionAt(Vector2d position);
 
     public Vector2d slotToVector(int index) {
-        return Util.slotToPosition(index, this.size.getX());
+        return Util.slotToVector(index, this.size.getX());
     }
 
     public <T> List<T> getEmptyContentArray(Class<T> clazz) {
@@ -38,7 +38,7 @@ public abstract class GUISection {
     }
 
     public int vectorToSlot(Vector2d position) {
-        return position.getY()*this.size.getX()+position.getX();
+        return Util.vectorToSlot(position, this.size.getX());
     }
 
     public int getSlots() {

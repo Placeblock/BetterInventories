@@ -34,8 +34,12 @@ public class Util {
         return item;
     }
 
-    public static Vector2d slotToPosition(int index, int width) {
+    public static Vector2d slotToVector(int index, int width) {
         return new Vector2d(index % width, (int) Math.floor(index/(width*1F)));
+    }
+
+    public static int vectorToSlot(Vector2d vector, int width) {
+        return vector.getY()*width+vector.getX();
     }
 
     public static int modulo(int divident, int divisor) {
