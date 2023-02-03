@@ -1,37 +1,37 @@
 package de.placeblock.betterinventories.util;
 
-import com.destroystokyo.paper.profile.CraftPlayerProfile;
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import de.placeblock.betterinventories.content.item.ItemBuilder;
 import io.schark.design.texts.Texts;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 
-import java.util.UUID;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.function.Consumer;
 
 /**
  * Author: Placeblock
  */
 public class Util {
     public static ItemStack getArrowItem(ArrowDirection direction, TextComponent title) {
-        ItemStack item = new ItemBuilder(title, Material.PLAYER_HEAD).build();
-        return Util.setHeadTexture(item, direction.getTexture());
+        return new ItemBuilder(title, Material.PLAYER_HEAD).skinTexture(direction.getTexture()).build();
     }
 
     public static ItemStack getArrowItem(ArrowDirection direction) {
         return Util.getArrowItem(direction, Texts.primary(direction.getName()));
     }
 
-    public static ItemStack setHeadTexture(ItemStack item, String texture) {
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        PlayerProfile playerProfile = new CraftPlayerProfile(UUID.randomUUID(), "");
-        playerProfile.setProperty(new ProfileProperty("textures", texture));
-        meta.setPlayerProfile(playerProfile);
-        item.setItemMeta(meta);
-        return item;
+    public static void getTexture(Plugin plugin, String playerName, Consumer<URL> callback) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+            callback.accept(offlinePlayer.getPlayerProfile().getTextures().getSkin());
+        });
     }
 
     public static Vector2d slotToVector(int index, int width) {
@@ -44,6 +44,14 @@ public class Util {
 
     public static int modulo(int divident, int divisor) {
         return (((divident % divisor) + divisor) % divisor);
+    }
+
+    public static URL convertURL(String base64) {
+        try {
+            return new URL(new String(Base64.getDecoder().decode(base64), StandardCharsets.UTF_8));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

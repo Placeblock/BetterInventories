@@ -1,21 +1,31 @@
 package de.placeblock.betterinventories.util;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Author: Placeblock
  */
 @Getter
-@RequiredArgsConstructor
 public enum ArrowDirection {
 
-    UP("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmNjYmY5ODgzZGQzNTlmZGYyMzg1YzkwYTQ1OWQ3Mzc3NjUzODJlYzQxMTdiMDQ4OTVhYzRkYzRiNjBmYyJ9fX0=", "↑"),
-    DOWN("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzI0MzE5MTFmNDE3OGI0ZDJiNDEzYWE3ZjVjNzhhZTQ0NDdmZTkyNDY5NDNjMzFkZjMxMTYzYzBlMDQzZTBkNiJ9fX0=", "↓"),
-    LEFT("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzdhZWU5YTc1YmYwZGY3ODk3MTgzMDE1Y2NhMGIyYTdkNzU1YzYzMzg4ZmYwMTc1MmQ1ZjQ0MTlmYzY0NSJ9fX0=", "←"),
-    RIGHT("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjgyYWQxYjljYjRkZDIxMjU5YzBkNzVhYTMxNWZmMzg5YzNjZWY3NTJiZTM5NDkzMzgxNjRiYWM4NGE5NmUifX19", "→");
+    UP("http://textures.minecraft.net/texture/6ccbf9883dd359fdf2385c90a459d737765382ec4117b04895ac4dc4b60fc", "↑"),
+    DOWN("http://textures.minecraft.net/texture/72431911f4178b4d2b413aa7f5c78ae4447fe9246943c31df31163c0e043e0d6", "↓"),
+    LEFT("http://textures.minecraft.net/texture/37aee9a75bf0df7897183015cca0b2a7d755c63388ff01752d5f4419fc645", "←"),
+    RIGHT("http://textures.minecraft.net/texture/682ad1b9cb4dd21259c0d75aa315ff389c3cef752be3949338164bac84a96e", "→");
 
-    private final String texture;
+    private final URL texture;
     private final String name;
+
+    ArrowDirection(String textureURL, String name) {
+        try {
+            this.texture = new URL(textureURL);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        this.name = name;
+    }
 
 }
