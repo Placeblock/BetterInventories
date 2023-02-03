@@ -54,12 +54,22 @@ public class PaginatorPane extends GUIPane {
 
     public void addItem(GUIItem item) {
         this.items.add(item);
+        this.updateSize();
+        this.update();
+    }
+
+    private void updateSize() {
         if (this.isAutoSize()) {
             int newWidth = Math.min(this.getMaxSize().getX(), this.items.size());
-            int newHeight = (int) Math.ceil(this.items.size()*1F/newWidth);
+            int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
             this.setWidth(newWidth);
             this.setHeight(newHeight);
         }
+    }
+
+    public void clearItems() {
+        this.items.clear();
+        this.updateSize();
         this.update();
     }
 
