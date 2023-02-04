@@ -36,7 +36,7 @@ public class Util {
     }
 
     public static Vector2d calculateGUISize(Collection<?> items, int width) {
-        return new Vector2d(width, (int) Math.ceil(items.size()*1F/width));
+        return new Vector2d(width, Math.min((int) Math.ceil(items.size()*1F/width), 6));
     }
 
     public static Vector2d slotToVector(int index, int width) {

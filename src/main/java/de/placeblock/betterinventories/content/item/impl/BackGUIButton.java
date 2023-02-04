@@ -10,6 +10,6 @@ import org.bukkit.Material;
  */
 public class BackGUIButton extends SwitchGUIButton {
     public BackGUIButton(GUI gui, GUI targetGUI) {
-        super(gui, new ItemBuilder(Texts.BUTTON_BACK_ITEM, Material.RED_STAINED_GLASS_PANE).build(), targetGUI);
+        super(gui, new ItemBuilder(Texts.BUTTON_BACK_ITEM, Material.RED_STAINED_GLASS_PANE).build(), () -> targetGUI);
     }
 }
