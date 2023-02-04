@@ -23,6 +23,8 @@ public abstract class GUISection {
 
     public abstract List<ItemStack> render();
 
+    public void prerender() {}
+
     public GUISection getSectionAt(int index) {
         return this.getSectionAt(this.slotToVector(index));
     }

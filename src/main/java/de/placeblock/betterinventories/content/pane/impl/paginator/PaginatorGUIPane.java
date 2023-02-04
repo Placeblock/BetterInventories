@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @Getter
 @SuppressWarnings("unused")
-public class PaginatorPane extends GUIPane {
+public class PaginatorGUIPane extends GUIPane {
     private final List<GUIItem> items = new ArrayList<>();
     private final Set<PaginatorControlsPane> controls = new HashSet<>();
     private final PaginatorControlsPane defaultControl;
@@ -32,11 +32,11 @@ public class PaginatorPane extends GUIPane {
     private boolean repeat;
     private boolean showDefaultControls;
 
-    public PaginatorPane(GUI gui, Vector2d size, boolean repeat) {
+    public PaginatorGUIPane(GUI gui, Vector2d size, boolean repeat) {
         this(gui, size, size, size, false, repeat, 0, true, PaginatorControlsPosition.RIGHT);
     }
 
-    public PaginatorPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
+    public PaginatorGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
         super(gui, size, maxSize, minSize, autoSize);
         if (this.getWidth() < 2) {
             throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum width of 2");

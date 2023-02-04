@@ -23,6 +23,20 @@ public class SimpleGUIPane extends GUIPane {
     }
 
     @Override
+    public void prerender() {
+        this.prerenderChildren();
+        if (this.isAutoSize()) {
+            this.updateSize();
+        }
+    }
+
+    protected void prerenderChildren() {
+        for (GUISection section : this.content.values()) {
+            section.prerender();
+        }
+    }
+
+    @Override
     public List<ItemStack> render() {
         List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
         for (Vector2d vector2d : this.content.keySet()) {
@@ -38,6 +52,15 @@ public class SimpleGUIPane extends GUIPane {
             if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
                     && pos.getY() <= position.getY() && pos.getY() + section.getHeight() - 1 >= position.getY()) {
                 return section.getSectionAt(position.subtract(pos));
+            }
+        }
+        return null;
+    }
+
+    public GUISection removeSection(GUISection section) {
+        for (Vector2d pos : this.content.keySet()) {
+            if (this.content.get(pos).equals(section)) {
+                return this.content.remove(pos);
             }
         }
         return null;
@@ -59,9 +82,6 @@ public class SimpleGUIPane extends GUIPane {
 
     public void setSectionAt(Vector2d position, GUISection section) {
         this.content.put(position, section);
-        if (this.isAutoSize()) {
-            this.updateSize();
-        }
     }
 
     public void fill(GUISection section) {

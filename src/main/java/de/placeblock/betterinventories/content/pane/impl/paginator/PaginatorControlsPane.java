@@ -14,15 +14,15 @@ import org.bukkit.entity.Player;
  */
 public class PaginatorControlsPane extends SimpleGUIPane {
     public static final GUIItem FILL_ITEM = new GUIItem(null, GUI.PLACEHOLDER_ITEM);
-    private final PaginatorPane paginatorPane;
+    private final PaginatorGUIPane paginatorGUIPane;
     private int[] buttonIndices;
     private GUIButton nextButton;
     private GUIButton previousButton;
-    private PaginatorControlsPosition position;
+    private final PaginatorControlsPosition position;
 
-    public PaginatorControlsPane(GUI gui, PaginatorPane paginatorPane, Vector2d size, PaginatorControlsPosition position) {
+    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d size, PaginatorControlsPosition position) {
         super(gui, size);
-        this.paginatorPane = paginatorPane;
+        this.paginatorGUIPane = paginatorGUIPane;
         this.position = position;
         this.init();
     }
@@ -37,9 +37,9 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     }
 
     public void updateButtons() {
-        int currentPage = this.paginatorPane.getCurrentPage();
-        int pages = this.paginatorPane.getPages();
-        boolean repeat = this.paginatorPane.isRepeat();
+        int currentPage = this.paginatorGUIPane.getCurrentPage();
+        int pages = this.paginatorGUIPane.getPages();
+        boolean repeat = this.paginatorGUIPane.isRepeat();
         this.setSectionAt(this.buttonIndices[0], (currentPage > 0 || repeat) ?
                 this.previousButton : FILL_ITEM);
         this.setSectionAt(this.buttonIndices[1], (currentPage < pages - 1) || repeat ?
@@ -50,7 +50,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         return new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
             @Override
             public void onClick(Player player, int slot) {
-                PaginatorControlsPane.this.paginatorPane.nextPage();
+                PaginatorControlsPane.this.paginatorGUIPane.nextPage();
                 PaginatorControlsPane.this.getGui().update();
             }
         };
@@ -60,7 +60,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         return new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT)) {
             @Override
             public void onClick(Player player, int slot) {
-                PaginatorControlsPane.this.paginatorPane.previousPage();
+                PaginatorControlsPane.this.paginatorGUIPane.previousPage();
                 PaginatorControlsPane.this.getGui().update();
             }
         };

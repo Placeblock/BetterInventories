@@ -2,9 +2,8 @@ package de.placeblock.betterinventories.builder.content;
 
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPosition;
-import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorPane;
+import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.util.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +14,7 @@ import java.util.function.Function;
  * Author: Placeblock
  */
 @SuppressWarnings("unused")
-public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorPane, PaginatorGUIPaneBuilder> {
+public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, PaginatorGUIPaneBuilder> {
     private boolean repeat = true;
     private int startPage = 0;
     private final List<GUIItem> items = new ArrayList<>();
@@ -62,7 +61,7 @@ public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorPane, P
         return this;
     }
 
-    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, T... items) {
+    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, T[] items) {
         return this.items(converter, new ArrayList<>(List.of(items)));
     }
 
@@ -76,21 +75,19 @@ public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorPane, P
     }
 
     @Override
-    public PaginatorPane build() {
-        Vector2d maxSize = this.getMaxSize() == null ? this.getSize() : this.getMaxSize();
-        Vector2d minSize = this.getMinSize() == null ? this.getSize() : this.getMinSize();
-        PaginatorPane paginatorPane = new PaginatorPane(this.getGui(),
+    public PaginatorGUIPane build() {
+        PaginatorGUIPane paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
                 this.getSize(),
-                maxSize,
-                minSize,
+                this.getMaxSize(),
+                this.getMinSize(),
                 this.getAutoSize(),
                 this.getRepeat(),
                 this.startPage,
                 this.defaultControls,
                 this.defaultControlsPosition);
         for (GUIItem item : this.items) {
-            paginatorPane.addItem(item);
+            paginatorGUIPane.addItem(item);
         }
-        return paginatorPane;
+        return paginatorGUIPane;
     }
 }
