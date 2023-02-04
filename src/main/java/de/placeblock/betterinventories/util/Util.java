@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
@@ -32,6 +33,10 @@ public class Util {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
             callback.accept(offlinePlayer.getPlayerProfile().getTextures().getSkin());
         });
+    }
+
+    public static Vector2d calculateGUISize(Collection<?> items, int width) {
+        return new Vector2d(width, (int) Math.ceil(items.size()*1F/width));
     }
 
     public static Vector2d slotToVector(int index, int width) {
