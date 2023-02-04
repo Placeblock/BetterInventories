@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -33,6 +34,17 @@ public class Util {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
             callback.accept(offlinePlayer.getPlayerProfile().getTextures().getSkin());
         });
+    }
+    public static <T> Vector2d calculateGUISize(T[] items) {
+        return Util.calculateGUISize(items, 9);
+    }
+
+    public static <T> Vector2d calculateGUISize(T[] items, int width) {
+        return Util.calculateGUISize(List.of(items), width);
+    }
+
+    public static Vector2d calculateGUISize(Collection<?> items) {
+        return Util.calculateGUISize(items, 9);
     }
 
     public static Vector2d calculateGUISize(Collection<?> items, int width) {

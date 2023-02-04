@@ -15,7 +15,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
     @Setter
-    private ItemStack item;
+    protected ItemStack item;
 
     public GUIItem(GUI gui, ItemStack item) {
         super(gui, new Vector2d(1,1));

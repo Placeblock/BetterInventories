@@ -121,6 +121,7 @@ public abstract class GUI implements Listener {
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
             if (clicked instanceof GUIButton button) {
+                button.click(player);
                 if (event.isShiftClick()) {
                     button.onShiftClick(player, slot);
                     if (leftClick) {

@@ -9,6 +9,7 @@ import de.placeblock.betterinventories.util.Vector2d;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Author: Placeblock
@@ -51,8 +52,18 @@ public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorPane, P
     }
 
     public PaginatorGUIPaneBuilder items(GUIItem... items) {
-        this.items.addAll(new ArrayList<>(List.of(items)));
+        return this.items(new ArrayList<>(List.of(items)));
+    }
+
+    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, Collection<T> items) {
+        for (T item : items) {
+            this.item(converter.apply(item));
+        }
         return this;
+    }
+
+    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, T... items) {
+        return this.items(converter, new ArrayList<>(List.of(items)));
     }
 
     public PaginatorGUIPaneBuilder defaultControlsPosition(PaginatorControlsPosition position) {

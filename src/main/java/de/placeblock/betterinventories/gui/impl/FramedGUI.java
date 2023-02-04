@@ -41,6 +41,10 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
     private long lastClick = 0;
     private int clicks = 0;
 
+    public FramedGUI(Plugin plugin, TextComponent title, int height) {
+        this(plugin, title, height, null);
+    }
+
     public FramedGUI(Plugin plugin, TextComponent title, int height, GUI backInventory) {
         this(plugin, title, height, backInventory, false);
     }
