@@ -2,25 +2,24 @@ package de.placeblock.betterinventories.content.item.impl;
 
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.function.Supplier;
 
 /**
  * Author: Placeblock
  */
-@SuppressWarnings("unused")
-public class SwitchGUIButton extends GUIButton {
-    private final Supplier<GUI> targetGUI;
+public class TeleportGUIButton extends GUIButton {
+    private final Location location;
 
-    public SwitchGUIButton(GUI gui, ItemStack item, Supplier<GUI> targetGUI) {
+    public TeleportGUIButton(GUI gui, ItemStack item, Location location) {
         super(gui, item);
-        this.targetGUI = targetGUI;
+        this.location = location;
     }
 
     @Override
     public void onClick(Player player, int slot) {
-        this.targetGUI.get().showPlayer(player);
+        player.closeInventory();
+        player.teleport(location);
     }
 }

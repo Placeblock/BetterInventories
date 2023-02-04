@@ -4,38 +4,49 @@ import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.entity.Player;
 
-import java.util.function.BiConsumer;
-
 /**
  * Author: Placeblock
  */
-@SuppressWarnings("unused")
-public class GUIButtonBuilder extends BaseGUIItemBuilder<GUIButton, GUIButtonBuilder> {
-    private BiConsumer<Player, Boolean> onClick;
-    private BiConsumer<Player, Boolean> onRightClick;
-    private BiConsumer<Player, Boolean> onLeftClick;
+public class GUIButtonBuilder extends BaseGUIButtonBuilder<GUIButton, GUIButtonBuilder> {
 
     public GUIButtonBuilder(GUI gui) {
         super(gui);
     }
 
-    public GUIButtonBuilder onClick(BiConsumer<Player, Boolean> onClick) {
-        this.onClick = onClick;
-        return this;
-    }
-
-    public GUIButtonBuilder onLeftClick(BiConsumer<Player, Boolean> onLeftClick) {
-        this.onLeftClick = onLeftClick;
-        return this;
-    }
-
-    public GUIButtonBuilder onRightClick(BiConsumer<Player, Boolean> onRightClick) {
-        this.onRightClick = onRightClick;
-        return this;
-    }
 
     @Override
     public GUIButton build() {
-        return null;
+        return new GUIButton(this.getGui(), this.getItem()) {
+            @Override
+            public void onClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnClick() == null) return;
+                GUIButtonBuilder.this.getOnClick().accept(player, slot);
+            }
+            @Override
+            public void onLeftClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnLeftClick() == null) return;
+                GUIButtonBuilder.this.getOnLeftClick().accept(player, slot);
+            }
+            @Override
+            public void onRightClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnRightClick() == null) return;
+                GUIButtonBuilder.this.getOnRightClick().accept(player, slot);
+            }
+            @Override
+            public void onShiftClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnShiftClick() == null) return;
+                GUIButtonBuilder.this.getOnShiftClick().accept(player, slot);
+            }
+            @Override
+            public void onShiftLeftClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnShiftLeftClick() == null) return;
+                GUIButtonBuilder.this.getOnShiftLeftClick().accept(player, slot);
+            }
+            @Override
+            public void onShiftRightClick(Player player, int slot) {
+                if (GUIButtonBuilder.this.getOnShiftRightClick() == null) return;
+                GUIButtonBuilder.this.getOnShiftRightClick().accept(player, slot);
+            }
+        };
     }
 }

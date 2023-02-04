@@ -15,10 +15,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
     @Setter
-    private ItemStack item;
+    protected ItemStack item;
 
     public GUIItem(GUI gui, ItemStack item) {
-        super(gui, 1, 1);
+        super(gui, new Vector2d(1,1));
         this.item = item;
     }
 

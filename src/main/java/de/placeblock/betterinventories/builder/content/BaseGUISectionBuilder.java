@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.builder.content;
 import de.placeblock.betterinventories.builder.Builder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Vector2d;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -12,31 +13,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class BaseGUISectionBuilder<G extends GUISection, B extends BaseGUISectionBuilder<G, B>> implements Builder<G, B> {
     private final GUI gui;
-    private Integer width;
-    private Integer height;
+    private Vector2d size;
 
-    public B width(Integer width) {
-        this.width = width;
+    public B size(Vector2d size) {
+        this.size = size;
         return (B) this;
     }
 
-    public B height(Integer height) {
-        this.height = height;
-        return (B) this;
-    }
-
-    protected int getWidth() {
-        if (this.width == null) {
-            throw new IllegalStateException("Width is null in builder");
+    protected Vector2d getSize() {
+        if (this.size == null) {
+            throw new IllegalStateException("Size is null in builder");
         }
-        return this.width;
-    }
-
-    protected int getHeight() {
-        if (this.height == null) {
-            throw new IllegalStateException("Height is null in builder");
-        }
-        return this.height;
+        return this.size;
     }
 
     protected GUI getGui() {

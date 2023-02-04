@@ -1,7 +1,9 @@
 package de.placeblock.betterinventories.content.item;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -9,11 +11,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerTextures;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Author: Placeblock
@@ -28,6 +30,7 @@ public class ItemBuilder {
     private final Map<Attribute, AttributeModifier> attributes = new HashMap<>();
     private final List<ItemFlag> flags = new ArrayList<>();
     private boolean unbreakable;
+    private URL skinURL;
 
     public ItemBuilder(TextComponent title, Material material) {
         this(title, material, 1);
@@ -76,6 +79,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder skinTexture(URL skinTexture) {
+        this.skinURL = skinTexture;
+        return this;
+    }
+
     public ItemStack build() {
         ItemStack item = new ItemStack(this.material, this.amount);
         ItemMeta meta = item.getItemMeta();
@@ -93,6 +101,13 @@ public class ItemBuilder {
         }
         if (this.unbreakable) {
             meta.setUnbreakable(true);
+        }
+        if (meta instanceof SkullMeta skullMeta && this.skinURL != null) {
+            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+            PlayerTextures textures = profile.getTextures();
+            textures.setSkin(this.skinURL);
+            profile.setTextures(textures);
+            skullMeta.setPlayerProfile(profile);
         }
 
         item.setItemMeta(meta);

@@ -1,10 +1,11 @@
 plugins {
     id("java")
     id("io.papermc.paperweight.userdev") version "1.3.5"
+    id("maven-publish")
 }
 
 group = "de.placeblock"
-version = "1.0-SNAPSHOT"
+version = "1.1.1"
 
 repositories {
     maven {
@@ -18,11 +19,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+    paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 
-    compileOnly("io.schark:ScharkDesign:1.4.2a")
+    compileOnly("io.schark:ScharkDesign:1.5.0")
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
@@ -52,8 +51,27 @@ tasks {
     processResources {
         filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
     }
+}
 
-    test {
-        useJUnitPlatform()
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group as String?
+            artifactId = project.name
+            version = project.version as String?
+
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            name = "ScharkIO"
+            url = uri("https://repo.schark.io/private")
+            isAllowInsecureProtocol = true
+            credentials{
+                username = project.properties["reposilite.username"] as String?
+                password = project.properties["reposilite.token"] as String?
+            }
+        }
     }
 }

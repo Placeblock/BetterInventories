@@ -2,16 +2,18 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIButton;
+import de.placeblock.betterinventories.content.item.ItemBuilder;
+import io.schark.design.items.BukkitItems;
+import io.schark.design.texts.Texts;
+import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -22,8 +24,10 @@ import java.util.List;
 /**
  * Author: Placeblock
  */
+@Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
+    public static final ItemStack PLACEHOLDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.valueOf(BukkitItems.INVENTORY_PLACEHOLDER_MATERIAL)).build();
 
     private final Plugin plugin;
     private final TextComponent title;
@@ -38,20 +42,35 @@ public abstract class GUI implements Listener {
     }
 
     public void update() {
-        this.content = this.render();
+        this.prerenderContent();
+        this.render();
+        this.updateViews();
+    }
+
+    protected void render() {
+        this.content = this.renderContent();
+    }
+
+    protected void updateViews() {
         for (GUIView view : this.views) {
             view.update(this.content);
         }
     }
 
-    public void showPlayer(Player player) {
+    public List<Player> getPlayers() {
+        return this.views.stream().map(GUIView::getPlayer).toList();
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public GUIView showPlayer(Player player) {
         if (this.views.size() == 0) {
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
+        if (this.getPlayers().contains(player)) return null;
         GUIView view = new GUIView(player, this.createBukkitInventory());
         view.update(this.content);
         this.views.add(view);
-
+        return view;
     }
 
     private Inventory createBukkitInventory() {
@@ -71,8 +90,20 @@ public abstract class GUI implements Listener {
         return null;
     }
 
+    public void reloadViews() {
+        List<Player> players = this.getPlayers();
+        List<GUIView> views = new ArrayList<>(this.getViews());
+        for (GUIView view : views) {
+            this.removePlayer(view);
+        }
+        for (Player player : players) {
+            this.showPlayer(player);
+        }
+    }
+
     public abstract int getSize();
-    public abstract List<ItemStack> render();
+    public abstract List<ItemStack> renderContent();
+    public abstract void prerenderContent();
     public abstract GUISection getClickedSection(int slot);
 
     public void onClose(Player player) {}
@@ -92,11 +123,21 @@ public abstract class GUI implements Listener {
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
             if (clicked instanceof GUIButton button) {
-                button.onClick(player, player.isSneaking());
-                if (leftClick) {
-                    button.onLeftClick(player, player.isSneaking());
+                button.click(player);
+                if (event.isShiftClick()) {
+                    button.onShiftClick(player, slot);
+                    if (leftClick) {
+                        button.onShiftLeftClick(player, slot);
+                    } else {
+                        button.onShiftRightClick(player, slot);
+                    }
                 } else {
-                    button.onRightClick(player, player.isSneaking());
+                    button.onClick(player, slot);
+                    if (leftClick) {
+                        button.onLeftClick(player, slot);
+                    } else {
+                        button.onRightClick(player, slot);
+                    }
                 }
             }
         }
@@ -107,13 +148,16 @@ public abstract class GUI implements Listener {
         if (!(event.getPlayer() instanceof Player player)) return;
         GUIView view = this.getView(event.getInventory());
         if (view != null) {
-            this.views.remove(view);
-            this.onClose(player);
-            if (this.views.size() == 0) {
-                HandlerList.unregisterAll(this);
-            }
+            removePlayer(view);
         }
     }
 
+    public void removePlayer(GUIView view) {
+        this.views.remove(view);
+        this.onClose(view.getPlayer());
+        if (this.views.size() == 0) {
+            HandlerList.unregisterAll(this);
+        }
+    }
 
 }

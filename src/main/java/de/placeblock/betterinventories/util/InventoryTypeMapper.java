@@ -21,6 +21,7 @@ public class InventoryTypeMapper {
         mappings.put(InventoryType.SHULKER_BOX, new Vector2d(9, 3));
         mappings.put(InventoryType.BARREL, new Vector2d(9, 3));
         mappings.put(InventoryType.LECTERN, new Vector2d(1, 1));
+        mappings.put(InventoryType.CHEST, new Vector2d(9, 3));
     }
 
     public static Vector2d getSize(InventoryType type) {

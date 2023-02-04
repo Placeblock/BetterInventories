@@ -5,22 +5,19 @@ import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.Supplier;
-
 /**
  * Author: Placeblock
  */
-@SuppressWarnings("unused")
-public class SwitchGUIButton extends GUIButton {
-    private final Supplier<GUI> targetGUI;
+public class CommandGUIButton extends GUIButton {
+    private final String command;
 
-    public SwitchGUIButton(GUI gui, ItemStack item, Supplier<GUI> targetGUI) {
+    public CommandGUIButton(GUI gui, ItemStack item, String command) {
         super(gui, item);
-        this.targetGUI = targetGUI;
+        this.command = command;
     }
 
     @Override
     public void onClick(Player player, int slot) {
-        this.targetGUI.get().showPlayer(player);
+        player.performCommand(this.command);
     }
 }
