@@ -25,6 +25,7 @@ public class PaginatorPane extends GUIPane {
     private final List<GUIItem> items = new ArrayList<>();
     private final Set<PaginatorControlsPane> controls = new HashSet<>();
     private final PaginatorControlsPane defaultControl;
+    private final PaginatorControlsPosition defaultControlsPosition;
     private final SimpleGUIPane contentPane;
     private int currentPage;
     @Setter
@@ -32,19 +33,20 @@ public class PaginatorPane extends GUIPane {
     private boolean showDefaultControls;
 
     public PaginatorPane(GUI gui, Vector2d size, boolean repeat) {
-        this(gui, size, size, size, false, repeat, 0, true);
+        this(gui, size, size, size, false, repeat, 0, true, PaginatorControlsPosition.RIGHT);
     }
 
-    public PaginatorPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls) {
+    public PaginatorPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
         super(gui, size, maxSize, minSize, autoSize);
         if (this.getWidth() < 2) {
             throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum width of 2");
         }
+        this.defaultControlsPosition = defaultControlsPosition;
         this.contentPane = new SimpleGUIPane(gui, this.size, this.size, new Vector2d(this.getWidth(), 1), false);
         this.currentPage = currentPage;
         this.repeat = repeat;
         if (defaultControls) {
-            this.defaultControl = new PaginatorControlsPane(gui, this, new Vector2d(this.getWidth(), 1), PaginatorControlsPosition.RIGHT);
+            this.defaultControl = new PaginatorControlsPane(gui, this, new Vector2d(this.getWidth(), 1), this.defaultControlsPosition);
             this.controls.add(this.defaultControl);
         } else {
             this.defaultControl = null;

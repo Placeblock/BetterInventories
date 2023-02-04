@@ -74,7 +74,7 @@ public class FramedGUI extends CanvasGUI<SimpleGUIPane> {
 
     public void setBackInventory(GUI backInventory) {
         if (backInventory != null) {
-            this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1, new BackGUIButton(this, backInventory));
+            this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1, new BackGUIButton(this, () -> backInventory));
         }
     }
 
