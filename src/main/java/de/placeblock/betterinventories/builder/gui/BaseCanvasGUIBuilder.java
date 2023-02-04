@@ -1,17 +1,17 @@
 package de.placeblock.betterinventories.builder.gui;
 
 import de.placeblock.betterinventories.content.pane.GUIPane;
-import de.placeblock.betterinventories.gui.impl.CanvasGUI;
+import de.placeblock.betterinventories.gui.impl.BaseCanvasGUI;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Author: Placeblock
  */
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class BaseSingleCanvasGUIBuilder <P extends GUIPane, G extends CanvasGUI<P>, B extends BaseSingleCanvasGUIBuilder<P, G, B>> extends BaseGUIBuilder<G, B> {
+public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanvasGUI<P>, B extends BaseCanvasGUIBuilder<P, G, B>> extends BaseGUIBuilder<G, B> {
     private Integer height;
 
-    public BaseSingleCanvasGUIBuilder(Plugin plugin) {
+    public BaseCanvasGUIBuilder(Plugin plugin) {
         super(plugin);
     }
 

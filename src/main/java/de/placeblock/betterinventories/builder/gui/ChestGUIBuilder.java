@@ -1,20 +1,20 @@
 package de.placeblock.betterinventories.builder.gui;
 
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
-import de.placeblock.betterinventories.gui.impl.SimpleChestCanvasGUI;
+import de.placeblock.betterinventories.gui.impl.ChestGUI;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Author: Placeblock
  */
-public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, SimpleChestCanvasGUI, ChestGUIBuilder> {
+public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, ChestGUI, ChestGUIBuilder> {
     public ChestGUIBuilder(Plugin plugin) {
         super(plugin);
     }
 
     @Override
-    public SimpleChestCanvasGUI build() {
+    public ChestGUI build() {
         super.build();
-        return new SimpleChestCanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight());
+        return new ChestGUI(this.getPlugin(), this.getTitle(), this.getHeight());
     }
 }

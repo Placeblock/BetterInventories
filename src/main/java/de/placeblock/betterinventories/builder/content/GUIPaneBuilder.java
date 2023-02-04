@@ -8,8 +8,8 @@ import de.placeblock.betterinventories.util.Vector2d;
  * Author: Placeblock
  */
 @SuppressWarnings("unused")
-public class SimpleGUIPaneBuilder extends BaseGUIPaneBuilder<SimpleGUIPane, SimpleGUIPaneBuilder> {
-    public SimpleGUIPaneBuilder(GUI gui) {
+public class GUIPaneBuilder extends BaseGUIPaneBuilder<SimpleGUIPane, GUIPaneBuilder> {
+    public GUIPaneBuilder(GUI gui) {
         super(gui);
     }
 

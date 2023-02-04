@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * Author: Placeblock
  */
 @Getter
-public class FramedGUI extends ChestCanvasGUI<FramedGUIPane> {
+public class FramedGUI extends BaseChestGUI<FramedGUIPane> {
     public static final int FRAMED_GUI_MAX_WIDTH = 9;
     public static final int FRAMED_GUI_MAX_HEIGHT = 6;
     public static final Vector2d FRAMED_GUI_VERTICAL_MIN = new Vector2d(3, 1);
@@ -33,7 +33,7 @@ public class FramedGUI extends ChestCanvasGUI<FramedGUIPane> {
     public FramedGUI(Plugin plugin, TextComponent title, int height, Supplier<GUI> backGUI, boolean vertical) {
         super(plugin, title);
         this.canvas = new FramedGUIPane(this, new Vector2d(FRAMED_GUI_MAX_WIDTH, height), vertical, backGUI);
-        this.setup();
+        this.initialize();
     }
 
     public SimpleGUIPane getFrame() {

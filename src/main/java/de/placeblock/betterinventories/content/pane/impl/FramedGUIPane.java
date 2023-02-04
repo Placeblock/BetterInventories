@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl;
 
-import de.placeblock.betterinventories.builder.content.SimpleGUIPaneBuilder;
+import de.placeblock.betterinventories.builder.content.GUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.ItemBuilder;
 import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
@@ -101,7 +101,7 @@ public class FramedGUIPane extends SimpleGUIPane {
         SimpleGUIPane pane;
         GUI gui = this.getGui();
         Vector2d frameBorderSize = this.vertical ? new Vector2d(1, this.getHeight()) : new Vector2d(this.getWidth(), 1);
-        pane =  new SimpleGUIPaneBuilder(gui).size(frameBorderSize).build();
+        pane =  new GUIPaneBuilder(gui).size(frameBorderSize).build();
         for (int i = 0; i < pane.getSlots(); i++) {
             pane.addSection(new FrameBorderGUIItem(this.getGui()) {
                 @Override

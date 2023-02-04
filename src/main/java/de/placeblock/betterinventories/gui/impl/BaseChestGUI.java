@@ -9,14 +9,14 @@ import org.bukkit.plugin.Plugin;
 /**
  * Author: Placeblock
  */
-public abstract class ChestCanvasGUI<P extends GUIPane> extends CanvasGUI<P> {
+public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> {
     private int lastUpdateRows = 1;
 
-    public ChestCanvasGUI(Plugin plugin, TextComponent title) {
+    public BaseChestGUI(Plugin plugin, TextComponent title) {
         super(plugin, title, InventoryType.CHEST);
     }
 
-    protected void setup() {
+    protected void initialize() {
         this.canvas.setAutoSize(true);
         int width = this.canvas.getWidth();
         this.canvas.setMinSize(new Vector2d(width, 1));
@@ -30,7 +30,7 @@ public abstract class ChestCanvasGUI<P extends GUIPane> extends CanvasGUI<P> {
     }
 
     private void updateHeight() {
-        int newHeight = ChestCanvasGUI.limitHeight(this.canvas.getHeight(), this.canvas.getMaxSize().getY());
+        int newHeight = BaseChestGUI.limitHeight(this.canvas.getHeight(), this.canvas.getMaxSize().getY());
         if (this.lastUpdateRows != newHeight) {
             this.lastUpdateRows = newHeight;
             this.reloadViews();
