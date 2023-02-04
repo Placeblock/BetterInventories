@@ -105,7 +105,7 @@ public class SimpleGUIPane extends GUIPane {
         return -1;
     }
 
-    private void updateSize() {
+    protected void updateSize() {
         int newHeight = 0;
         int newWidth = 0;
         for (Vector2d pos : this.content.keySet()) {

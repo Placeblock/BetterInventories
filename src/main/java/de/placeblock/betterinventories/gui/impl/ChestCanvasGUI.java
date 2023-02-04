@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Author: Placeblock
  */
-public class ChestCanvasGUI<C extends GUIPane> extends CanvasGUI<C> {
+public abstract class ChestCanvasGUI<P extends GUIPane> extends CanvasGUI<P> {
     private int lastUpdateRows = 1;
 
     public ChestCanvasGUI(Plugin plugin, TextComponent title) {

@@ -15,7 +15,7 @@ public abstract class FrameBorderGUIItem extends GUIButton {
     private int clicks = 0;
 
     public FrameBorderGUIItem(GUI gui) {
-        super(gui, GUI.PLACEHOLDER_ITEM);
+        super(gui, GUI.PLACEHOLDER_ITEM, null);
     }
 
     @Override

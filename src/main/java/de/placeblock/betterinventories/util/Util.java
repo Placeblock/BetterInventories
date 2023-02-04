@@ -71,4 +71,11 @@ public class Util {
         }
     }
 
+    public static Vector2d clampVector(Vector2d vector2d, Vector2d min, Vector2d max) {
+        return new Vector2d(
+                Math.min(Math.max(vector2d.getX(), min.getX()), max.getX()),
+                Math.min(Math.max(vector2d.getY(), min.getY()), max.getY())
+        );
+    }
+
 }

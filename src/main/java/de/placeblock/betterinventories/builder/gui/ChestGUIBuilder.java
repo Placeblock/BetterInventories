@@ -7,16 +7,14 @@ import org.bukkit.plugin.Plugin;
 /**
  * Author: Placeblock
  */
-public class SimpleChestCanvasGUIBuilder extends BaseSingleCanvasGUIBuilder<SimpleGUIPane, SimpleChestCanvasGUI, SimpleChestCanvasGUIBuilder> {
-    public SimpleChestCanvasGUIBuilder(Plugin plugin) {
+public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, SimpleChestCanvasGUI, ChestGUIBuilder> {
+    public ChestGUIBuilder(Plugin plugin) {
         super(plugin);
     }
 
     @Override
     public SimpleChestCanvasGUI build() {
-        if (this.getHeight() == null) {
-            throw new IllegalStateException("Height is null in builder");
-        }
+        super.build();
         return new SimpleChestCanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight());
     }
 }

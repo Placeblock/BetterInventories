@@ -12,13 +12,21 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("unused")
 public abstract class GUIButton extends GUIItem {
     private final int cooldown;
-    private final boolean clickSound;
+    private final Sound clickSound;
 
     public GUIButton(GUI gui, ItemStack item) {
-        this(gui, item, 0, true);
+        this(gui, item, 0, Sound.UI_BUTTON_CLICK);
     }
 
-    public GUIButton(GUI gui, ItemStack item, int cooldown, boolean clickSound) {
+    public GUIButton(GUI gui, ItemStack item, Sound clickSound) {
+        this(gui, item, 0, clickSound);
+    }
+
+    public GUIButton(GUI gui, ItemStack item, int cooldown) {
+        this(gui, item, cooldown, null);
+    }
+
+    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound) {
         super(gui, item);
         this.cooldown = cooldown;
         this.clickSound = clickSound;
@@ -28,8 +36,8 @@ public abstract class GUIButton extends GUIItem {
         if (this.cooldown > 0) {
             this.applyCooldown();
         }
-        if (this.clickSound) {
-            player.playSound(player.getEyeLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+        if (this.clickSound != null) {
+            player.playSound(player.getEyeLocation(), this.clickSound, 1, 1);
         }
     }
 

@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +27,8 @@ public abstract class GUIPane extends GUISection {
     }
 
     public GUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize) {
-        super(gui, size);
-        this.previousSize = size;
+        super(gui, Util.clampVector(size, minSize, maxSize));
+        this.previousSize = new Vector2d();
         this.maxSize = maxSize;
         this.minSize = minSize;
         this.autoSize = autoSize;

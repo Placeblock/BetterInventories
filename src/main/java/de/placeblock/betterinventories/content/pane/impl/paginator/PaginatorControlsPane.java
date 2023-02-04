@@ -7,6 +7,7 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ArrowDirection;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 /**
@@ -47,7 +48,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     }
 
     private GUIButton getNextButton(GUI gui) {
-        return new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT)) {
+        return new GUIButton(gui, Util.getArrowItem(ArrowDirection.RIGHT), Sound.ITEM_BOOK_PAGE_TURN) {
             @Override
             public void onClick(Player player, int slot) {
                 PaginatorControlsPane.this.paginatorGUIPane.nextPage();
@@ -57,7 +58,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     }
 
     private GUIButton getPreviousButton(GUI gui) {
-        return new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT)) {
+        return new GUIButton(gui, Util.getArrowItem(ArrowDirection.LEFT), Sound.ITEM_BOOK_PAGE_TURN) {
             @Override
             public void onClick(Player player, int slot) {
                 PaginatorControlsPane.this.paginatorGUIPane.previousPage();

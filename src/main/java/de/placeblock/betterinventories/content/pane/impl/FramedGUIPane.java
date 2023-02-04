@@ -7,6 +7,7 @@ import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
 import de.placeblock.betterinventories.content.item.impl.FrameBorderGUIItem;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.gui.impl.FramedGUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import io.schark.design.texts.Texts;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Author: Placeblock
@@ -25,49 +27,66 @@ import java.util.Set;
 public class FramedGUIPane extends SimpleGUIPane {
     public static final ItemStack EASTER_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.CYAN_STAINED_GLASS_PANE).build();
 
-    protected final SimpleGUIPane firstFrameBorder;
-    protected final SimpleGUIPane lastFrameBorder;
+    private Supplier<GUI> backGUI;
+
+    protected SimpleGUIPane firstFrameBorder;
+    protected SimpleGUIPane lastFrameBorder;
     @Getter
     private final SimpleGUIPane frame;
 
     protected final boolean vertical;
 
 
-    public FramedGUIPane(GUI gui, Vector2d size, boolean vertical, GUI backInventory) {
-        super(gui, size, new Vector2d(9, 6), new Vector2d(vertical ? 3 : 1, vertical ? 1 : 3), true);
+    public FramedGUIPane(GUI gui, Vector2d size, boolean vertical, Supplier<GUI> backGUI) {
+        super(gui, size, new Vector2d(FramedGUI.FRAMED_GUI_MAX_WIDTH, FramedGUI.FRAMED_GUI_MAX_HEIGHT),
+                vertical ? FramedGUI.FRAMED_GUI_VERTICAL_MIN : FramedGUI.FRAMED_GUI_HORIZONTAL_MIN, true);
+        this.backGUI = backGUI;
         this.vertical = vertical;
-        if (!this.vertical && size.getY() < 3) {
-            throw new IllegalArgumentException("Expected minimum size of 3 but got " + size.getY() + " in FramedGUIPane");
-        }
-        this.firstFrameBorder = this.getFrameBorder();
-        this.lastFrameBorder = this.getFrameBorder();
-        this.setBackInventory(backInventory);
+        this.setBackGUI(backGUI);
         Vector2d canvasSize = this.vertical ? new Vector2d(this.getWidth() - 2, this.getHeight()) : new Vector2d(this.getWidth(), this.getHeight() - 2);
-
-        this.frame = new SimpleGUIPane(this.getGui(), canvasSize, new Vector2d(canvasSize.getX(), 4), new Vector2d(canvasSize.getX(), 1), true);
+        int maxHeight = this.vertical ? FramedGUI.FRAMED_GUI_FRAME_VERTICAL_MAX_HEIGHT : FramedGUI.FRAMED_GUI_FRAME_HORIZONTAL_MAX_HEIGHT;
+        Vector2d frameMinSize = new Vector2d(canvasSize.getX(), 1);
+        Vector2d frameMaxSize = new Vector2d(canvasSize.getX(), maxHeight);
+        this.frame = new SimpleGUIPane(this.getGui(), canvasSize, frameMaxSize, frameMinSize, true);
         this.setSectionAt(this.vertical ? new Vector2d(1, 0) : new Vector2d(0, 1), this.getFrame());
-        this.updateFrameBorders();
+        this.setFrameBorders();
     }
 
-    public void setBackInventory(GUI backInventory) {
-        if (backInventory != null) {
+    public void setBackGUI(Supplier<GUI> backGUI) {
+        this.backGUI = backGUI;
+    }
+
+    protected void updateBackGUI() {
+        if (this.backGUI != null) {
             this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1,
-                    new BackGUIButton(this.getGui(), () -> backInventory));
+                    new BackGUIButton(this.getGui(), this.backGUI));
         }
     }
 
     @Override
-    public void prerenderChildren() {
-        super.prerenderChildren();
-        if (this.vertical) {
-            int newHeight = this.getHeight();
-            this.firstFrameBorder.setHeight(newHeight);
-            this.lastFrameBorder.setHeight(newHeight);
+    public void prerender() {
+        this.prerenderChildren();
+        this.repositionFrameBorders();
+        if (this.isAutoSize()) {
+            this.updateSize();
         }
-        this.updateFrameBorders();
     }
 
-    private void updateFrameBorders() {
+    @Override
+    public void onUpdateSize() {
+        this.setFrameBorders();
+    }
+
+    private void setFrameBorders() {
+        this.removeSection(this.firstFrameBorder);
+        this.removeSection(this.lastFrameBorder);
+        this.firstFrameBorder = this.getFrameBorder();
+        this.lastFrameBorder = this.getFrameBorder();
+        this.updateBackGUI();
+        this.repositionFrameBorders();
+    }
+
+    private void repositionFrameBorders() {
         this.removeSection(this.firstFrameBorder);
         this.removeSection(this.lastFrameBorder);
         this.setSectionAt(new Vector2d(0, 0), this.firstFrameBorder);
@@ -81,11 +100,8 @@ public class FramedGUIPane extends SimpleGUIPane {
     private SimpleGUIPane getFrameBorder() {
         SimpleGUIPane pane;
         GUI gui = this.getGui();
-        if (this.vertical) {
-            pane =  new SimpleGUIPaneBuilder(gui).size(new Vector2d(1, this.getHeight())).build();
-        } else {
-            pane = new SimpleGUIPaneBuilder(gui).size(new Vector2d(this.getWidth(), 1)).build();
-        }
+        Vector2d frameBorderSize = this.vertical ? new Vector2d(1, this.getHeight()) : new Vector2d(this.getWidth(), 1);
+        pane =  new SimpleGUIPaneBuilder(gui).size(frameBorderSize).build();
         for (int i = 0; i < pane.getSlots(); i++) {
             pane.addSection(new FrameBorderGUIItem(this.getGui()) {
                 @Override
@@ -97,7 +113,11 @@ public class FramedGUIPane extends SimpleGUIPane {
         return pane;
     }
 
+
+
+
     // FOR EASTER EGG
+
     public void playEasterAnimation(int slotStart) {
         this.moveAnimation(this.slotToVector(slotStart), EASTER_BORDER_ITEM);
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> this.moveAnimation(this.slotToVector(slotStart), GUI.PLACEHOLDER_ITEM), 4);
