@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.content.item;
+package de.placeblock.betterinventories.util;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;

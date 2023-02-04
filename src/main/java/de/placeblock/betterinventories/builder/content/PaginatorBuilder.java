@@ -14,58 +14,58 @@ import java.util.function.Function;
  * Author: Placeblock
  */
 @SuppressWarnings("unused")
-public class PaginatorGUIPaneBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, PaginatorGUIPaneBuilder> {
+public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, PaginatorBuilder> {
     private boolean repeat = true;
     private int startPage = 0;
     private final List<GUIItem> items = new ArrayList<>();
     private boolean defaultControls = true;
     private PaginatorControlsPosition defaultControlsPosition = PaginatorControlsPosition.RIGHT;
 
-    public PaginatorGUIPaneBuilder(GUI gui) {
+    public PaginatorBuilder(GUI gui) {
         super(gui);
     }
 
-    public PaginatorGUIPaneBuilder repeat(boolean repeat) {
+    public PaginatorBuilder repeat(boolean repeat) {
         this.repeat = repeat;
         return this;
     }
 
-    public PaginatorGUIPaneBuilder item(GUIItem item) {
+    public PaginatorBuilder item(GUIItem item) {
         this.items.add(item);
         return this;
     }
 
-    public PaginatorGUIPaneBuilder startPage(int index) {
+    public PaginatorBuilder startPage(int index) {
         this.startPage = index;
         return this;
     }
 
-    public PaginatorGUIPaneBuilder hideControls() {
+    public PaginatorBuilder hideControls() {
         this.defaultControls = false;
         return this;
     }
 
-    public PaginatorGUIPaneBuilder items(Collection<GUIItem> items) {
+    public PaginatorBuilder items(Collection<GUIItem> items) {
         this.items.addAll(items);
         return this;
     }
 
-    public PaginatorGUIPaneBuilder items(GUIItem... items) {
-        return this.items(new ArrayList<>(List.of(items)));
+    public PaginatorBuilder items(GUIItem... items) {
+        return this.items(List.of(items));
     }
 
-    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, Collection<T> items) {
+    public <T> PaginatorBuilder items(Function<T, GUIItem> converter, Collection<T> items) {
         for (T item : items) {
             this.item(converter.apply(item));
         }
         return this;
     }
 
-    public <T> PaginatorGUIPaneBuilder items(Function<T, GUIItem> converter, T[] items) {
+    public <T> PaginatorBuilder items(Function<T, GUIItem> converter, T[] items) {
         return this.items(converter, new ArrayList<>(List.of(items)));
     }
 
-    public PaginatorGUIPaneBuilder defaultControlsPosition(PaginatorControlsPosition position) {
+    public PaginatorBuilder defaultControlsPosition(PaginatorControlsPosition position) {
         this.defaultControlsPosition = position;
         return this;
     }

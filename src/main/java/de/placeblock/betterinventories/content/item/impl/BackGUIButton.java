@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl;
 
-import de.placeblock.betterinventories.content.item.ItemBuilder;
+import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.gui.GUI;
 import io.schark.design.texts.Texts;
 import org.bukkit.Material;

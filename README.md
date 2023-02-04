@@ -29,7 +29,7 @@ to represent a group of GUISections.
 A GUI represents an Inventory that can be shown to other players. It contains a main GUISection which is called
 the canvas. Everything you "draw" on it will be rendered and shown to the player.
 
-### In detail
+#### In detail
 
 If you want to create a new GUI you always have to ask you one question. What is the GUI going to contain?
 Based on the answer you can choose from one of the predefined GUIs or create your own.
@@ -40,9 +40,64 @@ Some examples for predefined GUIs:
 - CraftingTableGUI: A GUI which contains a GUIPane for the 3x3 Crafting Grid and one GUIItem for the result
 - ...
 
+GUIs can be shown to players. If you do so, a GUIView will be created containing the player and the BukkitInventory.
+If you update a GUI the content will be rendered and inserted into the BukkitInventories of the Views.
+
 ## How to create a GUI
-
-
 
 There are always two ways of creating GUIs and GUISections. You can create them by using builders or by
 extending them which allows you to add extra functionality.
+Creating a GUI is easy. Just instantiate a GUI class.
+
+> Don't forget to call gui.update() after adding items to a gui!
+
+## ItemBuilder
+
+If you want to create ItemStacks for a GUIItem you can use the ItemBuilder which also has support for
+head texture!
+Just instantiate a ```new ItemBuilder()``` with a title and a material and there you go!
+
+The following operations are supported by ItemBuilder:
+- Title and Material
+- Lore
+- Enchantments
+- Item Attributes
+- Item Flags
+- Unbreakable
+- Skin Texture
+
+## Implemented GUISections
+
+There are some GUISections already implemented to make life easier.
+
+### PaginatorGUIPane
+A GUIPane which creates pages for several Items you add to the Paginator.
+
+By default, it automatically creates controls to switch the page, but if you want to create your own ones,
+you can disable the default controls and add your own PaginatorControlsPane
+
+For the position of the arrows the following options are available in the PaginatorControlsPosition enum:
+- CENTER: Both buttons are in the center of the controls GUIPane
+- LEFT: Both buttons are on the left side of the controls GUIPane
+- RIGHT: Both buttons are on the right side of the controls GUIPane
+- SPACE_BETWEEN: One button is on the right side and the other one is on the left side of the controls GUIPane
+- SPACE_EVENLY: The space between the buttons and the border is even
+
+### FramedGUIPane
+FramedGUIPane creates borders around your content. It provides a frame GUIPane where you can draw on.
+You shouldn't draw directly on the canvas as this will potentially override the border.
+
+Another Feature of the FramedGUIPane is the option to pass a so called "BackGUI". If you do so, a Back-Button
+will be inserted into a border which opens the passed GUI.
+
+### SwitchGUIButton
+Automatically opens the passed GUI onClick
+
+### TeleportGUIButton
+Automatically teleports a player onClick
+
+### CommandGUIButton
+Automatically executes a command for a player on click
+
+### BackGUIButton
+Basically a SwitchGUIButton but with a specific ItemStack

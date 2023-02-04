@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.builder.content.PaginatorGUIPaneBuilder;
+import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -23,16 +23,16 @@ public class PaginatedFramedGUI extends FramedGUI {
         this(plugin, title, height, null);
     }
 
-    public PaginatedFramedGUI(Plugin plugin, TextComponent title, int height, Supplier<GUI> backInventory) {
-        this(plugin, title, height, FramedGUI.FRAMED_GUI_MAX_HEIGHT, backInventory, false, false);
+    public PaginatedFramedGUI(Plugin plugin, TextComponent title, Supplier<GUI> backInventory) {
+        this(plugin, title, 1, FramedGUI.FRAMED_GUI_MAX_HEIGHT, backInventory, false, true);
     }
 
     public PaginatedFramedGUI(Plugin plugin, TextComponent title, int height, boolean autoSize) {
         this(plugin, title, height, null, autoSize);
     }
 
-    public PaginatedFramedGUI(Plugin plugin, TextComponent title, int height, int maxHeight, Supplier<GUI> backInventory) {
-        this(plugin, title, height, maxHeight, backInventory, false, false);
+    public PaginatedFramedGUI(Plugin plugin, TextComponent title, int maxHeight, Supplier<GUI> backInventory) {
+        this(plugin, title, 1, maxHeight, backInventory, false, true);
     }
 
     public PaginatedFramedGUI(Plugin plugin, TextComponent title, int height, int maxHeight, boolean autoSize) {
@@ -52,7 +52,7 @@ public class PaginatedFramedGUI extends FramedGUI {
         int frameWidth = this.getFrame().getWidth();
         int frameHeight = this.getFrame().getHeight();
         int maxFrameHeight = this.getFrame().getMaxSize().getY();
-        PaginatorGUIPaneBuilder paginatorBuilder = new PaginatorGUIPaneBuilder(this)
+        PaginatorBuilder paginatorBuilder = new PaginatorBuilder(this)
                 .maxSize(new Vector2d(frameWidth, Math.min(vertical ? maxHeight : maxHeight - 2, maxFrameHeight)))
                 .repeat(true);
         if (autoSize) {

@@ -21,9 +21,6 @@ public abstract class BaseGUISectionBuilder<G extends GUISection, B extends Base
     }
 
     protected Vector2d getSize() {
-        if (this.size == null) {
-            throw new IllegalStateException("Size is null in builder");
-        }
         return this.size;
     }
 

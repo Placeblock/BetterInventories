@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.util;
 
-import de.placeblock.betterinventories.content.item.ItemBuilder;
 import io.schark.design.texts.Texts;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;

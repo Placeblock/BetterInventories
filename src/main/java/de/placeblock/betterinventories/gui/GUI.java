@@ -2,7 +2,7 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIButton;
-import de.placeblock.betterinventories.content.item.ItemBuilder;
+import de.placeblock.betterinventories.util.ItemBuilder;
 import io.schark.design.items.BukkitItems;
 import io.schark.design.texts.Texts;
 import lombok.Getter;
@@ -148,7 +148,7 @@ public abstract class GUI implements Listener {
         if (!(event.getPlayer() instanceof Player player)) return;
         GUIView view = this.getView(event.getInventory());
         if (view != null) {
-            removePlayer(view);
+            this.removePlayer(view);
         }
     }
 

@@ -2,7 +2,7 @@ package de.placeblock.betterinventories.content.pane.impl;
 
 import de.placeblock.betterinventories.builder.content.GUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
-import de.placeblock.betterinventories.content.item.ItemBuilder;
+import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
 import de.placeblock.betterinventories.content.item.impl.FrameBorderGUIItem;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
