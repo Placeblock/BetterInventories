@@ -16,9 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 @SuppressWarnings("unused")
 public class PaginatorGUIPane extends GUIPane {

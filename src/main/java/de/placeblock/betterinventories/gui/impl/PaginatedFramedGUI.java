@@ -10,9 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.function.Supplier;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 public class PaginatedFramedGUI extends FramedGUI {
 

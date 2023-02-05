@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.function.Function;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 @RequiredArgsConstructor
 public enum PaginatorControlsPosition {

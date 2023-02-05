@@ -5,9 +5,7 @@ import org.bukkit.event.inventory.InventoryType;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: Placeblock
- */
+
 public class InventoryTypeMapper {
 
     private static final Map<InventoryType, Vector2d> mappings = new HashMap<>();

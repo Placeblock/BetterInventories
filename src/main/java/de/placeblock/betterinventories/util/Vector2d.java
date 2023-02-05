@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 @RequiredArgsConstructor
 public class Vector2d {

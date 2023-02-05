@@ -10,9 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.function.Supplier;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 public class FramedGUI extends BaseChestGUI<FramedGUIPane> {
     public static final int FRAMED_GUI_MAX_WIDTH = 9;

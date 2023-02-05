@@ -7,9 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Supplier;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class SwitchGUIButton extends GUIButton {
     private final Supplier<GUI> targetGUI;

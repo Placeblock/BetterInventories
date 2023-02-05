@@ -5,9 +5,7 @@ import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Author: Placeblock
- */
+
 public class CommandGUIButton extends GUIButton {
     private final String command;
 

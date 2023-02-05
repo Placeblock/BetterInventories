@@ -7,9 +7,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
     public CanvasGUI(Plugin plugin, TextComponent title, int height) {
         this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));

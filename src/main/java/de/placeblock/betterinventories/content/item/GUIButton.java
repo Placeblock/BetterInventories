@@ -6,9 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public abstract class GUIButton extends GUIItem {
     private final int cooldown;

@@ -6,9 +6,7 @@ import de.placeblock.betterinventories.util.Vector2d;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
     public ChestGUI(Plugin plugin, TextComponent title, int height) {
         super(plugin, title);

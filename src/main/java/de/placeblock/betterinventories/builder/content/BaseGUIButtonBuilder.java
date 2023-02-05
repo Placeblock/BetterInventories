@@ -6,9 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.BiConsumer;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGUIButtonBuilder<G, B>> extends BaseGUIItemBuilder<G, B> {
     private BiConsumer<Player, Integer> onClick;

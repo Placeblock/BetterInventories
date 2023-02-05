@@ -9,9 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
     @Setter

@@ -11,9 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     protected C canvas;

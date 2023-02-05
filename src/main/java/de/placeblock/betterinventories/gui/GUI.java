@@ -21,9 +21,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {

@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.entity.Player;
 
-/**
- * Author: Placeblock
- */
+
 public abstract class FrameBorderGUIItem extends GUIButton {
     public static final int MAX_CLICK_DELAY = 400;
 

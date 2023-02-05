@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.entity.Player;
 
-/**
- * Author: Placeblock
- */
+
 public class GUIButtonBuilder extends BaseGUIButtonBuilder<GUIButton, GUIButtonBuilder> {
 
     public GUIButtonBuilder(GUI gui) {

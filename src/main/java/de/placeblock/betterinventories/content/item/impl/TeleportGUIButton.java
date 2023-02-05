@@ -6,9 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Author: Placeblock
- */
+
 public class TeleportGUIButton extends GUIButton {
     private final Location location;
 

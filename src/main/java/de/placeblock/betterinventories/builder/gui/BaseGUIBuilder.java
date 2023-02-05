@@ -8,9 +8,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings({"unchecked", "unused"})
 @RequiredArgsConstructor
 public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, B>> implements Builder<G, B> {

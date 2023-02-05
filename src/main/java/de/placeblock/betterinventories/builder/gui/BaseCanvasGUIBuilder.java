@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.impl.BaseCanvasGUI;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanvasGUI<P>, B extends BaseCanvasGUIBuilder<P, G, B>> extends BaseGUIBuilder<G, B> {
     private Integer height;

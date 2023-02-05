@@ -7,9 +7,7 @@ import org.bukkit.Material;
 
 import java.util.function.Supplier;
 
-/**
- * Author: Placeblock
- */
+
 public class BackGUIButton extends SwitchGUIButton {
     public BackGUIButton(GUI gui, Supplier<GUI> targetGUI) {
         super(gui, new ItemBuilder(Texts.BUTTON_BACK_ITEM, Material.RED_STAINED_GLASS_PANE).build(), targetGUI);

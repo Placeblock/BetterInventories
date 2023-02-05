@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 @AllArgsConstructor
 @SuppressWarnings("unused")

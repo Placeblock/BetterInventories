@@ -3,9 +3,7 @@ package de.placeblock.betterinventories.builder.gui;
 import de.placeblock.betterinventories.gui.impl.PaginatedFramedGUI;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public class PaginatedFramedGUIBuilder extends BaseFramedGUIBuilder<PaginatedFramedGUI, PaginatedFramedGUIBuilder>{
     private Integer maxHeight = 6;
     private boolean autoSize = false;

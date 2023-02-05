@@ -10,9 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, PaginatorBuilder> {
     private boolean repeat = true;

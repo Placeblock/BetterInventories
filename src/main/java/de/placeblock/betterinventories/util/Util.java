@@ -16,9 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Author: Placeblock
- */
+
 public class Util {
     public static ItemStack getArrowItem(ArrowDirection direction, TextComponent title) {
         return new ItemBuilder(title, Material.PLAYER_HEAD).skinTexture(direction.getTexture()).build();

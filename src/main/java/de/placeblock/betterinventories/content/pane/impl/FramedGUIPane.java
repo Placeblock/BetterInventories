@@ -21,9 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * Author: Placeblock
- */
+
 public class FramedGUIPane extends SimpleGUIPane {
     public static final ItemStack EASTER_BORDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.CYAN_STAINED_GLASS_PANE).build();
 

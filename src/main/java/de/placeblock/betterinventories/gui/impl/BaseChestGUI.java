@@ -6,9 +6,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> {
     private int lastUpdateRows = 1;
 

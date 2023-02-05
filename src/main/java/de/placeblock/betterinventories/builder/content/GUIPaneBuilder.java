@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class GUIPaneBuilder extends BaseGUIPaneBuilder<SimpleGUIPane, GUIPaneBuilder> {
     public GUIPaneBuilder(GUI gui) {

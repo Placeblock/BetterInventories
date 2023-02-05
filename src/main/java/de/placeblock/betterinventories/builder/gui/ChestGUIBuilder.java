@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.impl.ChestGUI;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, ChestGUI, ChestGUIBuilder> {
     public ChestGUIBuilder(Plugin plugin) {
         super(plugin);

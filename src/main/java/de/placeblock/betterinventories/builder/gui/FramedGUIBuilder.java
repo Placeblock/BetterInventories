@@ -3,9 +3,7 @@ package de.placeblock.betterinventories.builder.gui;
 import de.placeblock.betterinventories.gui.impl.FramedGUI;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Author: Placeblock
- */
+
 public class FramedGUIBuilder extends BaseFramedGUIBuilder<FramedGUI, FramedGUIBuilder> {
     public FramedGUIBuilder(Plugin plugin) {
         super(plugin);

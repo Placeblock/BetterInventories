@@ -10,9 +10,7 @@ import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-/**
- * Author: Placeblock
- */
+
 public class PaginatorControlsPane extends SimpleGUIPane {
     public static final GUIItem FILL_ITEM = new GUIItem(null, GUI.PLACEHOLDER_ITEM);
     private final PaginatorGUIPane paginatorGUIPane;

@@ -4,9 +4,7 @@ import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unchecked")
 public abstract class BaseGUIItemBuilder<T extends GUIItem, B extends BaseGUIItemBuilder<T, B>> extends BaseGUISectionBuilder<T, B> {
     private ItemStack item;

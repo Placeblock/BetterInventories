@@ -5,9 +5,7 @@ import lombok.Getter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 public enum ArrowDirection {
 

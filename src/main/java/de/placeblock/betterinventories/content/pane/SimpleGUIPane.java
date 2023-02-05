@@ -7,9 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class SimpleGUIPane extends GUIPane {
     private final Map<Vector2d, GUISection> content = new HashMap<>();

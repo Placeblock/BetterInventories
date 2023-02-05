@@ -7,9 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-/**
- * Author: Placeblock
- */
+
 @Getter
 public class GUIView {
 

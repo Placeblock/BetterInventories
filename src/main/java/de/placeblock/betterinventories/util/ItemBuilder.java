@@ -17,9 +17,7 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.URL;
 import java.util.*;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings("unused")
 public class ItemBuilder {
     private final Component title;
