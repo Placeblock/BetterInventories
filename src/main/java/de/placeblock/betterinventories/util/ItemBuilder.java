@@ -52,8 +52,12 @@ public class ItemBuilder {
         }
     }
 
-    public ItemBuilder lore(TextComponent lore) {
-        this.lore.add(lore);
+    public ItemBuilder lore(TextComponent... lore) {
+        return this.lore(List.of(lore));
+    }
+
+    public ItemBuilder lore(Collection<TextComponent> lore) {
+        this.lore.addAll(lore);
         return this;
     }
 
