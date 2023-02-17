@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,9 +13,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 
+@SuppressWarnings("unused")
 public class Util {
     public static ItemStack getArrowItem(ArrowDirection direction, TextComponent title) {
         return new ItemBuilder(title, Material.PLAYER_HEAD).skinTexture(direction.getTexture()).build();
@@ -26,12 +27,12 @@ public class Util {
         return Util.getArrowItem(direction, Texts.primary(direction.getName()));
     }
 
-    public static void getTexture(Plugin plugin, String playerName, Consumer<URL> callback) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
-            callback.accept(offlinePlayer.getPlayerProfile().getTextures().getSkin());
-        });
+    public static void getTexture(UUID playerUUID, Consumer<URL> callback) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+        offlinePlayer.getPlayerProfile().update().thenAccept(profile ->
+                callback.accept(profile.getTextures().getSkin()));
     }
+
     public static <T> Vector2d calculateGUISize(T[] items) {
         return Util.calculateGUISize(items, 9);
     }
