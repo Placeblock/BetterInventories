@@ -19,14 +19,14 @@ import java.util.*;
 
 
 @SuppressWarnings("unused")
-public class ItemBuilder implements Cloneable {
-    private TextComponent title;
-    private Material material;
-    private int amount;
-    private List<Component> lore = new ArrayList<>();
-    private Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private Map<Attribute, AttributeModifier> attributes = new HashMap<>();
-    private List<ItemFlag> flags = new ArrayList<>();
+public class ItemBuilder {
+    private final TextComponent title;
+    private final Material material;
+    private final int amount;
+    private final List<Component> lore;
+    private final Map<Enchantment, Integer> enchantments;
+    private final Map<Attribute, AttributeModifier> attributes;
+    private final List<ItemFlag> flags;
     private boolean unbreakable;
     private URL skinURL;
 
@@ -47,9 +47,25 @@ public class ItemBuilder implements Cloneable {
         this.material = material;
         this.amount = amount;
         this.unbreakable = unbreakable;
+        this.lore = new ArrayList<>();
+        this.attributes = new HashMap<>();
+        this.flags = new ArrayList<>();
+        this.enchantments = new HashMap<>();
         if (hideInfo) {
             this.flag(ItemFlag.HIDE_ATTRIBUTES).flag(ItemFlag.HIDE_ENCHANTS).flag(ItemFlag.HIDE_UNBREAKABLE);
         }
+    }
+
+    public ItemBuilder(ItemBuilder itemBuilder) {
+        this.title = itemBuilder.title;
+        this.material = itemBuilder.material;
+        this.lore = itemBuilder.lore;
+        this.amount = itemBuilder.amount;
+        this.enchantments = itemBuilder.enchantments;
+        this.flags = itemBuilder.flags;
+        this.attributes = itemBuilder.attributes;
+        this.unbreakable = itemBuilder.unbreakable;
+        this.skinURL = itemBuilder.skinURL;
     }
 
     public ItemBuilder lore(TextComponent... lore) {
@@ -114,24 +130,5 @@ public class ItemBuilder implements Cloneable {
 
         item.setItemMeta(meta);
         return item;
-    }
-
-    @Override
-    public ItemBuilder clone() {
-        try {
-            ItemBuilder clone = (ItemBuilder) super.clone();
-            clone.title = this.title;
-            clone.material = this.material;
-            clone.lore = this.lore;
-            clone.amount = this.amount;
-            clone.enchantments = this.enchantments;
-            clone.flags = this.flags;
-            clone.attributes = this.attributes;
-            clone.unbreakable = this.unbreakable;
-            clone.skinURL = this.skinURL;
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 }
