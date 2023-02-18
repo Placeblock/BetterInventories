@@ -19,14 +19,14 @@ import java.util.*;
 
 
 @SuppressWarnings("unused")
-public class ItemBuilder {
-    private final Component title;
-    private final Material material;
-    private final int amount;
-    private final List<Component> lore = new ArrayList<>();
-    private final Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private final Map<Attribute, AttributeModifier> attributes = new HashMap<>();
-    private final List<ItemFlag> flags = new ArrayList<>();
+public class ItemBuilder implements Cloneable {
+    private TextComponent title;
+    private Material material;
+    private int amount;
+    private List<Component> lore = new ArrayList<>();
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
+    private Map<Attribute, AttributeModifier> attributes = new HashMap<>();
+    private List<ItemFlag> flags = new ArrayList<>();
     private boolean unbreakable;
     private URL skinURL;
 
@@ -116,4 +116,22 @@ public class ItemBuilder {
         return item;
     }
 
+    @Override
+    public ItemBuilder clone() {
+        try {
+            ItemBuilder clone = (ItemBuilder) super.clone();
+            clone.title = this.title;
+            clone.material = this.material;
+            clone.lore = this.lore;
+            clone.amount = this.amount;
+            clone.enchantments = this.enchantments;
+            clone.flags = this.flags;
+            clone.attributes = this.attributes;
+            clone.unbreakable = this.unbreakable;
+            clone.skinURL = this.skinURL;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }
