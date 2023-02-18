@@ -59,11 +59,11 @@ public class ItemBuilder {
     public ItemBuilder(ItemBuilder itemBuilder) {
         this.title = itemBuilder.title;
         this.material = itemBuilder.material;
-        this.lore = itemBuilder.lore;
+        this.lore = new ArrayList<>(itemBuilder.lore);
         this.amount = itemBuilder.amount;
-        this.enchantments = itemBuilder.enchantments;
-        this.flags = itemBuilder.flags;
-        this.attributes = itemBuilder.attributes;
+        this.enchantments = new HashMap<>(itemBuilder.enchantments);
+        this.flags = new ArrayList<>(itemBuilder.flags);
+        this.attributes = new HashMap<>(itemBuilder.attributes);
         this.unbreakable = itemBuilder.unbreakable;
         this.skinURL = itemBuilder.skinURL;
     }
