@@ -3,13 +3,14 @@ package de.placeblock.betterinventories.content.item;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Getter
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
     @Setter
