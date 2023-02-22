@@ -14,16 +14,16 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
     @Setter
-    protected ItemStack item;
+    protected ItemStack itemStack;
 
-    public GUIItem(GUI gui, ItemStack item) {
+    public GUIItem(GUI gui, ItemStack itemStack) {
         super(gui, new Vector2d(1,1));
-        this.item = item;
+        this.itemStack = itemStack;
     }
 
     @Override
     public List<ItemStack> render() {
-        return new ArrayList<>(List.of(item));
+        return new ArrayList<>(List.of(itemStack));
     }
 
     @Override

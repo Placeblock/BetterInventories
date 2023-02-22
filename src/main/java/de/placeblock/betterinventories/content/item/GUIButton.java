@@ -45,7 +45,7 @@ public abstract class GUIButton extends GUIItem {
 
     public void setCooldown(int cooldown) {
         for (GUIView view : this.getGui().getViews()) {
-            view.getPlayer().setCooldown(this.item.getType(), cooldown);
+            view.getPlayer().setCooldown(this.itemStack.getType(), cooldown);
         }
     }
 

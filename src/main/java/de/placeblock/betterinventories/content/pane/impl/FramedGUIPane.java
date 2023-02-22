@@ -129,7 +129,7 @@ public class FramedGUIPane extends SimpleGUIPane {
             public void run() {
                 Set<FrameBorderGUIItem> animationItems = FramedGUIPane.this.getNextButtons(startIndex, index[0]);
                 for (FrameBorderGUIItem animationItem : animationItems) {
-                    animationItem.setItem(item);
+                    animationItem.setItemStack(item);
                 }
                 FramedGUIPane.this.getGui().update();
                 index[0]++;
