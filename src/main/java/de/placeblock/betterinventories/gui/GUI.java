@@ -113,11 +113,10 @@ public abstract class GUI implements Listener {
         if (view != null) {
             event.setCancelled(true);
 
-            InventoryAction action = event.getAction();
-            boolean leftClick = action == InventoryAction.PICKUP_ALL;
-            boolean rightClick = action == InventoryAction.PICKUP_HALF;
-            boolean shiftClick = action == InventoryAction.MOVE_TO_OTHER_INVENTORY;
-            if (!leftClick && !rightClick && !shiftClick) return;
+            ClickType clickType = event.getClick();
+            boolean leftClick = clickType == ClickType.LEFT;
+            boolean rightClick = clickType == ClickType.RIGHT;
+            if (!leftClick && !rightClick && clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT) return;
 
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
