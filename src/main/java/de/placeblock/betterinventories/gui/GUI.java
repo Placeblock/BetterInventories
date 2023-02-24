@@ -114,9 +114,9 @@ public abstract class GUI implements Listener {
             event.setCancelled(true);
 
             ClickType clickType = event.getClick();
-            boolean leftClick = clickType == ClickType.LEFT;
-            boolean rightClick = clickType == ClickType.RIGHT;
-            if (!leftClick && !rightClick && clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT) return;
+            boolean leftClick = clickType.isLeftClick();
+            boolean rightClick = clickType.isRightClick();
+            if (!leftClick && !rightClick) return;
 
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
