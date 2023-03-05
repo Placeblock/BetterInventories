@@ -1,9 +1,9 @@
 package de.placeblock.betterinventories.content.item.impl;
 
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Supplier;
@@ -19,9 +19,9 @@ public class SwitchGUIButton extends GUIButton {
     }
 
     @Override
-    public void onClick(Player player, int slot) {
+    public void onClick(ClickData data) {
         if (this.targetGUI != null) {
-            this.targetGUI.get().showPlayer(player);
+            this.targetGUI.get().showPlayer(data.getPlayer());
         }
     }
 }

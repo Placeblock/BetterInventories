@@ -49,17 +49,17 @@ public abstract class GUIButton extends GUIItem {
         }
     }
 
-    public abstract void onClick(Player player, int slot);
-    public void onLeftClick(Player player, int slot) {}
-    public void onRightClick(Player player, int slot) {}
-    public void onShiftClick(Player player, int slot) {
-        this.onClick(player, slot);
+    public abstract void onClick(ClickData data);
+    public void onLeftClick(ClickData data) {}
+    public void onRightClick(ClickData data) {}
+    public void onShiftClick(ClickData data) {
+        this.onClick(data);
     }
-    public void onShiftLeftClick(Player player, int slot) {
-        this.onLeftClick(player, slot);
+    public void onShiftLeftClick(ClickData data) {
+        this.onLeftClick(data);
     }
-    public void onShiftRightClick(Player player, int slot) {
-        this.onRightClick(player, slot);
+    public void onShiftRightClick(ClickData data) {
+        this.onRightClick(data);
     }
 
 }

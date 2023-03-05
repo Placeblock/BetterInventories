@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import io.schark.design.items.BukkitItems;
@@ -120,21 +121,22 @@ public abstract class GUI implements Listener {
 
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
+            ClickData clickData = new ClickData(player, slot, event.getAction(), event);
             if (clicked instanceof GUIButton button) {
                 button.click(player);
                 if (event.isShiftClick()) {
-                    button.onShiftClick(player, slot);
+                    button.onShiftClick(clickData);
                     if (leftClick) {
-                        button.onShiftLeftClick(player, slot);
+                        button.onShiftLeftClick(clickData);
                     } else {
-                        button.onShiftRightClick(player, slot);
+                        button.onShiftRightClick(clickData);
                     }
                 } else {
-                    button.onClick(player, slot);
+                    button.onClick(clickData);
                     if (leftClick) {
-                        button.onLeftClick(player, slot);
+                        button.onLeftClick(clickData);
                     } else {
-                        button.onRightClick(player, slot);
+                        button.onRightClick(clickData);
                     }
                 }
             }

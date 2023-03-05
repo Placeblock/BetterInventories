@@ -1,8 +1,8 @@
 package de.placeblock.betterinventories.content.item.impl;
 
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
-import org.bukkit.entity.Player;
 
 
 public abstract class FrameBorderGUIItem extends GUIButton {
@@ -17,14 +17,14 @@ public abstract class FrameBorderGUIItem extends GUIButton {
     }
 
     @Override
-    public void onClick(Player player, int slot) {
+    public void onClick(ClickData data) {
         long time = System.currentTimeMillis();
         if (time- this.lastClick > MAX_CLICK_DELAY) {
             this.clicks = 0;
         } else {
             this.clicks++;
             if (this.clicks > 3) {
-                this.onActivate(slot);
+                this.onActivate(data.getSlot());
                 this.clicks = 0;
             }
         }

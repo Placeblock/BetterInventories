@@ -1,8 +1,8 @@
 package de.placeblock.betterinventories.content.item.impl;
 
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -15,7 +15,7 @@ public class CommandGUIButton extends GUIButton {
     }
 
     @Override
-    public void onClick(Player player, int slot) {
-        player.performCommand(this.command);
+    public void onClick(ClickData data) {
+        data.getPlayer().performCommand(this.command);
     }
 }
