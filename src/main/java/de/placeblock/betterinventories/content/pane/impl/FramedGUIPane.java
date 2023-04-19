@@ -7,7 +7,6 @@ import de.placeblock.betterinventories.content.item.impl.BackGUIButton;
 import de.placeblock.betterinventories.content.item.impl.FrameBorderGUIItem;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.gui.impl.FramedGUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import io.schark.design.texts.Texts;
 import lombok.Getter;

@@ -2,7 +2,6 @@ package de.placeblock.betterinventories.builder.gui;
 
 import de.placeblock.betterinventories.content.pane.impl.FramedGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.gui.impl.FramedGUI;
 import lombok.Getter;
 import org.bukkit.plugin.Plugin;
 

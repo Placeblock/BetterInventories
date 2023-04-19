@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.builder.gui;
 
-import de.placeblock.betterinventories.gui.impl.PaginatedFramedGUI;
 import org.bukkit.plugin.Plugin;
 
 
