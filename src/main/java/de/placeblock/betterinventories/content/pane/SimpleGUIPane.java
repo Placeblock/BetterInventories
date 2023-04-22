@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.pane.size.PanePos;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.inventory.ItemStack;
@@ -12,26 +13,14 @@ import java.util.*;
 public class SimpleGUIPane extends GUIPane {
     private final Map<Vector2d, GUISection> content = new HashMap<>();
 
-    public SimpleGUIPane(GUI gui, Vector2d size) {
-        this(gui, size, size, size, false);
-    }
-
-    public SimpleGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize) {
-        super(gui, size, maxSize, minSize, autoSize);
+    public SimpleGUIPane(GUI gui, PanePos size, PanePos minSize, PanePos maxSize) {
+        super(gui, size, maxSize, minSize);
     }
 
     @Override
-    public void prerender() {
-        this.prerenderChildren();
-        if (this.isAutoSize()) {
-            this.updateSize();
-        }
-    }
+    public void updateSize(GUISection parent) {
 
-    protected void prerenderChildren() {
-        for (GUISection section : this.content.values()) {
-            section.prerender();
-        }
+        parent.get
     }
 
     @Override
@@ -101,17 +90,5 @@ public class SimpleGUIPane extends GUIPane {
             if (hascontentlist.get(i) == null) return i;
         }
         return -1;
-    }
-
-    protected void updateSize() {
-        int newHeight = 0;
-        int newWidth = 0;
-        for (Vector2d pos : this.content.keySet()) {
-            GUISection section = this.content.get(pos);
-            newHeight = Math.max(newHeight, pos.getY()+ section.getHeight());
-            newWidth = Math.max(newWidth, pos.getX()+ section.getWidth());
-        }
-        this.setHeight(newHeight);
-        this.setWidth(newWidth);
     }
 }
