@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.modifier;
+package de.placeblock.betterinventories.template;
 
 import de.placeblock.betterinventories.content.pane.impl.FramedGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -11,7 +11,7 @@ public class FrameGUITemplate extends GUITemplate {
 
     public FrameGUITemplate(GUI gui) {
         super(gui);
-        this.frame
+        this.frame = new FramedGUIPane();
     }
 
     @Override

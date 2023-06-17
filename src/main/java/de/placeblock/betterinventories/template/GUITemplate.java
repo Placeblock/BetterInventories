@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.modifier;
+package de.placeblock.betterinventories.template;
 
 import de.placeblock.betterinventories.gui.GUI;
 import lombok.Getter;

@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.content.pane;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.size.PanePos;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,14 +14,8 @@ import java.util.*;
 public class SimpleGUIPane extends GUIPane {
     private final Map<Vector2d, GUISection> content = new HashMap<>();
 
-    public SimpleGUIPane(GUI gui, PanePos size, PanePos minSize, PanePos maxSize) {
-        super(gui, size, maxSize, minSize);
-    }
-
-    @Override
-    public void updateSize(GUISection parent) {
-
-        parent.get
+    public SimpleGUIPane(GUI gui, PanePos size, Vector2d minSize, Vector2d maxSize) {
+        super(gui, maxSize, minSize, size);
     }
 
     @Override
@@ -31,6 +26,16 @@ public class SimpleGUIPane extends GUIPane {
             content = this.renderOnList(vector2d, guiSection, content);
         }
         return content;
+    }
+
+    @Override
+    public void updateSize(GUISection parent) {
+        this.absoluteSize = Util.clampVector(this.size.getAbsolute(parent.getAbsoluteSize()), this.minSize, this.maxSize);
+    }
+
+    @Override
+    public Collection<GUISection> getChildren() {
+        return this.content.values();
     }
 
     public GUISection getSectionAt(Vector2d position) {

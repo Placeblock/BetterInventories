@@ -11,10 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -129,6 +126,18 @@ public class PaginatorGUIPane extends GUIPane {
             rendered = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.defaultControl, rendered);
         }
         return rendered;
+    }
+
+    @Override
+    public void updateSize(GUISection parent) {
+        Vector2d maxSize = this.size.getAbsolute(parent.getMaxSize());
+        Vector2d size = Util.calculateGUISize(this.items, maxSize.getX());
+        this.absoluteSize = Util.clampVector(size, this.minSize, this.maxSize);
+    }
+
+    @Override
+    public Collection<GUISection> getChildren() {
+        return List.of();
     }
 
     @Override

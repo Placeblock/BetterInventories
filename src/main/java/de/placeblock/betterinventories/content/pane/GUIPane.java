@@ -16,11 +16,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUIPane extends GUISection {
 
-    public GUIPane(GUI gui, PanePos size, PanePos minSize, PanePos maxSize) {
-        super(gui);
+    public GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, PanePos size) {
+        super(gui, minSize, maxSize, size);
     }
-
-    public abstract void updateSize(GUISection parent);
 
     protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
         List<ItemStack> childContent = section.render();

@@ -6,24 +6,36 @@ import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 
 @Getter
-@AllArgsConstructor
 @SuppressWarnings("unused")
 public abstract class GUISection {
     private final GUI gui;
     protected Vector2d absoluteSize;
+    protected Vector2d minSize;
+    protected Vector2d maxSize;
     protected PanePos size;
-    protected PanePos minSize;
-    protected PanePos maxSize;
+
+    public GUISection(GUI gui, Vector2d minSize, Vector2d maxSize, PanePos size) {
+        this.gui = gui;
+        this.minSize = minSize;
+        this.maxSize = maxSize;
+        this.size = size;
+    }
 
     public abstract List<ItemStack> render();
+
+    public abstract void updateSize(GUISection parent);
+
+    public abstract Collection<GUISection> getChildren();
 
     public GUISection getSectionAt(int index) {
         return this.getSectionAt(this.slotToVector(index));
