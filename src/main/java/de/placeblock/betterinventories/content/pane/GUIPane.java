@@ -5,9 +5,6 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
 
 
 @Getter
@@ -15,16 +12,21 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUIPane extends GUISection {
 
-    public GUIPane(GUI gui, Vector2d size) {
-        super(gui, size);
+    public GUIPane(GUI gui, Vector2d size, Vector2d maxSize) {
+        super(gui, size, maxSize);
     }
 
-    protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
-        List<ItemStack> childContent = section.render();
-        for (int i = 0; i < childContent.size(); i++) {
-            Vector2d relative = section.slotToVector(i);
-            content.set(this.vectorToSlot(position.add(relative)), childContent.get(i));
-        }
-        return content;
+    public void setSize(Vector2d size) {
+        this.size = size;
     }
+
+    public void setHeight(int height) {
+        this.setSize(new Vector2d(this.getWidth(), height));
+    }
+
+    public void setWidth(int width) {
+        this.setSize(new Vector2d(width, this.getHeight()));
+    }
+
+    abstract void updateSize(Vector2d parentMaxSize);
 }

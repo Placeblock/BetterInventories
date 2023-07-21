@@ -129,7 +129,7 @@ public class PaginatorGUIPane extends GUIPane {
 
     @Override
     public List<ItemStack> render() {
-        List<ItemStack> rendered = this.getEmptyContentArray(ItemStack.class);
+        List<ItemStack> rendered = this.getEmptyContentList(ItemStack.class);
         rendered = this.renderOnList(new Vector2d(), this.contentPane, rendered);
         if (this.isDefaultControlEnabled()) {
             rendered = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.defaultControl, rendered);

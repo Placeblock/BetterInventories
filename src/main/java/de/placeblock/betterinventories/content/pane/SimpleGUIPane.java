@@ -12,16 +12,24 @@ import java.util.*;
 public class SimpleGUIPane extends GUIPane {
     private final Map<Vector2d, GUISection> content = new HashMap<>();
 
-    public SimpleGUIPane(GUI gui, Vector2d size) {
-        super(gui, size);
+    public SimpleGUIPane(GUI gui, Vector2d size, Vector2d maxSize) {
+        super(gui, size, maxSize);
+    }
+
+    protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
+        List<ItemStack> childContent = section.render();
+        for (int i = 0; i < childContent.size(); i++) {
+            Vector2d relative = section.slotToVector(i);
+            content.set(this.vectorToSlot(position.add(relative)), childContent.get(i));
+        }
+        return content;
     }
 
     @Override
     public List<ItemStack> render() {
-        List<ItemStack> content = this.getEmptyContentArray(ItemStack.class);
-        for (Vector2d vector2d : this.content.keySet()) {
-            GUISection guiSection = this.content.get(vector2d);
-            content = this.renderOnList(vector2d, guiSection, content);
+        List<ItemStack> content = this.getEmptyContentList(ItemStack.class);
+        for (Map.Entry<Vector2d, GUISection> sectionEntry : this.content.entrySet()) {
+            this.renderOnList(sectionEntry.getKey(), sectionEntry.getValue(), content);
         }
         return content;
     }
@@ -71,7 +79,7 @@ public class SimpleGUIPane extends GUIPane {
     }
 
     private int getNextEmptySlot() {
-        List<Boolean> hascontentlist = this.getEmptyContentArray(Boolean.class);
+        List<Boolean> hascontentlist = this.getEmptyContentList(Boolean.class);
         for (Vector2d pos : this.content.keySet()) {
             GUISection child = this.content.get(pos);
             for (int i = 0; i < child.getSlots(); i++) {

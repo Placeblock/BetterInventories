@@ -4,7 +4,6 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -16,12 +15,13 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUISection {
     private final GUI gui;
-    @Setter
     protected Vector2d size;
+    protected Vector2d maxSize;
 
-    public GUISection(GUI gui, Vector2d size) {
+    public GUISection(GUI gui, Vector2d size, Vector2d maxSize) {
         this.gui = gui;
         this.size = size;
+        this.maxSize = maxSize;
     }
 
     public abstract List<ItemStack> render();
@@ -36,7 +36,7 @@ public abstract class GUISection {
         return Util.slotToVector(index, this.size.getX());
     }
 
-    public <T> List<T> getEmptyContentArray(Class<T> clazz) {
+    public <T> List<T> getEmptyContentList(Class<T> clazz) {
         return new ArrayList<>(Collections.nCopies(this.getSlots(), null));
     }
 
@@ -54,13 +54,5 @@ public abstract class GUISection {
 
     public int getWidth() {
         return this.size.getX();
-    }
-
-    public void setHeight(int height) {
-        this.setSize(new Vector2d(this.getWidth(), height));
-    }
-
-    public void setWidth(int width) {
-        this.setSize(new Vector2d(width, this.getHeight()));
     }
 }
