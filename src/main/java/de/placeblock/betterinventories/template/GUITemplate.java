@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public abstract class GUITemplate {
+public abstract class GUITemplate<G extends GUI> {
 
-    private final GUI gui;
-
-    abstract void setup();
+    protected final G gui;
 
 }

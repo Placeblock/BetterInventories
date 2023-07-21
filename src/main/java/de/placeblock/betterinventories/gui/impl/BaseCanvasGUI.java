@@ -30,13 +30,8 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     }
 
     @Override
-    public List<ItemStack> renderContent() {
+    protected List<ItemStack> renderContent() {
         return this.canvas.render();
-    }
-
-    @Override
-    public void prerenderContent() {
-        this.canvas.prerender();
     }
 
     @Override

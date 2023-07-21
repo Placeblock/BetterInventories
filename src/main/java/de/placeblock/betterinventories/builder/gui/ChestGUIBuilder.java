@@ -1,7 +1,6 @@
 package de.placeblock.betterinventories.builder.gui;
 
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
-import de.placeblock.betterinventories.gui.impl.ChestGUI;
 import org.bukkit.plugin.Plugin;
 
 

@@ -35,16 +35,12 @@ public class FramedGUIPane extends SimpleGUIPane {
 
 
     public FramedGUIPane(GUI gui, Vector2d size, boolean vertical, Supplier<GUI> backGUI) {
-        super(gui, size, new Vector2d(FramedGUI.FRAMED_GUI_MAX_WIDTH, FramedGUI.FRAMED_GUI_MAX_HEIGHT),
-                vertical ? FramedGUI.FRAMED_GUI_VERTICAL_MIN : FramedGUI.FRAMED_GUI_HORIZONTAL_MIN, true);
+        super(gui, size);
         this.backGUI = backGUI;
         this.vertical = vertical;
         this.setBackGUI(backGUI);
         Vector2d canvasSize = this.vertical ? new Vector2d(this.getWidth() - 2, this.getHeight()) : new Vector2d(this.getWidth(), this.getHeight() - 2);
-        int maxHeight = this.vertical ? FramedGUI.FRAMED_GUI_FRAME_VERTICAL_MAX_HEIGHT : FramedGUI.FRAMED_GUI_FRAME_HORIZONTAL_MAX_HEIGHT;
-        Vector2d frameMinSize = new Vector2d(canvasSize.getX(), 1);
-        Vector2d frameMaxSize = new Vector2d(canvasSize.getX(), maxHeight);
-        this.frame = new SimpleGUIPane(this.getGui(), canvasSize, frameMaxSize, frameMinSize, true);
+        this.frame = new SimpleGUIPane(this.getGui(), canvasSize);
         this.setSectionAt(this.vertical ? new Vector2d(1, 0) : new Vector2d(0, 1), this.getFrame());
         this.setFrameBorders();
     }
@@ -58,20 +54,6 @@ public class FramedGUIPane extends SimpleGUIPane {
             this.lastFrameBorder.setSectionAt(this.lastFrameBorder.getSlots()-1,
                     new BackGUIButton(this.getGui(), this.backGUI));
         }
-    }
-
-    @Override
-    public void prerender() {
-        this.prerenderChildren();
-        this.repositionFrameBorders();
-        if (this.isAutoSize()) {
-            this.updateSize();
-        }
-    }
-
-    @Override
-    public void onUpdateSize() {
-        this.setFrameBorders();
     }
 
     private void setFrameBorders() {
@@ -109,8 +91,6 @@ public class FramedGUIPane extends SimpleGUIPane {
         }
         return pane;
     }
-
-
 
 
     // FOR EASTER EGG

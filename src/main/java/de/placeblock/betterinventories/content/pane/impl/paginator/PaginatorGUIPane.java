@@ -28,16 +28,16 @@ public class PaginatorGUIPane extends GUIPane {
     private boolean showDefaultControls;
 
     public PaginatorGUIPane(GUI gui, Vector2d size, boolean repeat) {
-        this(gui, size, size, size, false, repeat, 0, true, PaginatorControlsPosition.RIGHT);
+        this(gui, size, size.getX(), size.getY(), false, repeat, 0, true, PaginatorControlsPosition.RIGHT);
     }
 
-    public PaginatorGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
-        super(gui, size, maxSize, minSize, autoSize);
+    public PaginatorGUIPane(GUI gui, Vector2d size, int maxWidth, int maxHeight, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
+        super(gui, size);
         if (this.getWidth() < 2) {
             throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum width of 2");
         }
         this.defaultControlsPosition = defaultControlsPosition;
-        this.contentPane = new SimpleGUIPane(gui, this.size, this.size, new Vector2d(this.getWidth(), 1), false);
+        this.contentPane = new SimpleGUIPane(gui, this.size);
         this.currentPage = currentPage;
         this.repeat = repeat;
         if (defaultControls) {
@@ -46,27 +46,37 @@ public class PaginatorGUIPane extends GUIPane {
         } else {
             this.defaultControl = null;
         }
+        this.updateSize(maxWidth, maxHeight);
         this.update();
     }
 
     public void addItem(GUIItem item) {
         this.items.add(item);
-        this.updateSize();
         this.update();
     }
 
+
     private void updateSize() {
-        if (this.isAutoSize()) {
-            int newWidth = Math.min(this.getMaxSize().getX(), this.items.size());
-            int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
-            this.setWidth(newWidth);
-            this.setHeight(newHeight);
+        this.updateSize(this.getWidth(), this.getHeight());
+    }
+
+    private void updateSize(int maxWidth, int maxHeight) {
+        int newWidth = Math.min(maxWidth, this.items.size());
+        int newHeight = (int) Math.min(Math.ceil(this.items.size() * 1F / newWidth), maxHeight);
+        this.setSize(new Vector2d(newWidth, newHeight));
+
+        this.contentPane.setWidth(this.getWidth());
+        this.contentPane.setHeight(this.isDefaultControlEnabled() ? this.getHeight() - 1 : this.getHeight());
+        for (PaginatorControlsPane control : this.controls) {
+            control.setWidth(this.getWidth());
         }
+        this.currentPage = Math.min(this.currentPage, this.getPages());
+        this.initControls();
+        this.update();
     }
 
     public void clearItems() {
         this.items.clear();
-        this.updateSize();
         this.update();
     }
 
@@ -95,7 +105,6 @@ public class PaginatorGUIPane extends GUIPane {
         this.showDefaultControls = this.items.size() > this.getSlots();
         this.updateControls();
         this.contentPane.clear();
-        this.contentPane.setHeight(this.isDefaultControlEnabled() ? this.getHeight() - 1 : this.getHeight());
         int startIndex = this.contentPane.getSlots()*this.currentPage;
         for (int i = 0; i < this.contentPane.getSlots() && i < this.items.size() - startIndex; i++) {
             this.contentPane.setSectionAt(i, this.items.get(i+startIndex));
@@ -129,38 +138,11 @@ public class PaginatorGUIPane extends GUIPane {
     }
 
     @Override
-    public void updateSize(GUISection parent) {
-        Vector2d maxSize = this.size.getAbsolute(parent.getMaxSize());
-        Vector2d size = Util.calculateGUISize(this.items, maxSize.getX());
-        this.absoluteSize = Util.clampVector(size, this.minSize, this.maxSize);
-    }
-
-    @Override
-    public Collection<GUISection> getChildren() {
-        return List.of();
-    }
-
-    @Override
     public GUISection getSectionAt(Vector2d position) {
         if (position.getY() >= this.getHeight()-1 && this.isDefaultControlEnabled()) {
             return this.defaultControl.getSectionAt(position.subtract(new Vector2d(0, this.getHeight()-1)));
         } else {
             return this.contentPane.getSectionAt(position);
         }
-    }
-
-    @Override
-    protected void onUpdateSize() {
-        this.contentPane.setMaxSize(this.getMaxSize());
-        this.contentPane.setMinSize(this.getMinSize());
-        this.contentPane.setWidth(this.getWidth());
-        for (PaginatorControlsPane control : this.controls) {
-            control.setMaxSize(new Vector2d(this.getWidth(), 1));
-            control.setMinSize(new Vector2d(this.getWidth(), 1));
-            control.setWidth(this.getWidth());
-        }
-        this.currentPage = Math.min(this.currentPage, this.getPages());
-        this.initControls();
-        this.update();
     }
 }
