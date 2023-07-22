@@ -3,6 +3,8 @@ package de.placeblock.betterinventories.util;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -45,5 +47,25 @@ public class Vector2d {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    public static Vector2d largest(Collection<Vector2d> vectors) {
+        Vector2d largest = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        for (Vector2d vector : vectors) {
+            largest = max(vector, largest);
+        }
+        return largest;
+    }
+
+    public static Vector2d max(Vector2d vector1, Vector2d vector2) {
+        int x = Math.max(vector1.x, vector2.x);
+        int y = Math.max(vector1.y, vector2.y);
+        return new Vector2d(x, y);
+    }
+
+    public static Vector2d min(Vector2d vector1, Vector2d vector2) {
+        int x = Math.min(vector1.x, vector2.x);
+        int y = Math.min(vector1.y, vector2.y);
+        return new Vector2d(x, y);
     }
 }

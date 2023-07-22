@@ -3,13 +3,9 @@ package de.placeblock.betterinventories.gui;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
-import de.placeblock.betterinventories.util.ItemBuilder;
-import io.schark.design.items.BukkitItems;
-import io.schark.design.texts.Texts;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -26,8 +22,6 @@ import java.util.List;
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
-    public static final ItemStack PLACEHOLDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.valueOf(BukkitItems.INVENTORY_PLACEHOLDER_MATERIAL)).build();
-
     private final Plugin plugin;
     private final TextComponent title;
     private final List<GUIView> views = new ArrayList<>();
@@ -73,7 +67,7 @@ public abstract class GUI implements Listener {
 
     private Inventory createBukkitInventory() {
         if (this.type == InventoryType.CHEST) {
-            return Bukkit.createInventory(null, this.getSize(), this.title);
+            return Bukkit.createInventory(null, this.getSlots(), this.title);
         } else {
             return Bukkit.createInventory(null, this.type, this.title);
         }
@@ -99,7 +93,7 @@ public abstract class GUI implements Listener {
         }
     }
 
-    public abstract int getSize();
+    public abstract int getSlots();
     protected abstract List<ItemStack> renderContent();
     public abstract GUISection getClickedSection(int slot);
 

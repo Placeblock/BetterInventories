@@ -17,7 +17,7 @@ public class GUIItem extends GUISection {
     protected ItemStack itemStack;
 
     public GUIItem(GUI gui, ItemStack itemStack) {
-        super(gui, new Vector2d(1,1));
+        super(gui, new Vector2d(1,1), new Vector2d(1,1));
         this.itemStack = itemStack;
     }
 

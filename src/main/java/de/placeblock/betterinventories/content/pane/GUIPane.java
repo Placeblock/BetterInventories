@@ -6,6 +6,8 @@ import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 
 @Getter
 @Setter
@@ -17,7 +19,9 @@ public abstract class GUIPane extends GUISection {
     }
 
     public void setSize(Vector2d size) {
+        boolean sizeChanged = !this.size.equals(size);
         this.size = size;
+        if (sizeChanged) this.onSizeChange();
     }
 
     public void setHeight(int height) {
@@ -28,5 +32,11 @@ public abstract class GUIPane extends GUISection {
         this.setSize(new Vector2d(width, this.getHeight()));
     }
 
-    abstract void updateSize(Vector2d parentMaxSize);
+    abstract public void updateSize(Vector2d parentMaxSize);
+
+    public void onSizeChange() {
+
+    }
+
+    abstract public Set<GUISection> getChildren();
 }

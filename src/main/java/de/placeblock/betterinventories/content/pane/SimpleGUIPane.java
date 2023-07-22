@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.inventory.ItemStack;
@@ -12,15 +13,28 @@ import java.util.*;
 public class SimpleGUIPane extends GUIPane {
     private final Map<Vector2d, GUISection> content = new HashMap<>();
 
-    public SimpleGUIPane(GUI gui, Vector2d size, Vector2d maxSize) {
-        super(gui, size, maxSize);
+    public SimpleGUIPane(GUI gui, Vector2d maxSize) {
+        super(gui, new Vector2d(), maxSize);
     }
 
-    protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
+    @Override
+    public void updateSize(Vector2d parentMaxSize) {
+        Set<Vector2d> vectors = this.content.keySet();
+        Vector2d largest = Vector2d.largest(vectors);
+        this.size = Vector2d.min(Vector2d.min(largest, parentMaxSize), this.maxSize);
+    }
+
+    @Override
+    public Set<GUISection> getChildren() {
+        return new HashSet<>(this.content.values());
+    }
+
+    protected List<ItemStack> renderOnList(GUISection section, Vector2d position, List<ItemStack> content) {
         List<ItemStack> childContent = section.render();
         for (int i = 0; i < childContent.size(); i++) {
             Vector2d relative = section.slotToVector(i);
-            content.set(this.vectorToSlot(position.add(relative)), childContent.get(i));
+            Vector2d absolute = position.add(relative);
+            content.set(this.vectorToSlot(absolute), childContent.get(i));
         }
         return content;
     }
@@ -29,7 +43,7 @@ public class SimpleGUIPane extends GUIPane {
     public List<ItemStack> render() {
         List<ItemStack> content = this.getEmptyContentList(ItemStack.class);
         for (Map.Entry<Vector2d, GUISection> sectionEntry : this.content.entrySet()) {
-            this.renderOnList(sectionEntry.getKey(), sectionEntry.getValue(), content);
+            this.renderOnList(sectionEntry.getValue(), sectionEntry.getKey(), content);
         }
         return content;
     }
@@ -45,23 +59,24 @@ public class SimpleGUIPane extends GUIPane {
         return null;
     }
 
-    public GUISection removeSection(GUISection section) {
-        for (Vector2d pos : this.content.keySet()) {
-            if (this.content.get(pos).equals(section)) {
-                return this.content.remove(pos);
+    public boolean removeSection(GUISection section) {
+        for (Vector2d vector2d : this.content.keySet()) {
+            if (this.content.get(vector2d).equals(section)) {
+                this.content.remove(vector2d);
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public void clear() {
         this.content.clear();
     }
 
-    public void addSection(GUISection section) {
+    public void addItem(GUIItem item) {
         int nextEmptySlot = this.getNextEmptySlot();
         if (nextEmptySlot == -1) return;
-        this.setSectionAt(nextEmptySlot, section);
+        this.setSectionAt(nextEmptySlot, item);
     }
 
     public void setSectionAt(int index, GUISection section) {
@@ -72,23 +87,17 @@ public class SimpleGUIPane extends GUIPane {
         this.content.put(position, section);
     }
 
-    public void fill(GUISection section) {
+    public void fill(GUIItem item) {
         while (this.getNextEmptySlot() != -1) {
-            this.addSection(section);
+            this.addItem(item);
         }
     }
 
     private int getNextEmptySlot() {
-        List<Boolean> hascontentlist = this.getEmptyContentList(Boolean.class);
-        for (Vector2d pos : this.content.keySet()) {
-            GUISection child = this.content.get(pos);
-            for (int i = 0; i < child.getSlots(); i++) {
-                Vector2d relative = child.slotToVector(i);
-                hascontentlist.set(this.vectorToSlot(pos.add(relative)), true);
+        for (int i = 0; i < this.getSlots(); i++) {
+            if (this.getSectionAt(this.slotToVector(i)) == null) {
+                return i;
             }
-        }
-        for (int i = 0; i < hascontentlist.size(); i++) {
-            if (hascontentlist.get(i) == null) return i;
         }
         return -1;
     }

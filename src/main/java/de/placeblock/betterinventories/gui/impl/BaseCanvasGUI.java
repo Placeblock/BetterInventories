@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.gui.impl;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
@@ -25,8 +26,12 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     }
 
     @Override
-    public int getSize() {
+    public int getSlots() {
         return this.canvas.getSlots();
+    }
+
+    public Vector2d getSize() {
+        return this.canvas.getSize();
     }
 
     @Override

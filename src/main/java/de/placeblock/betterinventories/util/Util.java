@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.util;
 
-import io.schark.design.texts.Texts;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,10 +20,6 @@ import java.util.function.Consumer;
 public class Util {
     public static ItemStack getArrowItem(ArrowDirection direction, TextComponent title) {
         return new ItemBuilder(title, Material.PLAYER_HEAD).skinTexture(direction.getTexture()).build();
-    }
-
-    public static ItemStack getArrowItem(ArrowDirection direction) {
-        return Util.getArrowItem(direction, Texts.primary(direction.getName()));
     }
 
     public static void getTexture(UUID playerUUID, Consumer<URL> callback) {

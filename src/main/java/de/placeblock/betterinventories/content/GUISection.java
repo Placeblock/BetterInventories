@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Getter
 @SuppressWarnings("unused")
-public abstract class GUISection {
+public abstract class GUISection implements Sizeable {
     private final GUI gui;
     protected Vector2d size;
     protected Vector2d maxSize;

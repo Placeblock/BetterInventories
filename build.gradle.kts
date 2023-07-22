@@ -8,20 +8,11 @@ group = "de.placeblock"
 version = "1.1.5"
 
 repositories {
-    maven {
-        url = uri("https://repo.schark.io/private")
-        credentials{
-            username = project.properties["reposilite.username"] as String?
-            password = project.properties["reposilite.token"] as String?
-        }
-    }
     mavenCentral()
 }
 
 dependencies {
     paperDevBundle("1.18.2-R0.1-SNAPSHOT")
-
-    compileOnly("io.schark:ScharkDesign:1.5.0")
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
