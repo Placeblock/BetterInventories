@@ -5,11 +5,14 @@ import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIBu
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
 import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 
 
 public class PaginatorControlsPane extends SimpleGUIPane {
-    public static final GUIItem FILL_ITEM = new GUIItem(null, GUI.PLACEHOLDER_ITEM);
+    public static final GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
     private final PaginatorGUIPane paginatorGUIPane;
     private NextPageGUIButton nextButton;
     private PreviousPageGUIButton previousButton;

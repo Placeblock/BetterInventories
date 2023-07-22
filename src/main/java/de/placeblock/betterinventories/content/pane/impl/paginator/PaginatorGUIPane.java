@@ -27,10 +27,12 @@ public class PaginatorGUIPane extends SimpleGUIPane {
             throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum of 2");
         }
         this.contentPane = new PaginatorContentPane(gui, maxSize, this);
+        this.setSectionAt(0, this.contentPane);
         this.currentPage = currentPage;
         this.repeat = repeat;
         if (defaultControlsPosition != null) {
             this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(this.getWidth(), 1), defaultControlsPosition);
+            this.setDefaultControls();
         } else {
             this.defaultControls = null;
         }
@@ -41,17 +43,26 @@ public class PaginatorGUIPane extends SimpleGUIPane {
         int newWidth = Math.min(this.maxSize.getX(), this.items.size());
         int newHeight = (int) Math.min(Math.ceil(this.items.size() * 1F / newWidth), this.maxSize.getY());
         this.setSize(new Vector2d(newWidth, newHeight));
-
     }
 
     @Override
     public void onSizeChange() {
         this.currentPage = Math.min(this.currentPage, this.getPages());
+        this.setDefaultControls();
     }
 
-    public void addItem(GUIItem item) {
+    private void setDefaultControls() {
+        this.removeSection(this.defaultControls);
+        if (this.showDefaultControls()) {
+            this.setSectionAt(new Vector2d(0, this.getContentPaneSize().getY()), this.defaultControls);
+        }
+    }
+
+    @Override
+    public PaginatorGUIPane addItem(GUIItem item) {
         this.items.add(item);
         this.contentPane.setItems();
+        return this;
     }
 
     public void clearItems() {

@@ -69,28 +69,32 @@ public class SimpleGUIPane extends GUIPane {
         return false;
     }
 
-    public void clear() {
+    public SimpleGUIPane clear() {
         this.content.clear();
+        return this;
     }
 
-    public void addItem(GUIItem item) {
+    public SimpleGUIPane addItem(GUIItem item) {
         int nextEmptySlot = this.getNextEmptySlot();
-        if (nextEmptySlot == -1) return;
+        if (nextEmptySlot == -1) return this;
         this.setSectionAt(nextEmptySlot, item);
+        return this;
     }
 
-    public void setSectionAt(int index, GUISection section) {
-        this.setSectionAt(this.slotToVector(index), section);
+    public SimpleGUIPane setSectionAt(int index, GUISection section) {
+        return this.setSectionAt(this.slotToVector(index), section);
     }
 
-    public void setSectionAt(Vector2d position, GUISection section) {
+    public SimpleGUIPane setSectionAt(Vector2d position, GUISection section) {
         this.content.put(position, section);
+        return this;
     }
 
-    public void fill(GUIItem item) {
+    public SimpleGUIPane fill(GUIItem item) {
         while (this.getNextEmptySlot() != -1) {
             this.addItem(item);
         }
+        return this;
     }
 
     private int getNextEmptySlot() {

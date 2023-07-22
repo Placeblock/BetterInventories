@@ -16,7 +16,6 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
     private boolean repeat = true;
     private int startPage = 0;
     private final List<GUIItem> items = new ArrayList<>();
-    private boolean defaultControls = true;
     private PaginatorControlsPosition defaultControlsPosition = PaginatorControlsPosition.RIGHT;
 
     public PaginatorBuilder(GUI gui) {
@@ -35,11 +34,6 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
 
     public PaginatorBuilder startPage(int index) {
         this.startPage = index;
-        return this;
-    }
-
-    public PaginatorBuilder hideControls() {
-        this.defaultControls = false;
         return this;
     }
 
@@ -63,7 +57,7 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
         return this.items(converter, new ArrayList<>(List.of(items)));
     }
 
-    public PaginatorBuilder defaultControlsPosition(PaginatorControlsPosition position) {
+    public PaginatorBuilder defaultControls(PaginatorControlsPosition position) {
         this.defaultControlsPosition = position;
         return this;
     }
@@ -75,13 +69,9 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
     @Override
     public PaginatorGUIPane build() {
         PaginatorGUIPane paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
-                this.getSize(),
                 this.getMaxSize(),
-                this.getMinSize(),
-                this.getAutoSize(),
                 this.getRepeat(),
                 this.startPage,
-                this.defaultControls,
                 this.defaultControlsPosition);
         for (GUIItem item : this.items) {
             paginatorGUIPane.addItem(item);

@@ -19,7 +19,12 @@ public class ChestGUI extends CanvasGUI implements Sizeable {
 
     @Override
     public void update() {
-        this.canvas.updateSize(this.getMaxSize());
+        Vector2d oldSize = this.canvas.getSize();
+        this.canvas.updateSizeRecursive(this.getMaxSize());
+        Vector2d newSize = this.canvas.getSize();
+        if (oldSize != newSize) {
+            this.reloadViews();
+        }
         super.update();
     }
 

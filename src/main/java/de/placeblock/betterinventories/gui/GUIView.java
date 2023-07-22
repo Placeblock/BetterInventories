@@ -22,7 +22,7 @@ public class GUIView {
 
     public void update(List<ItemStack> content) {
         this.inventory.setContents(content.toArray(ItemStack[]::new));
-        this.player.updateInventory();
+        //TODO: TRY WITHOUT this.player.updateInventory();
     }
 
 }

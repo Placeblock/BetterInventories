@@ -5,14 +5,14 @@ plugins {
 }
 
 group = "de.placeblock"
-version = "1.1.5"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    paperDevBundle("1.18.2-R0.1-SNAPSHOT")
+    paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
