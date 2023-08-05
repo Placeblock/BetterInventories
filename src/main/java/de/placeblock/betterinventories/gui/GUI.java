@@ -5,7 +5,6 @@ import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -65,13 +64,7 @@ public abstract class GUI implements Listener {
         return view;
     }
 
-    private Inventory createBukkitInventory() {
-        if (this.type == InventoryType.CHEST) {
-            return Bukkit.createInventory(null, this.getSlots(), this.title);
-        } else {
-            return Bukkit.createInventory(null, this.type, this.title);
-        }
-    }
+    public abstract Inventory createBukkitInventory();
 
     public GUIView getView(Inventory inventory) {
         for (GUIView view : this.views) {

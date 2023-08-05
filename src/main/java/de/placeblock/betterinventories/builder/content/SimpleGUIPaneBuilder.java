@@ -14,6 +14,6 @@ public class SimpleGUIPaneBuilder extends BaseGUIPaneBuilder<SimpleGUIPane, Simp
     @Override
     public SimpleGUIPane build() {
         Vector2d maxSize = this.getMaxSize() == null ? this.getSize() : this.getMaxSize();
-        return new SimpleGUIPane(this.getGui(), maxSize);
+        return new SimpleGUIPane(this.getGui(), this.getSize(), maxSize);
     }
 }

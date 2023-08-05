@@ -7,7 +7,6 @@ import org.bukkit.plugin.Plugin;
 
 @SuppressWarnings("unused")
 public class CanvasGUIBuilder extends BaseCanvasGUIBuilder<SimpleGUIPane, CanvasGUI, CanvasGUIBuilder> {
-    private Integer height;
 
     public CanvasGUIBuilder(Plugin plugin) {
         super(plugin);

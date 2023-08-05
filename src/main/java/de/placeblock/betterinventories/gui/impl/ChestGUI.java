@@ -13,7 +13,7 @@ public class ChestGUI extends CanvasGUI implements Sizeable {
     private int maxHeight;
 
     public ChestGUI(Plugin plugin, TextComponent title, int maxHeight) {
-        super(plugin, title, 0);
+        super(plugin, title, maxHeight);
         this.maxHeight = maxHeight;
     }
 
@@ -21,8 +21,10 @@ public class ChestGUI extends CanvasGUI implements Sizeable {
     public void update() {
         Vector2d oldSize = this.canvas.getSize();
         this.canvas.updateSizeRecursive(this.getMaxSize());
+        int width = this.canvas.getWidth();
+        this.canvas.setWidth((int) (Math.ceil(width/9F)*9));
         Vector2d newSize = this.canvas.getSize();
-        if (oldSize != newSize) {
+        if (!oldSize.equals(newSize)) {
             this.reloadViews();
         }
         super.update();

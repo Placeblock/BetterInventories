@@ -5,7 +5,9 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -33,7 +35,11 @@ public abstract class GUIPane extends GUISection {
     }
 
     public void updateSizeRecursive(Vector2d parentMaxSize) {
+        this.updateChildrenRecursive(parentMaxSize);
         this.updateSize(parentMaxSize);
+    }
+
+    protected void updateChildrenRecursive(Vector2d parentMaxSize) {
         for (GUISection child : this.getChildren()) {
             if (child instanceof GUIPane pane) {
                 pane.updateSizeRecursive(parentMaxSize);
@@ -48,4 +54,17 @@ public abstract class GUIPane extends GUISection {
     }
 
     abstract public Set<GUISection> getChildren();
+
+
+
+    protected void renderOnList(GUISection section, Vector2d position, List<ItemStack> content) {
+        List<ItemStack> childContent = section.render();
+        for (int i = 0; i < childContent.size(); i++) {
+            Vector2d relative = section.slotToVector(i);
+            Vector2d absolute = position.add(relative);
+            int slot = this.vectorToSlot(absolute);
+            ItemStack item = childContent.get(i);
+            content.set(slot, item);
+        }
+    }
 }

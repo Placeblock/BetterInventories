@@ -19,6 +19,6 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
 
     protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
         super(plugin, title, type);
-        this.setCanvas(new SimpleGUIPane(this, size));
+        this.setCanvas(new SimpleGUIPane(this, size, size, true));
     }
 }

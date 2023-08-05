@@ -10,28 +10,28 @@ import lombok.Setter;
 
 import java.util.*;
 
-
-@Getter
 @SuppressWarnings("unused")
 public class PaginatorGUIPane extends SimpleGUIPane {
+    @Getter
     private final List<GUIItem> items = new ArrayList<>();
     private final PaginatorControlsPane defaultControls;
     private final PaginatorContentPane contentPane;
+
+    @Getter
     private int currentPage;
+
+    @Getter
     @Setter
     private boolean repeat;
 
     public PaginatorGUIPane(GUI gui, Vector2d maxSize, boolean repeat, int currentPage, PaginatorControlsPosition defaultControlsPosition) {
-        super(gui, maxSize);
-        if (this.getWidth() < 2) {
-            throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum of 2");
-        }
+        super(gui, maxSize, maxSize);
         this.contentPane = new PaginatorContentPane(gui, maxSize, this);
-        this.setSectionAt(0, this.contentPane);
+        this.setSectionAt(new Vector2d(), this.contentPane);
         this.currentPage = currentPage;
         this.repeat = repeat;
         if (defaultControlsPosition != null) {
-            this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(this.getWidth(), 1), defaultControlsPosition);
+            this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(maxSize.getX(), 1), defaultControlsPosition);
             this.setDefaultControls();
         } else {
             this.defaultControls = null;
@@ -40,15 +40,19 @@ public class PaginatorGUIPane extends SimpleGUIPane {
 
     @Override
     public void updateSize(Vector2d parentMaxSize) {
-        int newWidth = Math.min(this.maxSize.getX(), this.items.size());
-        int newHeight = (int) Math.min(Math.ceil(this.items.size() * 1F / newWidth), this.maxSize.getY());
-        this.setSize(new Vector2d(newWidth, newHeight));
+        int newWidth = Math.max(Math.min(this.maxSize.getX(), this.items.size()),2);
+        int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
+        int actualHeight = Math.min(this.maxSize.getY(), itemHeight);
+        this.setSize(new Vector2d(newWidth, actualHeight));
+
+        this.currentPage = Math.min(this.currentPage, this.getPages());
+        this.setDefaultControls();
     }
 
     @Override
-    public void onSizeChange() {
-        this.currentPage = Math.min(this.currentPage, this.getPages());
-        this.setDefaultControls();
+    public void updateSizeRecursive(Vector2d parentMaxSize) {
+        this.updateSize(parentMaxSize);
+        this.updateChildrenRecursive(parentMaxSize);
     }
 
     private void setDefaultControls() {
@@ -71,11 +75,19 @@ public class PaginatorGUIPane extends SimpleGUIPane {
     }
 
     public void nextPage() {
-        this.setCurrentPage((this.currentPage + 1) % this.getPages());
+        this.setCurrentPage(this.getNextPage());
+    }
+
+    private int getNextPage() {
+        return (this.currentPage + 1) % this.getPages();
     }
 
     public void previousPage() {
-        this.setCurrentPage(Util.modulo(this.currentPage - 1, this.getPages()));
+        this.setCurrentPage(this.getPreviousPage());
+    }
+
+    private int getPreviousPage() {
+        return Util.modulo(this.currentPage - 1, this.getPages());
     }
 
     public void setCurrentPage(int index) {
@@ -93,6 +105,10 @@ public class PaginatorGUIPane extends SimpleGUIPane {
     }
 
     private boolean showDefaultControls() {
-        return this.items.size() > this.getSlots() && this.defaultControls != null;
+        return this.showDefaultControls(this.items.size(), this.getSlots());
+    }
+
+    private boolean showDefaultControls(int itemSize, int slots) {
+        return itemSize > slots && this.defaultControls != null;
     }
 }

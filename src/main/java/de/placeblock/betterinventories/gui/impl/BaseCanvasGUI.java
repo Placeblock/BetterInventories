@@ -6,7 +6,9 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -28,6 +30,17 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @Override
     public int getSlots() {
         return this.canvas.getSlots();
+    }
+
+    @Override
+    public Inventory createBukkitInventory() {
+        if (this.getType() == InventoryType.CHEST) {
+            int width = (int) (Math.ceil(this.getSize().getX()/9F)*9);
+            int size = width*this.getSize().getY();
+            return Bukkit.createInventory(null, size, this.getTitle());
+        } else {
+            return Bukkit.createInventory(null, this.getType(), this.getTitle());
+        }
     }
 
     public Vector2d getSize() {

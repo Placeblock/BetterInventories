@@ -34,6 +34,7 @@ public abstract class GUISection implements Sizeable {
     public abstract GUISection getSectionAt(Vector2d position);
 
     public Vector2d slotToVector(int index) {
+        if (this.getSlots() == 0) return null;
         return Util.slotToVector(index, this.size.getX());
     }
 

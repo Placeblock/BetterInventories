@@ -23,5 +23,6 @@ public class NextPageGUIButton extends PaginatorGUIButton {
     @Override
     public void onClick(ClickData data) {
         this.paginatorGUIPane.nextPage();
+        this.getGui().update();
     }
 }

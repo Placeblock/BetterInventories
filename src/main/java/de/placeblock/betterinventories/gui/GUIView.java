@@ -21,8 +21,14 @@ public class GUIView {
     }
 
     public void update(List<ItemStack> content) {
-        this.inventory.setContents(content.toArray(ItemStack[]::new));
-        //TODO: TRY WITHOUT this.player.updateInventory();
+        ItemStack[] contents = this.inventory.getContents();
+        for (int i = 0; i < contents.length && i < content.size(); i++) {
+            ItemStack newItem = content.get(i);
+            ItemStack oldItem = contents[i];
+            if (newItem == null || !newItem.equals(oldItem)) {
+                this.inventory.setItem(i, newItem);
+            }
+        }
     }
 
 }

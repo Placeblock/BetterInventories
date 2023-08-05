@@ -11,13 +11,13 @@ public class PaginatorContentPane extends SimpleGUIPane {
     private final PaginatorGUIPane paginatorGUIPane;
 
     public PaginatorContentPane(GUI gui, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
-        super(gui, maxSize);
+        super(gui, maxSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
     }
 
     @Override
     public void updateSize(Vector2d parentMaxSize) {
-        this.size = paginatorGUIPane.getContentPaneSize();
+        this.setSize(this.paginatorGUIPane.getContentPaneSize());
     }
 
     @Override

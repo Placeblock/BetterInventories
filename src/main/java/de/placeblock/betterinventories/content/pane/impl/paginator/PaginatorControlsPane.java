@@ -18,8 +18,8 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     private PreviousPageGUIButton previousButton;
     private final PaginatorControlsPosition position;
 
-    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d size, PaginatorControlsPosition position) {
-        super(gui, size);
+    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d maxSize, PaginatorControlsPosition position) {
+        super(gui, maxSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
         this.position = position;
         this.init();
@@ -53,6 +53,8 @@ public class PaginatorControlsPane extends SimpleGUIPane {
 
     @Override
     public void onSizeChange() {
+        this.clear();
+        this.fill(FILL_ITEM);
         this.updateButtons();
     }
 }
