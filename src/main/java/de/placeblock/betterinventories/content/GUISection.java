@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * A GUISection is the most basic element that can be put inside GUIs.
+ */
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUISection implements Sizeable {

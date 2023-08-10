@@ -14,7 +14,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-
+/**
+ * The Base Class for GUIs which only have just one canvas e.g. Chest, Hopper, Crafting...
+ * If you want to instantiate this one use {@link CanvasGUI}.
+ * @param <C> The type of the Canvas
+ */
 @Getter
 public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     protected C canvas;
@@ -23,15 +27,25 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
         super(plugin, title, type);
     }
 
+    /**
+     * Sets the canvas for this GUI. Should be done before using {@link #getCanvas()}
+     * @param canvas The canvas to be set
+     */
     protected void setCanvas(C canvas) {
         this.canvas = canvas;
     }
 
+    /**
+     * @return The size of this GUI in slots
+     */
     @Override
     public int getSlots() {
         return this.canvas.getSlots();
     }
 
+    /**
+     * @return A new Bukkit Inventory matching the size or type of this GUI
+     */
     @Override
     public Inventory createBukkitInventory() {
         if (this.getType() == InventoryType.CHEST) {
@@ -41,15 +55,26 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
         }
     }
 
+    /**
+     * @return The Size of this GUI as a Vector
+     */
     public Vector2d getSize() {
         return this.canvas.getSize();
     }
 
+    /**
+     * @return The rendered representation of the canvas
+     */
     @Override
     protected List<ItemStack> renderContent() {
         return this.canvas.render();
     }
 
+    /**
+     * Uses recursion to find the GUISection which was clicked
+     * @param slot The slot that got clicked
+     * @return The section which lies at the specific slot, or null if there is no section.
+     */
     @Override
     public GUISection getClickedSection(int slot) {
         return this.canvas.getSectionAt(slot);

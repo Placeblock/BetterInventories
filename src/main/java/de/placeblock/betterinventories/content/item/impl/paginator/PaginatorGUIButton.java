@@ -5,6 +5,9 @@ import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIP
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Abstract class for {@link GUIButton}s that belong to a specific {@link PaginatorGUIPane}.
+ */
 public abstract class PaginatorGUIButton extends GUIButton {
 
     protected final PaginatorGUIPane paginatorGUIPane;

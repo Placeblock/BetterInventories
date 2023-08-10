@@ -11,6 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 
+/**
+ * A {@link GUISection} that can contain other {@link GUISection}s.
+ * Renders to a List.
+ * <p></p>
+ * Updating the {@link GUIPane}'s size works as follows:
+ * At first the size of the children is updated, then the own size.
+ * To modify this update process you can override {@link #updateSizeRecursive(Vector2d)}.
+ * How the own size is updated can be implemented by the different {@link GUIPane}s.
+ */
 @Getter
 @Setter
 @SuppressWarnings("unused")
@@ -50,14 +59,27 @@ public abstract class GUIPane extends GUISection {
 
     abstract public void updateSize(Vector2d parentMaxSize);
 
+    /**
+     * Can be overridden and is only called when the size of this GUIPane really changes.
+     */
     public void onSizeChange() {
 
     }
 
+    /**
+     * Implemented by GUIPanes
+     * Child sections that aren't returned in this method won't update their sizes correctly.
+     * @return All child sections
+     */
     abstract public Set<GUISection> getChildren();
 
-
-
+    /**
+     * Renders a child section at a specific position on a list
+     * @param section The child section
+     * @param position The child position the child is at
+     * @param content The list on which the section should be rendered. Has to have the size of this GUIPane,
+     *                otherwise it can lead to exceptions.
+     */
     protected void renderOnList(GUISection section, Vector2d position, List<ItemStack> content) {
         List<ItemStack> childContent = section.render();
         for (int i = 0; i < childContent.size(); i++) {

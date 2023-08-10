@@ -10,6 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A {@link GUIPane} with an upper and lower pane.
+ * Renders the lower pane always below the upper pane.
+ */
 @Setter
 public class HorizontalSplitGUIPane extends GUIPane {
     private GUIPane upperPane;

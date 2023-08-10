@@ -9,11 +9,20 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * The Base for {@link GUIPane}s where content can be just placed with a {@link Vector2d} as the position.
+ * @param <C> Which types of {@link GUISection} can be placed inside the BaseSimpleGUIPane
+ * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
+ */
 @SuppressWarnings("unchecked")
 public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
     private final Map<Vector2d, C> content = new HashMap<>();
     private final boolean autoSize;
 
+    /**
+     * @param autoSize Whether to automatically resize the pane according to the children.
+     *                 If true it will set the size to the bounding box of all children.
+     */
     public BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize);
         this.autoSize = autoSize;
@@ -59,6 +68,10 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         return null;
     }
 
+    /**
+     * Adds an Item to an empty slot on the pane.
+     * @param item The Item
+     */
     @SuppressWarnings("UnusedReturnValue")
     public S addItemEmptySlot(GUIItem item) {
         int nextEmptySlot = this.getNextEmptySlot();
@@ -67,6 +80,10 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         return (S) this;
     }
 
+    /**
+     * Fills all empty slots with this Item.
+     * @param item The Item
+     */
     @SuppressWarnings("UnusedReturnValue")
     public S fill(GUIItem item) {
         while (this.getNextEmptySlot() != -1) {
@@ -84,6 +101,11 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         return -1;
     }
 
+    /**
+     * Removes a section from the pane.
+     * @param section The Section
+     * @return Whether the section existed
+     */
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeSection(C section) {
         for (Vector2d vector2d : this.content.keySet()) {
@@ -95,17 +117,31 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         return false;
     }
 
+    /**
+     * Removes all sections from the pane
+     */
     @SuppressWarnings("UnusedReturnValue")
     public S clear() {
         this.content.clear();
         return (S) this;
     }
 
+    /**
+     * Sets a section at a specific slot.
+     * Note that the specified slot is converted to a vector using the pane's width.
+     * This can lead to exceptions when the size of this pane is zero.
+     * Bear in mind that the vector conversion happens at the time calling this method, which means
+     * if you change the size afterward the position will stay the same.
+     * If it comes to issues you can use {@link #setSectionAt(Vector2d, GUISection)}
+     */
     @SuppressWarnings("UnusedReturnValue")
-    public S setSectionAt(int index, C section) {
-        return this.setSectionAt(this.slotToVector(index), section);
+    public S setSectionAt(int slot, C section) {
+        return this.setSectionAt(this.slotToVector(slot), section);
     }
 
+    /**
+     * Sets a section at a specific position
+     */
     public S setSectionAt(Vector2d position, C section) {
         this.content.put(position, section);
         return (S) this;

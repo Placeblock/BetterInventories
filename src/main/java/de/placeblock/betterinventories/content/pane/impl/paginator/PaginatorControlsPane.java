@@ -11,33 +11,63 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
-
+/**
+ * The Controls pane for a {@link PaginatorGUIPane}.
+ */
 public class PaginatorControlsPane extends SimpleGUIPane {
     public static final GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
     private final PaginatorGUIPane paginatorGUIPane;
-    private NextPageGUIButton nextButton;
-    private PreviousPageGUIButton previousButton;
+    private final NextPageGUIButton nextButton;
+    private final PreviousPageGUIButton previousButton;
     private final PaginatorControlsPosition position;
     @Setter
     private boolean autoSize;
 
-    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d minSize, Vector2d maxSize, boolean autoSize, PaginatorControlsPosition position) {
+    /**
+     * @param autoSize Whether to set the width of the ControlsPane automatically to the width of the Paginator.
+     * @param position The position of the Controls
+     */
+    public PaginatorControlsPane(GUI gui,
+                                 PaginatorGUIPane paginatorGUIPane,
+                                 Vector2d minSize,
+                                 Vector2d maxSize,
+                                 boolean autoSize,
+                                 PaginatorControlsPosition position) {
+        this(gui, paginatorGUIPane, minSize,
+                maxSize, autoSize, position, new NextPageGUIButton(paginatorGUIPane, gui),
+                new PreviousPageGUIButton(paginatorGUIPane, gui));
+    }
+
+    /**
+     * @param autoSize Whether to set the width of the ControlsPane automatically to the width of the Paginator.
+     * @param position The position of the Controls
+     * @param nextButton The custom next button
+     * @param previousButton The custom previous button
+     */
+    public PaginatorControlsPane(GUI gui,
+                                 PaginatorGUIPane paginatorGUIPane,
+                                 Vector2d minSize,
+                                 Vector2d maxSize,
+                                 boolean autoSize,
+                                 PaginatorControlsPosition position,
+                                 NextPageGUIButton nextButton,
+                                 PreviousPageGUIButton previousButton) {
         super(gui, minSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
         this.position = position;
         this.autoSize = autoSize;
+        this.nextButton = nextButton;
+        this.previousButton = previousButton;
         this.init();
     }
 
-    public void init() {
+    private void init() {
         this.clear();
         this.fill(FILL_ITEM);
-        this.nextButton = new NextPageGUIButton(this.paginatorGUIPane, this.getGui());
-        this.previousButton = new PreviousPageGUIButton(this.paginatorGUIPane, this.getGui());
         this.updateButtons();
     }
 
-    public void updateButtons() {
+    private void updateButtons() {
         this.removeSection(this.nextButton);
         this.removeSection(this.previousButton);
         int[] buttonIndices = this.position.calculateIndices.apply(this.getSize().getX());

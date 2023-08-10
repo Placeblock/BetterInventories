@@ -7,6 +7,10 @@ import de.placeblock.betterinventories.util.Vector2d;
 
 import java.util.List;
 
+/**
+ * The ContentPane of a {@link PaginatorGUIPane}.
+ * Internal use only.
+ */
 public class PaginatorContentPane extends SimpleItemGUIPane {
     private final PaginatorGUIPane paginatorGUIPane;
 

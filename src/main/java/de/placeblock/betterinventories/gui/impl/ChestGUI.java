@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.gui.impl;
 
 import de.placeblock.betterinventories.Sizeable;
+import de.placeblock.betterinventories.builder.gui.ChestGUIBuilder;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
@@ -9,6 +10,14 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Used for creating ChestGUIs. They auto-resize depending on the size of the canvas.
+ * The canvas is a SimpleGUIPane which auto-resizes too.
+ * If you don't want the gui to resize you should consider setting the minHeight
+ * equals the maxHeight or use {@link CanvasGUI}
+ * <p></p>
+ * Builder: {@link ChestGUIBuilder}
+ */
 @Getter
 public class ChestGUI extends BaseCanvasGUI<SimpleGUIPane> implements Sizeable {
     @Setter

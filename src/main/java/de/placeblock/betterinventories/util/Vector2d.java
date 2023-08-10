@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -67,5 +66,12 @@ public class Vector2d {
         int x = Math.min(vector1.x, vector2.x);
         int y = Math.min(vector1.y, vector2.y);
         return new Vector2d(x, y);
+    }
+
+    public static Vector2d clamp(Vector2d vector2d, Vector2d min, Vector2d max) {
+        return new Vector2d(
+                Math.min(Math.max(vector2d.getX(), min.getX()), max.getX()),
+                Math.min(Math.max(vector2d.getY(), min.getY()), max.getY())
+        );
     }
 }

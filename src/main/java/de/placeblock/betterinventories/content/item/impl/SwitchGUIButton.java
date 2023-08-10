@@ -8,7 +8,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Supplier;
 
-
+/**
+ * A {@link GUIButton} which automatically switches the GUI to another {@link GUI}.
+ */
 @SuppressWarnings("unused")
 public class SwitchGUIButton extends GUIButton {
     private final Supplier<GUI> targetGUI;

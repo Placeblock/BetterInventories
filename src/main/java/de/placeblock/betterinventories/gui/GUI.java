@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Root class for GUIs
+ * Can be used to create any sort of GUI that can be rendered to a list
+ * e.g. Chest, Hopper, Furnace, Anvil, Brewing.
+ * However, for most of these examples there exist better methods for creating a GUI already.
+ */
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
