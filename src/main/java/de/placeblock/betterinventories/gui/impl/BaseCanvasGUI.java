@@ -4,7 +4,6 @@ import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
-import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
@@ -19,7 +18,6 @@ import java.util.List;
  * If you want to instantiate this one use {@link CanvasGUI}.
  * @param <C> The type of the Canvas
  */
-@Getter
 public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     protected C canvas;
 
@@ -78,5 +76,10 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @Override
     public GUISection getClickedSection(int slot) {
         return this.canvas.getSectionAt(slot);
+    }
+
+    @SuppressWarnings("unused")
+    public C getCanvas() {
+        return this.canvas;
     }
 }
