@@ -146,4 +146,12 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         this.content.put(position, section);
         return (S) this;
     }
+
+    /**
+     * Sets a section at coordinates 0,0
+     */
+    @SuppressWarnings("unused")
+    public S setSection(C section) {
+        return this.setSectionAt(new Vector2d(), section);
+    }
 }
