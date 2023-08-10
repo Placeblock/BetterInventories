@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Author: Placeblock
+ * Used internally to calculate the Inventory's size based on the InventoryType
  */
 public class InventoryTypeMapper {
 

@@ -1,13 +1,19 @@
 package de.placeblock.betterinventories.content.item;
 
+import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.GUIView;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+
 /**
- * Author: Placeblock
+ * A {@link GUIItem} with the ability to get clicked.
+ * Various onclick methods can be implemented and overridden.
+ * The cooldown is being set for the whole material of the {@link ItemStack}.
+ * <p></p>
+ * Builder: {@link GUIButtonBuilder}
  */
 @SuppressWarnings("unused")
 public abstract class GUIButton extends GUIItem {
@@ -47,21 +53,21 @@ public abstract class GUIButton extends GUIItem {
 
     public void setCooldown(int cooldown) {
         for (GUIView view : this.getGui().getViews()) {
-            view.getPlayer().setCooldown(this.item.getType(), cooldown);
+            view.getPlayer().setCooldown(this.itemStack.getType(), cooldown);
         }
     }
 
-    public abstract void onClick(Player player, int slot);
-    public void onLeftClick(Player player, int slot) {}
-    public void onRightClick(Player player, int slot) {}
-    public void onShiftClick(Player player, int slot) {
-        this.onClick(player, slot);
+    public abstract void onClick(ClickData data);
+    public void onLeftClick(ClickData data) {}
+    public void onRightClick(ClickData data) {}
+    public void onShiftClick(ClickData data) {
+        this.onClick(data);
     }
-    public void onShiftLeftClick(Player player, int slot) {
-        this.onLeftClick(player, slot);
+    public void onShiftLeftClick(ClickData data) {
+        this.onLeftClick(data);
     }
-    public void onShiftRightClick(Player player, int slot) {
-        this.onRightClick(player, slot);
+    public void onShiftRightClick(ClickData data) {
+        this.onRightClick(data);
     }
 
 }

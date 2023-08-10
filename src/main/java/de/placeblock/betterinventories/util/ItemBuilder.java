@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.content.item;
+package de.placeblock.betterinventories.util;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
@@ -18,17 +18,17 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * Author: Placeblock
+ * Can be used to create more complex Items easier.
  */
 @SuppressWarnings("unused")
 public class ItemBuilder {
-    private final Component title;
+    private final TextComponent title;
     private final Material material;
     private final int amount;
-    private final List<Component> lore = new ArrayList<>();
-    private final Map<Enchantment, Integer> enchantments = new HashMap<>();
-    private final Map<Attribute, AttributeModifier> attributes = new HashMap<>();
-    private final List<ItemFlag> flags = new ArrayList<>();
+    private final List<Component> lore;
+    private final Map<Enchantment, Integer> enchantments;
+    private final Map<Attribute, AttributeModifier> attributes;
+    private final List<ItemFlag> flags;
     private boolean unbreakable;
     private URL skinURL;
 
@@ -49,13 +49,33 @@ public class ItemBuilder {
         this.material = material;
         this.amount = amount;
         this.unbreakable = unbreakable;
+        this.lore = new ArrayList<>();
+        this.attributes = new HashMap<>();
+        this.flags = new ArrayList<>();
+        this.enchantments = new HashMap<>();
         if (hideInfo) {
             this.flag(ItemFlag.HIDE_ATTRIBUTES).flag(ItemFlag.HIDE_ENCHANTS).flag(ItemFlag.HIDE_UNBREAKABLE);
         }
     }
 
-    public ItemBuilder lore(TextComponent lore) {
-        this.lore.add(lore);
+    public ItemBuilder(ItemBuilder itemBuilder) {
+        this.title = itemBuilder.title;
+        this.material = itemBuilder.material;
+        this.lore = new ArrayList<>(itemBuilder.lore);
+        this.amount = itemBuilder.amount;
+        this.enchantments = new HashMap<>(itemBuilder.enchantments);
+        this.flags = new ArrayList<>(itemBuilder.flags);
+        this.attributes = new HashMap<>(itemBuilder.attributes);
+        this.unbreakable = itemBuilder.unbreakable;
+        this.skinURL = itemBuilder.skinURL;
+    }
+
+    public ItemBuilder lore(TextComponent... lore) {
+        return this.lore(List.of(lore));
+    }
+
+    public ItemBuilder lore(Collection<TextComponent> lore) {
+        this.lore.addAll(lore);
         return this;
     }
 
@@ -113,5 +133,4 @@ public class ItemBuilder {
         item.setItemMeta(meta);
         return item;
     }
-
 }

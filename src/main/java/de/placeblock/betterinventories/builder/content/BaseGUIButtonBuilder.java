@@ -1,79 +1,77 @@
 package de.placeblock.betterinventories.builder.content;
 
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
-import org.bukkit.entity.Player;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGUIButtonBuilder<G, B>> extends BaseGUIItemBuilder<G, B> {
-    private BiConsumer<Player, Integer> onClick;
-    private BiConsumer<Player, Integer> onRightClick;
-    private BiConsumer<Player, Integer> onLeftClick;
-    private BiConsumer<Player, Integer> onShiftClick;
-    private BiConsumer<Player, Integer> onShiftRightClick;
-    private BiConsumer<Player, Integer> onShiftLeftClick;
+    private Consumer<ClickData> onClick;
+    private Consumer<ClickData> onRightClick;
+    private Consumer<ClickData> onLeftClick;
+    private Consumer<ClickData> onShiftClick;
+    private Consumer<ClickData> onShiftRightClick;
+    private Consumer<ClickData> onShiftLeftClick;
 
     public BaseGUIButtonBuilder(GUI gui) {
         super(gui);
     }
 
-    public B onClick(BiConsumer<Player, Integer> onClick) {
+    public B onClick(Consumer<ClickData> onClick) {
         this.onClick = onClick;
         return (B) this;
     }
 
-    public B onLeftClick(BiConsumer<Player, Integer> onLeftClick) {
+    public B onLeftClick(Consumer<ClickData> onLeftClick) {
         this.onLeftClick = onLeftClick;
         return (B) this;
     }
 
-    public B onRightClick(BiConsumer<Player, Integer> onRightClick) {
+    public B onRightClick(Consumer<ClickData> onRightClick) {
         this.onRightClick = onRightClick;
         return (B) this;
     }
 
 
-    public B onShiftClick(BiConsumer<Player, Integer> onShiftClick) {
+    public B onShiftClick(Consumer<ClickData> onShiftClick) {
         this.onShiftClick = onShiftClick;
         return (B) this;
     }
 
-    public B onShiftLeftClick(BiConsumer<Player, Integer> onShiftLeftClick) {
+    public B onShiftLeftClick(Consumer<ClickData> onShiftLeftClick) {
         this.onShiftLeftClick = onShiftLeftClick;
         return (B) this;
     }
 
-    public B onShiftRightClick(BiConsumer<Player, Integer> onShiftRightClick) {
+    public B onShiftRightClick(Consumer<ClickData> onShiftRightClick) {
         this.onShiftRightClick = onShiftRightClick;
         return (B) this;
     }
 
-    protected BiConsumer<Player, Integer> getOnClick() {
+    protected Consumer<ClickData> getOnClick() {
         return this.onClick;
     }
 
-    protected BiConsumer<Player, Integer> getOnLeftClick() {
+    protected Consumer<ClickData> getOnLeftClick() {
         return this.onLeftClick;
     }
 
-    protected BiConsumer<Player, Integer> getOnRightClick() {
+    protected Consumer<ClickData> getOnRightClick() {
         return this.onRightClick;
     }
 
-    protected BiConsumer<Player, Integer> getOnShiftClick() {
+    protected Consumer<ClickData> getOnShiftClick() {
         return this.onShiftClick;
     }
 
-    protected BiConsumer<Player, Integer> getOnShiftLeftClick() {
+    protected Consumer<ClickData> getOnShiftLeftClick() {
         return this.onShiftLeftClick;
     }
 
-    protected BiConsumer<Player, Integer> getOnShiftRightClick() {
+    protected Consumer<ClickData> getOnShiftRightClick() {
         return this.onShiftRightClick;
     }
 }

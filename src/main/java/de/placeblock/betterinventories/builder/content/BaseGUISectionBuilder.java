@@ -6,9 +6,7 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Author: Placeblock
- */
+
 @SuppressWarnings({"unchecked", "unused"})
 @RequiredArgsConstructor
 public abstract class BaseGUISectionBuilder<G extends GUISection, B extends BaseGUISectionBuilder<G, B>> implements Builder<G, B> {
@@ -21,9 +19,6 @@ public abstract class BaseGUISectionBuilder<G extends GUISection, B extends Base
     }
 
     protected Vector2d getSize() {
-        if (this.size == null) {
-            throw new IllegalStateException("Size is null in builder");
-        }
         return this.size;
     }
 
