@@ -36,6 +36,12 @@ public abstract class BaseGUIPaneBuilder<G extends GUIPane, B extends BaseGUIPan
         return (B) this;
     }
 
+    public B adoptMinMax(GUIPane pane) {
+        this.minSize = pane.getMinSize();
+        this.maxSize = pane.getMaxSize();
+        return (B) this;
+    }
+
     protected Vector2d getBestMaxSize() {
         return this.getValue(List.of(this::getMaxSize, this::getMaxSize, this::getSize));
     }
