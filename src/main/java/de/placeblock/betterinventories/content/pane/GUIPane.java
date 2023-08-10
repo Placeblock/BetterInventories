@@ -2,60 +2,92 @@ package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Set;
 
 
+/**
+ * A {@link GUISection} that can contain other {@link GUISection}s.
+ * Renders to a List.
+ * <p></p>
+ * Updating the {@link GUIPane}'s size works as follows:
+ * At first the size of the children is updated, then the own size.
+ * To modify this update process you can override {@link #updateSizeRecursive(Vector2d)}.
+ * How the own size is updated can be implemented by the different {@link GUIPane}s.
+ */
 @Getter
 @Setter
 @SuppressWarnings("unused")
 public abstract class GUIPane extends GUISection {
-    private Vector2d maxSize;
-    private Vector2d minSize;
-    private Vector2d previousSize;
-    private boolean autoSize;
 
-    public GUIPane(GUI gui, Vector2d size) {
-        this(gui, size, size, size, false);
+    public GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+        super(gui, minSize, minSize, maxSize);
     }
 
-    public GUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize) {
-        super(gui, Util.clampVector(size, minSize, maxSize));
-        this.previousSize = new Vector2d();
-        this.maxSize = maxSize;
-        this.minSize = minSize;
-        this.autoSize = autoSize;
+    @Override
+    public void setSize(Vector2d size) {
+        Vector2d oldSize = this.getSize();
+        super.setSize(this.clampSize(size));
+        if (!oldSize.equals(this.getSize())) this.onSizeChange();
     }
 
-    protected List<ItemStack> renderOnList(Vector2d position, GUISection section, List<ItemStack> content) {
+    public void setHeight(int height) {
+        this.setSize(new Vector2d(this.getWidth(), height));
+    }
+
+    public void setWidth(int width) {
+        this.setSize(new Vector2d(width, this.getHeight()));
+    }
+
+    public void updateSizeRecursive(Vector2d parentMaxSize) {
+        this.updateChildrenRecursive(parentMaxSize);
+        this.updateSize(parentMaxSize);
+    }
+
+    protected void updateChildrenRecursive(Vector2d parentMaxSize) {
+        for (GUISection child : this.getChildren()) {
+            if (child instanceof GUIPane pane) {
+                pane.updateSizeRecursive(parentMaxSize);
+            }
+        }
+    }
+
+    abstract public void updateSize(Vector2d parentMaxSize);
+
+    /**
+     * Can be overridden and is only called when the size of this GUIPane really changes.
+     */
+    public void onSizeChange() {
+
+    }
+
+    /**
+     * Implemented by GUIPanes
+     * Child sections that aren't returned in this method won't update their sizes correctly.
+     * @return All child sections
+     */
+    abstract public Set<GUISection> getChildren();
+
+    /**
+     * Renders a child section at a specific position on a list
+     * @param section The child section
+     * @param position The child position the child is at
+     * @param content The list on which the section should be rendered. Has to have the size of this GUIPane,
+     *                otherwise it can lead to exceptions.
+     */
+    protected void renderOnList(GUISection section, Vector2d position, List<ItemStack> content) {
         List<ItemStack> childContent = section.render();
         for (int i = 0; i < childContent.size(); i++) {
             Vector2d relative = section.slotToVector(i);
-            content.set(this.vectorToSlot(position.add(relative)), childContent.get(i));
+            Vector2d absolute = position.add(relative);
+            int slot = this.vectorToSlot(absolute);
+            ItemStack item = childContent.get(i);
+            content.set(slot, item);
         }
-        return content;
-    }
-
-    protected void onUpdateSize() {}
-
-    @Override
-    public void setHeight(int height) {
-        if (height == this.previousSize.getY()) return;
-        super.setHeight(Math.max(Math.min(height, this.maxSize.getY()), this.minSize.getY()));
-        this.onUpdateSize();
-        this.previousSize = new Vector2d(this.previousSize.getX(), height);
-    }
-
-    @Override
-    public void setWidth(int width) {
-        if (width == this.previousSize.getX()) return;
-        super.setWidth(Math.max(Math.min(width, this.maxSize.getX()), this.minSize.getX()));
-        this.onUpdateSize();
-        this.previousSize = new Vector2d(width, this.previousSize.getY());
     }
 }

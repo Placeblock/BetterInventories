@@ -27,17 +27,11 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     }
 
     protected TextComponent getTitle() {
-        if (this.title == null) {
-            throw new IllegalStateException("Title is missing in builder");
-        }
-        return this.title;
+        return this.getValue(this.title);
     }
 
     protected InventoryType getType() {
-        if (this.type == null) {
-            throw new IllegalStateException("InventoryType is missing in builder");
-        }
-        return this.type;
+        return this.getValue(this.type);
     }
 
     protected Plugin getPlugin() {

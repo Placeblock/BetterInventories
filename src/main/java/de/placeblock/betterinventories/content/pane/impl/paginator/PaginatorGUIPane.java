@@ -1,157 +1,159 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
-import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
+import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.content.pane.GUIPane;
-import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-
-@Getter
+/**
+ * A Paginator is a {@link GUIPane} that can contain items. If there are too many items you can switch pages to see all items.
+ * <p></p>
+ * Builder: {@link PaginatorBuilder}
+ */
 @SuppressWarnings("unused")
-public class PaginatorGUIPane extends GUIPane {
+public class PaginatorGUIPane extends SimpleGUIPane implements ItemAddable<PaginatorGUIPane> {
+    @Getter
     private final List<GUIItem> items = new ArrayList<>();
-    private final Set<PaginatorControlsPane> controls = new HashSet<>();
-    private final PaginatorControlsPane defaultControl;
-    private final PaginatorControlsPosition defaultControlsPosition;
-    private final SimpleGUIPane contentPane;
+    private final PaginatorControlsPane defaultControls;
+    private final PaginatorContentPane contentPane;
+
+    @Getter
     private int currentPage;
+
+    @Getter
     @Setter
     private boolean repeat;
-    private boolean showDefaultControls;
 
-    public PaginatorGUIPane(GUI gui, Vector2d size, boolean repeat) {
-        this(gui, size, size, size, false, repeat, 0, true, PaginatorControlsPosition.RIGHT);
-    }
-
-    public PaginatorGUIPane(GUI gui, Vector2d size, Vector2d maxSize, Vector2d minSize, boolean autoSize, boolean repeat, int currentPage, boolean defaultControls, PaginatorControlsPosition defaultControlsPosition) {
-        super(gui, size, maxSize, minSize, autoSize);
-        if (this.getWidth() < 2) {
-            throw new IllegalArgumentException("The width of a PaginatorGUIPane has a minimum width of 2");
-        }
-        this.defaultControlsPosition = defaultControlsPosition;
-        this.contentPane = new SimpleGUIPane(gui, this.size, this.size, new Vector2d(this.getWidth(), 1), false);
+    /**
+     * @param repeat Whether to jump back to the first page when reaching the last page (and via versa)
+     * @param currentPage The start page
+     * @param defaultControlsPosition The default controls automatically appear if there
+     *                                is not enough space for all items. Set to null if you don't want
+     *                                automatic controls, or you want to handle them yourself. To add custom controls
+     *                                you can instantiate the {@link PaginatorControlsPane}
+     */
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int currentPage, PaginatorControlsPosition defaultControlsPosition) {
+        super(gui, minSize, maxSize);
+        this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
+        this.setSectionAt(new Vector2d(), this.contentPane);
         this.currentPage = currentPage;
         this.repeat = repeat;
-        if (defaultControls) {
-            this.defaultControl = new PaginatorControlsPane(gui, this, new Vector2d(this.getWidth(), 1), this.defaultControlsPosition);
-            this.controls.add(this.defaultControl);
+        if (defaultControlsPosition != null) {
+            this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
+            this.setDefaultControls();
         } else {
-            this.defaultControl = null;
-        }
-        this.update();
-    }
-
-    public void addItem(GUIItem item) {
-        this.items.add(item);
-        this.updateSize();
-        this.update();
-    }
-
-    private void updateSize() {
-        if (this.isAutoSize()) {
-            int newWidth = Math.min(this.getMaxSize().getX(), this.items.size());
-            int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
-            this.setWidth(newWidth);
-            this.setHeight(newHeight);
+            this.defaultControls = null;
         }
     }
 
-    public void clearItems() {
+    @Override
+    public void updateSize(Vector2d parentMaxSize) {
+        int newWidth = Math.max(Math.min(parentMaxSize.getX(), this.items.size()),2);
+        int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
+        int realHeight = Math.min(parentMaxSize.getY(), itemHeight);
+        this.setSize(new Vector2d(newWidth, realHeight));
+
+        this.currentPage = Math.min(this.currentPage, this.getPages());
+        this.setDefaultControls();
+    }
+
+    @Override
+    public void updateSizeRecursive(Vector2d parentMaxSize) {
+        this.updateSize(parentMaxSize);
+        this.updateChildrenRecursive(parentMaxSize);
+    }
+
+    private void setDefaultControls() {
+        this.removeSection(this.defaultControls);
+        if (this.showDefaultControls()) {
+            this.setSectionAt(new Vector2d(0, this.getContentPaneSize().getY()), this.defaultControls);
+        }
+    }
+
+    public <I extends GUIItem> PaginatorGUIPane setItems(List<I> items) {
         this.items.clear();
-        this.updateSize();
-        this.update();
+        this.items.addAll(items);
+        this.contentPane.setItems();
+        return this;
     }
 
-    public void addControl(PaginatorControlsPane control) {
-        this.controls.add(control);
+    @Override
+    public void onItemAdd() {
+        this.contentPane.setItems();
     }
 
-    public void nextPage() {
-        this.setCurrentPage((this.currentPage + 1) % this.getPages());
+    /**
+     * Clears all Items in this Paginator
+     */
+    public PaginatorGUIPane clearItems() {
+        this.items.clear();
+        this.contentPane.setItems();
+        return this;
     }
 
-    public void previousPage() {
-        this.setCurrentPage(Util.modulo(this.currentPage - 1, this.getPages()));
+    /**
+     * Skips to the next page.
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public PaginatorGUIPane nextPage() {
+        this.setCurrentPage(this.getNextPage());
+        return this;
     }
 
-    public void setCurrentPage(int index) {
+    private int getNextPage() {
+        int pages = this.getPages();
+        if (this.currentPage + 1 > pages && !this.repeat) return this.currentPage;
+        return (this.currentPage + 1) % pages;
+    }
+
+    /**
+     * Returns to the previous page.
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public PaginatorGUIPane previousPage() {
+        this.setCurrentPage(this.getPreviousPage());
+        return this;
+    }
+
+    private int getPreviousPage() {
+        if (this.currentPage == 0 && !this.repeat) return 0;
+        return Util.modulo(this.currentPage - 1, this.getPages());
+    }
+
+    /**
+     * Sets the current page
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public PaginatorGUIPane setCurrentPage(int index) {
         this.currentPage = index;
-        this.update();
+        this.contentPane.setItems();
+        return this;
     }
 
+    /**
+     * @return the amount of pages
+     */
     public int getPages() {
         return (int) Math.ceil(this.items.size()*1F/this.contentPane.getSlots());
     }
 
-    private void update() {
-        this.showDefaultControls = this.items.size() > this.getSlots();
-        this.updateControls();
-        this.contentPane.clear();
-        this.contentPane.setHeight(this.isDefaultControlEnabled() ? this.getHeight() - 1 : this.getHeight());
-        int startIndex = this.contentPane.getSlots()*this.currentPage;
-        for (int i = 0; i < this.contentPane.getSlots() && i < this.items.size() - startIndex; i++) {
-            this.contentPane.setSectionAt(i, this.items.get(i+startIndex));
-        }
+    public Vector2d getContentPaneSize() {
+        int height = this.showDefaultControls() ? this.getHeight() - 1 : this.getHeight();
+        return new Vector2d(this.getWidth(), height);
     }
 
-    private boolean isDefaultControlEnabled() {
-        return this.showDefaultControls && this.defaultControl != null;
+    private boolean showDefaultControls() {
+        return this.showDefaultControls(this.items.size(), this.getSlots());
     }
 
-    private void updateControls() {
-        for (PaginatorControlsPane control : this.controls) {
-            control.updateButtons();
-        }
-    }
-
-    private void initControls() {
-        for (PaginatorControlsPane control : this.controls) {
-            control.init();
-        }
-    }
-
-    @Override
-    public List<ItemStack> render() {
-        List<ItemStack> rendered = this.getEmptyContentArray(ItemStack.class);
-        rendered = this.renderOnList(new Vector2d(), this.contentPane, rendered);
-        if (this.isDefaultControlEnabled()) {
-            rendered = this.renderOnList(new Vector2d(0, this.getHeight()-1), this.defaultControl, rendered);
-        }
-        return rendered;
-    }
-
-    @Override
-    public GUISection getSectionAt(Vector2d position) {
-        if (position.getY() >= this.getHeight()-1 && this.isDefaultControlEnabled()) {
-            return this.defaultControl.getSectionAt(position.subtract(new Vector2d(0, this.getHeight()-1)));
-        } else {
-            return this.contentPane.getSectionAt(position);
-        }
-    }
-
-    @Override
-    protected void onUpdateSize() {
-        this.contentPane.setMaxSize(this.getMaxSize());
-        this.contentPane.setMinSize(this.getMinSize());
-        this.contentPane.setWidth(this.getWidth());
-        for (PaginatorControlsPane control : this.controls) {
-            control.setMaxSize(new Vector2d(this.getWidth(), 1));
-            control.setMinSize(new Vector2d(this.getWidth(), 1));
-            control.setWidth(this.getWidth());
-        }
-        this.currentPage = Math.min(this.currentPage, this.getPages());
-        this.initControls();
-        this.update();
+    private boolean showDefaultControls(int itemSize, int slots) {
+        return itemSize > slots && this.defaultControls != null;
     }
 }

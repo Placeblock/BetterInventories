@@ -3,13 +3,8 @@ package de.placeblock.betterinventories.gui;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
-import de.placeblock.betterinventories.util.ItemBuilder;
-import io.schark.design.items.BukkitItems;
-import io.schark.design.texts.Texts;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -23,11 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Root class for GUIs
+ * Can be used to create any sort of GUI that can be rendered to a list
+ * e.g. Chest, Hopper, Furnace, Anvil, Brewing.
+ * However, for most of these examples there exist better methods for creating a GUI already.
+ */
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
-    public static final ItemStack PLACEHOLDER_ITEM = new ItemBuilder(Texts.noItalic(Texts.PREFIX_RAW), Material.valueOf(BukkitItems.INVENTORY_PLACEHOLDER_MATERIAL)).build();
-
     private final Plugin plugin;
     private final TextComponent title;
     private final List<GUIView> views = new ArrayList<>();
@@ -41,7 +40,6 @@ public abstract class GUI implements Listener {
     }
 
     public void update() {
-        this.prerenderContent();
         this.render();
         this.updateViews();
     }
@@ -72,13 +70,7 @@ public abstract class GUI implements Listener {
         return view;
     }
 
-    private Inventory createBukkitInventory() {
-        if (this.type == InventoryType.CHEST) {
-            return Bukkit.createInventory(null, this.getSize(), this.title);
-        } else {
-            return Bukkit.createInventory(null, this.type, this.title);
-        }
-    }
+    public abstract Inventory createBukkitInventory();
 
     public GUIView getView(Inventory inventory) {
         for (GUIView view : this.views) {
@@ -100,9 +92,8 @@ public abstract class GUI implements Listener {
         }
     }
 
-    public abstract int getSize();
-    public abstract List<ItemStack> renderContent();
-    public abstract void prerenderContent();
+    public abstract int getSlots();
+    protected abstract List<ItemStack> renderContent();
     public abstract GUISection getClickedSection(int slot);
 
     public void onClose(Player player) {}

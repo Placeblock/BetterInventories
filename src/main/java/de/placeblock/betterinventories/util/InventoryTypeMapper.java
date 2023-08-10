@@ -5,7 +5,9 @@ import org.bukkit.event.inventory.InventoryType;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Used internally to calculate the Inventory's size based on the InventoryType
+ */
 public class InventoryTypeMapper {
 
     private static final Map<InventoryType, Vector2d> mappings = new HashMap<>();

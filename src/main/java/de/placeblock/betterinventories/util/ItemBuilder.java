@@ -17,7 +17,9 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.URL;
 import java.util.*;
 
-
+/**
+ * Can be used to create more complex Items easier.
+ */
 @SuppressWarnings("unused")
 public class ItemBuilder {
     private final TextComponent title;

@@ -6,6 +6,10 @@ import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.inventory.ItemStack;
 
 
+/**
+ * A {@link GUIButton} which executes a command.
+ */
+@SuppressWarnings("unused")
 public class CommandGUIButton extends GUIButton {
     private final String command;
 

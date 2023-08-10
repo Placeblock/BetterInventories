@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
 
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanvasGUI<P>, B extends BaseCanvasGUIBuilder<P, G, B>> extends BaseGUIBuilder<G, B> {
-    private Integer height;
+    protected Integer height;
 
     public BaseCanvasGUIBuilder(Plugin plugin) {
         super(plugin);
@@ -19,9 +19,6 @@ public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanv
     }
 
     protected Integer getHeight() {
-        if (this.height == null && this.getType() == null) {
-            throw new IllegalStateException("Height is null in builder");
-        }
         return this.height;
     }
 }

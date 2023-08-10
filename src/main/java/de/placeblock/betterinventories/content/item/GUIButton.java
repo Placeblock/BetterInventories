@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.item;
 
+import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.GUIView;
 import org.bukkit.Sound;
@@ -7,6 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
+/**
+ * A {@link GUIItem} with the ability to get clicked.
+ * Various onclick methods can be implemented and overridden.
+ * The cooldown is being set for the whole material of the {@link ItemStack}.
+ * <p></p>
+ * Builder: {@link GUIButtonBuilder}
+ */
 @SuppressWarnings("unused")
 public abstract class GUIButton extends GUIItem {
     private final int cooldown;

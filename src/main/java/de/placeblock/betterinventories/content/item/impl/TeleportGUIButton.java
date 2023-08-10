@@ -7,7 +7,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
+/**
+ * A {@link GUIButton} which automatically teleports the player to a specific {@link Location}
+ */
+@SuppressWarnings("unused")
 public class TeleportGUIButton extends GUIButton {
     private final Location location;
 
