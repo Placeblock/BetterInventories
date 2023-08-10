@@ -19,9 +19,6 @@ public abstract class BaseGUIItemBuilder<T extends GUIItem, B extends BaseGUIIte
     }
 
     protected ItemStack getItem() {
-        if (this.item == null) {
-            throw new IllegalStateException("Item is null in builder");
-        }
-        return this.item;
+        return this.getValue(this.item);
     }
 }

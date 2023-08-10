@@ -3,10 +3,11 @@ package de.placeblock.betterinventories.content.pane.impl.paginator;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIButton;
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
-import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 
@@ -17,11 +18,14 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     private NextPageGUIButton nextButton;
     private PreviousPageGUIButton previousButton;
     private final PaginatorControlsPosition position;
+    @Setter
+    private boolean autoSize;
 
-    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d maxSize, PaginatorControlsPosition position) {
-        super(gui, maxSize, maxSize);
+    public PaginatorControlsPane(GUI gui, PaginatorGUIPane paginatorGUIPane, Vector2d minSize, Vector2d maxSize, boolean autoSize, PaginatorControlsPosition position) {
+        super(gui, minSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
         this.position = position;
+        this.autoSize = autoSize;
         this.init();
     }
 
@@ -36,7 +40,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     public void updateButtons() {
         this.removeSection(this.nextButton);
         this.removeSection(this.previousButton);
-        int[] buttonIndices = this.position.calculateIndices.apply(size.getX());
+        int[] buttonIndices = this.position.calculateIndices.apply(this.getSize().getX());
         int currentPage = this.paginatorGUIPane.getCurrentPage();
         int pages = this.paginatorGUIPane.getPages();
         boolean repeat = this.paginatorGUIPane.isRepeat();
@@ -48,7 +52,9 @@ public class PaginatorControlsPane extends SimpleGUIPane {
 
     @Override
     public void updateSize(Vector2d parentMaxSize) {
-        this.setSize(new Vector2d(this.paginatorGUIPane.getWidth(), 1));
+        if (this.autoSize) {
+            this.setSize(new Vector2d(this.paginatorGUIPane.getWidth(), 1));
+        }
     }
 
     @Override

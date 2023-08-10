@@ -1,17 +1,17 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.content.item.GUIItem;
-import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 
 import java.util.List;
 
-public class PaginatorContentPane extends SimpleGUIPane {
+public class PaginatorContentPane extends SimpleItemGUIPane {
     private final PaginatorGUIPane paginatorGUIPane;
 
-    public PaginatorContentPane(GUI gui, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
-        super(gui, maxSize, maxSize);
+    public PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
+        super(gui, minSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
     }
 

@@ -16,14 +16,15 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public abstract class GUIPane extends GUISection {
 
-    public GUIPane(GUI gui, Vector2d size, Vector2d maxSize) {
-        super(gui, size, maxSize);
+    public GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+        super(gui, minSize, minSize, maxSize);
     }
 
+    @Override
     public void setSize(Vector2d size) {
-        boolean sizeChanged = !this.size.equals(size);
-        this.size = size;
-        if (sizeChanged) this.onSizeChange();
+        Vector2d oldSize = this.getSize();
+        super.setSize(this.clampSize(size));
+        if (!oldSize.equals(this.getSize())) this.onSizeChange();
     }
 
     public void setHeight(int height) {

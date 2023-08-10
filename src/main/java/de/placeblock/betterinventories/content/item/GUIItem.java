@@ -13,11 +13,12 @@ import java.util.List;
 @Getter
 @SuppressWarnings("unused")
 public class GUIItem extends GUISection {
+    public static final Vector2d BUTTON_SIZE = new Vector2d(1, 1);
     @Setter
     protected ItemStack itemStack;
 
     public GUIItem(GUI gui, ItemStack itemStack) {
-        super(gui, new Vector2d(1,1), new Vector2d(1,1));
+        super(gui, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE);
         this.itemStack = itemStack;
     }
 

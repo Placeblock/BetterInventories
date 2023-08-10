@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.builder.gui;
 
-import de.placeblock.betterinventories.content.pane.SimpleGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.impl.CanvasGUI;
 import org.bukkit.plugin.Plugin;
 

@@ -19,9 +19,6 @@ public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanv
     }
 
     protected Integer getHeight() {
-        if (this.height == null) {
-            throw new IllegalStateException("Height is null in builder");
-        }
         return this.height;
     }
 }

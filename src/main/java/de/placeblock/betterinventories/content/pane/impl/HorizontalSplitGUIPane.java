@@ -15,8 +15,8 @@ public class HorizontalSplitGUIPane extends GUIPane {
     private GUIPane upperPane;
     private GUIPane lowerPane;
 
-    public HorizontalSplitGUIPane(GUI gui, Vector2d size, Vector2d maxSize) {
-        super(gui, size, maxSize);
+    public HorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+        super(gui, minSize, maxSize);
     }
 
     @Override

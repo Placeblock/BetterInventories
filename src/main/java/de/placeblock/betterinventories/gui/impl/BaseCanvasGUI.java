@@ -35,9 +35,7 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @Override
     public Inventory createBukkitInventory() {
         if (this.getType() == InventoryType.CHEST) {
-            int width = (int) (Math.ceil(this.getSize().getX()/9F)*9);
-            int size = width*this.getSize().getY();
-            return Bukkit.createInventory(null, size, this.getTitle());
+            return Bukkit.createInventory(null, this.getSlots(), this.getTitle());
         } else {
             return Bukkit.createInventory(null, this.getType(), this.getTitle());
         }

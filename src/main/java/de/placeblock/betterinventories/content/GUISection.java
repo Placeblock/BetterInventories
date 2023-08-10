@@ -16,13 +16,19 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class GUISection implements Sizeable {
     private final GUI gui;
-    protected Vector2d size;
+    private Vector2d size;
+    protected Vector2d minSize;
     protected Vector2d maxSize;
 
-    public GUISection(GUI gui, Vector2d size, Vector2d maxSize) {
+    public GUISection(GUI gui, Vector2d size, Vector2d minSize, Vector2d maxSize) {
         this.gui = gui;
         this.size = size;
+        this.minSize = minSize;
         this.maxSize = maxSize;
+    }
+
+    public void setSize(Vector2d vector2d) {
+        this.size = vector2d;
     }
 
     public abstract List<ItemStack> render();
