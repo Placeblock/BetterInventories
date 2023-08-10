@@ -12,12 +12,7 @@ public interface Builder<G, B extends Builder<G, B>> {
     G build();
 
     default <T> T getValue(Supplier<T> location) {
-        T value = location.get();
-        if (value != null) {
-            return value;
-        } else {
-            throw VALUE_MISSING_EXCEPTION;
-        }
+        return this.getValue(location.get());
     }
 
     default <T> T getValue(T value) {
