@@ -15,11 +15,17 @@ public class HorizontalSplitGUIPaneBuilder extends BaseGUIPaneBuilder<Horizontal
         super(gui);
     }
 
+    /**
+     * Sets the upper part of the pane
+     */
     public HorizontalSplitGUIPaneBuilder upperPane(GUIPane pane) {
         this.upperPane = pane;
         return this;
     }
 
+    /**
+     * Sets the lower part of the pane
+     */
     public HorizontalSplitGUIPaneBuilder lowerPane(GUIPane pane) {
         this.lowerPane = pane;
         return this;
