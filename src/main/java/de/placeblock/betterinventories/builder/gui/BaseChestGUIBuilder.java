@@ -16,11 +16,22 @@ public abstract class BaseChestGUIBuilder<P extends GUIPane, G extends BaseChest
     public BaseChestGUIBuilder(Plugin plugin) {
         super(plugin);
     }
+
+
+    /**
+     * Sets the maxHeight of the Inventory.
+     * If no maxHeight is set at build-time it will use minHeight or Height
+     */
     @SuppressWarnings("unchecked")
     public B maxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
         return (B) this;
     }
+
+    /**
+     * Sets the minHeight of the Inventory.
+     * If no minHeight is set at build-time it will use Height or 1
+     */
     @SuppressWarnings("unchecked")
     public B minHeight(int minHeight) {
         this.minHeight = minHeight;

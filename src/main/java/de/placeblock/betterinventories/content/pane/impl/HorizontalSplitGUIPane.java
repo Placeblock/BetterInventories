@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl;
 
+import de.placeblock.betterinventories.builder.content.HorizontalSplitGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -13,6 +14,8 @@ import java.util.Set;
 /**
  * A {@link GUIPane} with an upper and lower pane.
  * Renders the lower pane always below the upper pane.
+ * <p></p>
+ * Builder: {@link HorizontalSplitGUIPaneBuilder}
  */
 @Setter
 public class HorizontalSplitGUIPane extends GUIPane {

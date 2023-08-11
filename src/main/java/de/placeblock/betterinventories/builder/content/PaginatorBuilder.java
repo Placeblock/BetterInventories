@@ -5,6 +5,7 @@ import de.placeblock.betterinventories.content.pane.impl.paginator.ItemAddable;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPosition;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -23,16 +24,25 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
         super(gui);
     }
 
+    /**
+     * {@link PaginatorGUIPane#PaginatorGUIPane(GUI, Vector2d, Vector2d, boolean, int, PaginatorControlsPosition)}
+     */
     public PaginatorBuilder repeat(boolean repeat) {
         this.repeat = repeat;
         return this;
     }
 
+    /**
+     * {@link PaginatorGUIPane#PaginatorGUIPane(GUI, Vector2d, Vector2d, boolean, int, PaginatorControlsPosition)}
+     */
     public PaginatorBuilder startPage(int index) {
         this.startPage = index;
         return this;
     }
 
+    /**
+     * {@link PaginatorGUIPane#PaginatorGUIPane(GUI, Vector2d, Vector2d, boolean, int, PaginatorControlsPosition)}
+     */
     public PaginatorBuilder defaultControls(PaginatorControlsPosition position) {
         this.defaultControlsPosition = position;
         return this;

@@ -16,11 +16,18 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     private TextComponent title;
     private InventoryType type;
 
+    /**
+     * Sets the title of the Inventory.
+     */
     public B title(@NotNull TextComponent title) {
         this.title = title;
         return (B) this;
     }
 
+    /**
+     * Sets the type of the Inventory.
+     * Does not need to be set in many implementing GUIBuilders.
+     */
     public B type(@NotNull InventoryType type) {
         this.type = type;
         return (B) this;

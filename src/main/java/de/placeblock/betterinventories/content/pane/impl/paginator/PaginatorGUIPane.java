@@ -33,17 +33,17 @@ public class PaginatorGUIPane extends SimpleGUIPane implements ItemAddable<Pagin
 
     /**
      * @param repeat Whether to jump back to the first page when reaching the last page (and via versa)
-     * @param currentPage The start page
+     * @param startPage The start page
      * @param defaultControlsPosition The default controls automatically appear if there
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself. To add custom controls
      *                                you can instantiate the {@link PaginatorControlsPane}
      */
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int currentPage, PaginatorControlsPosition defaultControlsPosition) {
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, PaginatorControlsPosition defaultControlsPosition) {
         super(gui, minSize, maxSize);
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
         this.setSectionAt(new Vector2d(), this.contentPane);
-        this.currentPage = currentPage;
+        this.currentPage = startPage;
         this.repeat = repeat;
         if (defaultControlsPosition != null) {
             this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);

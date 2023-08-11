@@ -13,6 +13,10 @@ public abstract class BaseGUISectionBuilder<G extends GUISection, B extends Base
     private final GUI gui;
     private Vector2d size;
 
+    /**
+     * Sets the size of the {@link GUISection}.
+     * Not needed in many implementations.
+     */
     public B size(Vector2d size) {
         this.size = size;
         return (B) this;

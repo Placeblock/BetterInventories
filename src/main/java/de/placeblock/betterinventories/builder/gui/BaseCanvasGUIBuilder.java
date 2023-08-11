@@ -13,6 +13,9 @@ public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanv
         super(plugin);
     }
 
+    /**
+     * Sets the height of the inventory
+     */
     public B height(int height) {
         this.height = height;
         return (B) this;
