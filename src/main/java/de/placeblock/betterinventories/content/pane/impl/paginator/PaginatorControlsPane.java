@@ -70,7 +70,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         boolean repeat = this.paginatorGUIPane.isRepeat();
         this.setSectionAt(buttonIndices[0], (currentPage > 0 || repeat) ?
                 this.previousButton : FILL_ITEM);
-        this.setSectionAt(buttonIndices[1], (currentPage < pages - 1) || repeat ?
+        this.setSectionAt(buttonIndices[1], ((currentPage < (pages - 1)) || repeat) ?
                 this.nextButton : FILL_ITEM);
     }
 
