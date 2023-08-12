@@ -2,7 +2,7 @@ package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
-import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.HorizontalSplitGUIPane;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
@@ -18,7 +18,7 @@ import java.util.*;
  * Builder: {@link PaginatorBuilder}
  */
 @SuppressWarnings("unused")
-public class PaginatorGUIPane extends SimpleGUIPane implements ItemAddable<PaginatorGUIPane> {
+public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAddable<PaginatorGUIPane> {
     @Getter
     private final List<GUIItem> items = new ArrayList<>();
     private final PaginatorControlsPane defaultControls;
@@ -42,12 +42,12 @@ public class PaginatorGUIPane extends SimpleGUIPane implements ItemAddable<Pagin
     public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, PaginatorControlsPosition defaultControlsPosition) {
         super(gui, minSize, maxSize);
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
-        this.setSectionAt(new Vector2d(), this.contentPane);
+        this.setUpperPane(this.contentPane);
         this.currentPage = startPage;
         this.repeat = repeat;
         if (defaultControlsPosition != null) {
             this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
-            this.setDefaultControls();
+            this.setLowerPane(this.defaultControls);
         } else {
             this.defaultControls = null;
         }
@@ -59,21 +59,15 @@ public class PaginatorGUIPane extends SimpleGUIPane implements ItemAddable<Pagin
         int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
         int realHeight = Math.min(parentMaxSize.getY(), itemHeight);
         this.setSize(new Vector2d(newWidth, realHeight));
-
         this.currentPage = Math.min(this.currentPage, this.getPages());
-        this.setDefaultControls();
     }
 
     @Override
     public void updateSizeRecursive(Vector2d parentMaxSize) {
         this.updateSize(parentMaxSize);
-        this.updateChildrenRecursive(parentMaxSize);
-    }
-
-    private void setDefaultControls() {
-        this.removeSection(this.defaultControls);
-        if (this.showDefaultControls()) {
-            this.setSectionAt(new Vector2d(0, this.getContentPaneSize().getY()), this.defaultControls);
+        this.contentPane.updateSizeRecursive(parentMaxSize);
+        if (this.defaultControls != null) {
+            this.defaultControls.updateSizeRecursive(parentMaxSize);
         }
     }
 
