@@ -58,6 +58,9 @@ public abstract class GUI implements Listener {
         return this.views.stream().map(GUIView::getPlayer).toList();
     }
 
+    /**
+     * Shows the GUI to a player.
+     */
     @SuppressWarnings("UnusedReturnValue")
     public GUIView showPlayer(Player player) {
         if (this.views.size() == 0) {
@@ -143,7 +146,7 @@ public abstract class GUI implements Listener {
         }
     }
 
-    public void removePlayer(GUIView view) {
+    private void removePlayer(GUIView view) {
         this.views.remove(view);
         this.onClose(view.getPlayer());
         if (this.views.size() == 0) {

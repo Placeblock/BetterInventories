@@ -58,13 +58,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         this.autoSize = autoSize;
         this.nextButton = nextButton;
         this.previousButton = previousButton;
-        this.init();
-    }
-
-    private void init() {
-        this.clear();
-        this.fill(FILL_ITEM);
-        this.updateButtons();
+        this.onSizeChange();
     }
 
     private void updateButtons() {
