@@ -15,6 +15,9 @@ import org.bukkit.plugin.Plugin;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * GUI for getting Text Input
+ */
 public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     public static final Material INPUT_MATERIAL = Material.PAPER;
     public static final Material RESULT_MATERIAL = Material.LIME_DYE;
@@ -27,6 +30,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     private String currentText;
     private boolean closed = false;
 
+    /**
+     * @param text The initial Text
+     * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
+     */
     @SuppressWarnings("unused")
     public TextInputGUI(Plugin plugin, TextComponent title,
                         Player player, String text,
@@ -34,6 +41,11 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this(plugin, title, player, text, onFinish, Component::text);
     }
 
+    /**
+     * @param text The initial Text
+     * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
+     * @param titleConverter Is called to convert the current text to the title of the submit item
+     */
     public TextInputGUI(Plugin plugin, TextComponent title,
                         Player player, String text,
                         FinishConsumer onFinish,
@@ -41,6 +53,12 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this(plugin, title, player, text, onFinish, t -> {}, titleConverter);
     }
 
+    /**
+     * @param text The initial Text
+     * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
+     * @param onUpdate Is called whenever the player types something
+     * @param titleConverter Is called to convert the current text to the title of the submit item
+     */
     public TextInputGUI(Plugin plugin, TextComponent title,
                         Player player, String text,
                         FinishConsumer onFinish,

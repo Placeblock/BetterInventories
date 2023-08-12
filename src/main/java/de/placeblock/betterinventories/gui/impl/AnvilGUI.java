@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.gui.impl;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.gui.impl.textinput.TextInputGUI;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.TextComponent;
@@ -15,6 +16,10 @@ import org.bukkit.plugin.Plugin;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * GUI for creating Anvil GUIs
+ * If you want to receive Text from Anvils you should use {@link TextInputGUI}
+ */
 @Getter
 @Setter
 public class AnvilGUI extends GUI {
