@@ -150,7 +150,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     /**
      * Sets a section at coordinates 0,0
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "UnusedReturnValue"})
     public S setSection(C section) {
         return this.setSectionAt(new Vector2d(), section);
     }

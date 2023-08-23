@@ -20,7 +20,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * Adds an Item.
      * @param item The Item
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "UnusedReturnValue"})
     default O addItem(GUIItem item) {
         this.getItems().add(item);
         this.onItemAdd();
