@@ -13,7 +13,7 @@ public class GUIButtonBuilder extends BaseGUIButtonBuilder<GUIButton, GUIButtonB
 
     @Override
     public GUIButton build() {
-        return new GUIButton(this.getGui(), this.getItem()) {
+        return new GUIButton(this.getGui(), this.getItem(), this.getCooldown(), this.getClickSound(), this.getPermission()) {
             @Override
             public void onClick(ClickData data) {
                 if (GUIButtonBuilder.this.getOnClick() == null) return;

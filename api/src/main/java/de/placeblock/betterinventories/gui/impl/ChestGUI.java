@@ -20,8 +20,8 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
     private int minHeight;
 
     @SuppressWarnings("unused")
-    public ChestGUI(Plugin plugin, TextComponent title, int size) {
-        this(plugin, title, size, size);
+    public ChestGUI(Plugin plugin, TextComponent title, int height) {
+        this(plugin, title, height, height);
     }
 
     public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {

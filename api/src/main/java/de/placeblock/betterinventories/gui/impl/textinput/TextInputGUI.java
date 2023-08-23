@@ -55,6 +55,17 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
 
     /**
      * @param text The initial Text
+     * @param titleConverter Is called to convert the current text to the title of the submit item
+     */
+    @SuppressWarnings("unused")
+    public TextInputGUI(Plugin plugin, TextComponent title,
+                        Player player, String text,
+                        Function<String, TextComponent> titleConverter) {
+        this(plugin, title, player, text, (t, a) -> true, t -> {}, titleConverter);
+    }
+
+    /**
+     * @param text The initial Text
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      * @param onUpdate Is called whenever the player types something
      * @param titleConverter Is called to convert the current text to the title of the submit item
@@ -96,6 +107,7 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
 
     public void updateText(String text) {
         this.onUpdate.accept(text);
+        this.onUpdate(text);
         this.currentText = text;
         this.setResultButton();
         this.update();
@@ -109,11 +121,18 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     private void finish(boolean abort) {
         if (!this.closed) {
             this.closed = true;
-            this.onFinish.accept(this.currentText, abort);
-            this.packetListener.uninject();
-            this.player.closeInventory();
+            if ((this.onFinish.accept(this.currentText, abort) &&
+                this.onFinish(this.currentText, abort)) || abort) {
+                this.packetListener.uninject();
+                this.player.closeInventory();
+            }
         }
     }
+
+    @SuppressWarnings("unused")
+    public void onUpdate(String text) {}
+    @SuppressWarnings("unused")
+    public boolean onFinish(String text, boolean abort) {return true;}
 
     @Override
     public Player getPlayer() {
