@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 // We use Hopper Inventory in this example (Not mandatory)
+// With gui.showPlayer(Player) you can show the GUI to a player!
 @SuppressWarnings("unused")
 public class ButtonExample extends CanvasGUI {
     protected ButtonExample(Plugin plugin) {

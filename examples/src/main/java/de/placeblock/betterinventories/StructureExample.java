@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 // This example shows, how GUIPanes can be placed in GUIPanes.
+// With gui.showPlayer(Player) you can show the GUI to a player!
 @SuppressWarnings("unused")
 public class StructureExample extends ChestGUI {
     public StructureExample(Plugin plugin) {
