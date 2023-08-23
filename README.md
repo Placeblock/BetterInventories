@@ -11,7 +11,7 @@ Features:
 - Clean management of different parts of the GUI (Components)
 - Listen to button clicks
 - Customizable click sound
-- Switch Inventory and update size without centering the player's cursor
+- Switch Inventory and update GUI size without centering the player's cursor
 - Text input using Anvil
 - And many more...
 
@@ -19,36 +19,40 @@ Features:
 Examples can be found in the example module.
 
 ## Installation
-You can download and use the sourcecode at any time.
+You can download and use the sourcecode at any time.<br>
 For the build-tool users out there:
 #### Repository
-```kotlin
-repositories {
-    maven {
-        url = uri("https://repo.codelix.de/releases")
-    }
-}
-```
-#### Dependency
 Gradle Kotlin
 ```kotlin
-implementation("de.placeblock:betterinventories:1.3.4")
+maven { // Repository
+    url = uri("https://repo.codelix.de/releases")
+}
+```
+```kotlin
+implementation("de.placeblock:betterinventories:1.3.4") // Dependency
 ```
 Gradle Groovy
 ```groovy
-implementation "de.placeblock:betterinventories:1.3.4"
+maven { // Repository
+    url "https://repo.codelix.de/releases"
+}
+```
+```groovy
+implementation "de.placeblock:betterinventories:1.3.4" // Dependency
 ```
 Maven
 ```xml
+<repository>
+    <id>codelix-repo</id>
+    <url>https://repo.codelix.de/releases</url>
+</repository>
+```
+```xml
 <dependency>
-  <groupId>de.placeblock</groupId>
-  <artifactId>betterinventories</artifactId>
-  <version>1.3.4</version>
+    <groupId>de.placeblock</groupId>
+    <artifactId>betterinventories</artifactId>
+    <version>1.3.4</version>
 </dependency>
-```
-SBT
-```
-"de.placeblock" %% "betterinventories" %% "1.3.4"
 ```
 
 ## Basic structure
@@ -70,6 +74,7 @@ your life easier. For the most of the GUISection implementations there are build
 which make creation simpler.
 
 ## Sizing
+`For simple GUIs you dont have to worry about that :)`<br>
 Some GUIPanes and GUIs resize themselves. The auto-sizing GUI is called the ChestGUI and 
 sets it's size based on the content (if autoSize is enabled). The SimpleGUIPane can resize 
 itself based on the contents too.
