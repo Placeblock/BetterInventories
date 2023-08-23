@@ -30,21 +30,25 @@ repositories {
 }
 ```
 #### Dependency
+Gradle Kotlin
 ```kotlin
-// Kotlin
 implementation("de.placeblock:betterinventories:1.3.4")
 ```
+Gradle Groovy
 ```groovy
-// Groovy
 implementation "de.placeblock:betterinventories:1.3.4"
 ```
+Maven
 ```xml
-<!-- Maven -->
 <dependency>
   <groupId>de.placeblock</groupId>
   <artifactId>betterinventories</artifactId>
   <version>1.3.4</version>
 </dependency>
+```
+SBT
+```
+"de.placeblock" %% "betterinventories" %% "1.3.4"
 ```
 
 ## Basic structure
