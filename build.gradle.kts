@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "de.placeblock"
-version = "1.3.3"
+version = "1.3.4"
 
 repositories {
     mavenCentral()
@@ -57,14 +57,6 @@ publishing {
         }
     }
     repositories {
-        maven {
-            name = "ScharkIO"
-            url = uri("https://repo.schark.io/private")
-            credentials{
-                username = project.properties["reposilite.username"] as String?
-                password = project.properties["reposilite.token"] as String?
-            }
-        }
         maven {
             name = "Placeblock"
             url = uri("https://repo.codelix.de/releases")
