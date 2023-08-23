@@ -39,6 +39,7 @@ tasks {
 
     javadoc {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
+        title = "BetterInventories API Documentation"
     }
 
     processResources {
@@ -50,7 +51,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group as String?
-            artifactId = project.name
+            artifactId = "betterinventories"
             version = project.version as String?
 
             from(components["java"])
@@ -58,7 +59,7 @@ publishing {
     }
     repositories {
         maven {
-            name = "Placeblock"
+            name = "PlaceblockRelease"
             url = uri("https://repo.codelix.de/releases")
             credentials{
                 username = project.properties["placerepo.username"] as String?
@@ -66,7 +67,7 @@ publishing {
             }
         }
         maven {
-            name = "Placeblock"
+            name = "PlaceblockSnapshot"
             url = uri("https://repo.codelix.de/snapshots")
             credentials{
                 username = project.properties["placerepo.username"] as String?
@@ -74,8 +75,9 @@ publishing {
             }
         }
         maven {
-            name = "Placeblock"
+            name = "PlaceblockPrivate"
             url = uri("https://repo.codelix.de/private")
+            isAllowInsecureProtocol = true
             credentials{
                 username = project.properties["placerepo.username"] as String?
                 password = project.properties["placerepo.token"] as String?

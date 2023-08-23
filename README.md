@@ -18,6 +18,35 @@ Features:
 ## Examples
 Examples can be found in the example module.
 
+## Installation
+You can download and use the sourcecode at any time.
+For the build-tool users out there:
+#### Repository
+```kotlin
+repositories {
+    maven {
+        url = uri("https://repo.codelix.de/releases")
+    }
+}
+```
+#### Dependency
+```kotlin
+// Kotlin
+implementation("de.placeblock:betterinventories:1.3.4")
+```
+```groovy
+// Groovy
+implementation "de.placeblock:betterinventories:1.3.4"
+```
+```xml
+<!-- Maven -->
+<dependency>
+  <groupId>de.placeblock</groupId>
+  <artifactId>betterinventories</artifactId>
+  <version>1.3.4</version>
+</dependency>
+```
+
 ## Basic structure
 
 BetterInventories consists of two major components.
