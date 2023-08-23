@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+// With gui.showPlayer(Player) you can show the GUI to a player!
 @SuppressWarnings("unused")
 public class TextInputExample extends TextInputGUI {
 

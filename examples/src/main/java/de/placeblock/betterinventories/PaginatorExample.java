@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 // We use ChestGUI to auto-resize the GUI
+// With gui.showPlayer(Player) you can show the GUI to a player!
 @SuppressWarnings("unused")
 public class PaginatorExample extends ChestGUI {
     public PaginatorExample(Plugin plugin) {
