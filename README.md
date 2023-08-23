@@ -1,103 +1,58 @@
-# BetterInventories - API for Inventory Management
+## What is BetterInventories?
+Creating Inventories with Bukkit can be quite complicated, especially if they get more complex.
+Better Inventories solves these problems by allowing you to create reusable components, which
+you can place inside the GUI wherever you want. It is highly customizable, DRY, simple and extensive
+if you need to implement more complex features.
 
-## Introduction
+Features:
+- Supports different types of Inventories (Chest, Anvil)
+- Custom titles
+- Built-in Page system
+- Clean management of different parts of the GUI (Components)
+- Listen to button clicks
+- Customizable click sound
+- Switch Inventory and update size without centering the player's cursor
+- Text input using Anvil
+- And many more...
 
-To design a rich Inventory System with high re-usability, clean code and extensibility 
-can be hard. I've tried my best to cover all three aspects.
+## Examples
+Examples can be found in the example module.
 
-There are several questions that arise when thinking about these .
-1. There should be a feature to encapsulate one part of an Inventory to reuse it
-2. There should be support for several Inventory Types
-3. Open new Inventories without a cursor moving to the center of the players screen.
-4. Decentralized use of inventories without a manager
-5. ...
+## Basic structure
 
-There are some Key Concepts that try to solve these Problems:
+BetterInventories consists of two major components.
 
-### GUISection
+### The GUI Class
+A GUI is what people can see. They can interact with it and do stuff with it. Multiple players can see one GUI.
+There are different types of GUI e.g. the CanvasGUI and the ChestGUI (more info in JavaDoc). For the most of the GUI 
+implementations there are builder available which make GUI creation easier
 
-A GUISection is a container which can hold other GUISections. It's based on <b>recursion</b>.
-It is used to represent a group of GUISections or a single GUISection and has attributes like width and height.
+### The GUISection class
+The content of GUIs is created using GUISections. These are building blocks which can be 
+used to create many different GUIs. For just Items and Buttons you can use GUIItem or 
+GUIButton. GUIPanes are GUISections that can contain other GUISections. If you want to 
+structure your inventory with a left and right half you can use two GUIPanes which you 
+place inside your GUI. There are several implementations of the GUIPane which make 
+your life easier. For the most of the GUISection implementations there are builder available 
+which make creation simpler.
 
-For example the GUIItem class is a GUISection and holds one ItemStack. Of course its size is 1x1. 
+## Sizing
+Some GUIPanes and GUIs resize themselves. The auto-sizing GUI is called the ChestGUI and 
+sets it's size based on the content (if autoSize is enabled). The SimpleGUIPane can resize 
+itself based on the contents too.
+Before an GUI is rendered every GUISection gets recursively updated. It begins at the top 
+of the "GUI-Tree" and calls the updateSizeRecursive(Vector2d) of the first GUIPane. 
+Usually this method calls the same method for every child (recursive) and then calls 
+updateSize(Vector2d). However, you can override these methods and implement it different, 
+e.g. the PaginatorGUIPane first updates its size and then it's children.
 
-In contrast, there is GUIPane, which is also a GUISection. It is used
-to represent a group of GUISections.
-
-### GUI
-
-A GUI represents an Inventory that can be shown to other players. It contains a main GUISection which is called
-the canvas. Everything you "draw" on it will be rendered and shown to the player.
-
-#### In detail
-
-If you want to create a new GUI you always have to ask you one question. What is the GUI going to contain?
-Based on the answer you can choose from one of the predefined GUIs or create your own.
-Some examples for predefined GUIs:
-- CanvasGUI: A basic GUI which contains one canvas you can draw on
-- ChestGUI: A CanvasGUI which has support for Auto-Resize
-- FramedGUI: A ChestGUI which automatically adds borders to either the top and bottom or left and right side of the inventory
-- CraftingTableGUI: A GUI which contains a GUIPane for the 3x3 Crafting Grid and one GUIItem for the result
-- ...
-
-GUIs can be shown to players. If you do so, a GUIView will be created containing the player and the BukkitInventory.
-If you update a GUI the content will be rendered and inserted into the BukkitInventories of the Views.
-
-## How to create a GUI
-
-There are always two ways of creating GUIs and GUISections. You can create them by using builders or by
-extending them which allows you to add extra functionality.
-Creating a GUI is easy. Just instantiate a GUI class.
-
-> Don't forget to call gui.update() after adding items to a gui!
-
-## ItemBuilder
-
-If you want to create ItemStacks for a GUIItem you can use the ItemBuilder which also has support for
-head texture!
-Just instantiate a ```new ItemBuilder()``` with a title and a material and there you go!
-
-The following operations are supported by ItemBuilder:
-- Title and Material
-- Lore
-- Enchantments
-- Item Attributes
-- Item Flags
-- Unbreakable
-- Skin Texture
-
-## Implemented GUISections
-
-There are some GUISections already implemented to make life easier.
-
-### PaginatorGUIPane
-A GUIPane which creates pages for several Items you add to the Paginator.
-
-By default, it automatically creates controls to switch the page, but if you want to create your own ones,
-you can disable the default controls and add your own PaginatorControlsPane
-
-For the position of the arrows the following options are available in the PaginatorControlsPosition enum:
-- CENTER: Both buttons are in the center of the controls GUIPane
-- LEFT: Both buttons are on the left side of the controls GUIPane
-- RIGHT: Both buttons are on the right side of the controls GUIPane
-- SPACE_BETWEEN: One button is on the right side and the other one is on the left side of the controls GUIPane
-- SPACE_EVENLY: The space between the buttons and the border is even
-
-### FramedGUIPane
-FramedGUIPane creates borders around your content. It provides a frame GUIPane where you can draw on.
-You shouldn't draw directly on the canvas as this will potentially override the border.
-
-Another Feature of the FramedGUIPane is the option to pass a so called "BackGUI". If you do so, a Back-Button
-will be inserted into a border which opens the passed GUI.
-
-### SwitchGUIButton
-Automatically opens the passed GUI onClick
-
-### TeleportGUIButton
-Automatically teleports a player onClick
-
-### CommandGUIButton
-Automatically executes a command for a player on click
-
-### BackGUIButton
-Basically a SwitchGUIButton but with a specific ItemStack
+Every GUIPane and the ChestGUI implement Sizeable which means they have a size, a 
+min-size and a max-size. If you ever set the size of a GUIPane you should always use 
+the setSize(Vector2d) method as it automatically limits the size to min and max. 
+As the size of GUIPanes is responsive and not fix you cannot set the size of a GUIPane 
+in the constructor. The size of a GUIPane is initially set to the minSize, but usually 
+the size changes after the first updateSizeRecursive(Vector2d) call. If you still want 
+to set your GUIPane to a fixed size you can just set max and min size to the same, 
+builders will do that automatically if you use size(Vector2d) instead of minSize(Vector) 
+and maxSize(Vector2d) .
+This leads to a highly responsive GUI and GUISection that can automatically resize itself.

@@ -4,8 +4,10 @@ import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -13,9 +15,13 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 public class SwitchGUIButton extends GUIButton {
-    private final Supplier<GUI> targetGUI;
+    private final Function<Player, GUI> targetGUI;
 
     public SwitchGUIButton(GUI gui, ItemStack item, Supplier<GUI> targetGUI) {
+        this(gui, item, player -> targetGUI.get());
+    }
+
+    public SwitchGUIButton(GUI gui, ItemStack item, Function<Player, GUI> targetGUI) {
         super(gui, item, targetGUI == null ? null : Sound.UI_BUTTON_CLICK);
         this.targetGUI = targetGUI;
     }
@@ -23,7 +29,8 @@ public class SwitchGUIButton extends GUIButton {
     @Override
     public void onClick(ClickData data) {
         if (this.targetGUI != null) {
-            this.targetGUI.get().showPlayer(data.getPlayer());
+            Player player = data.getPlayer();
+            this.targetGUI.apply(player).showPlayer(player);
         }
     }
 }

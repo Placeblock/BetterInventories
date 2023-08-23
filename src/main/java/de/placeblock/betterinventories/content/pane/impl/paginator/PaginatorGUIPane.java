@@ -47,7 +47,6 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         this.repeat = repeat;
         if (defaultControlsPosition != null) {
             this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
-            this.setLowerPane(this.defaultControls);
         } else {
             this.defaultControls = null;
         }
@@ -60,6 +59,11 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         int realHeight = Math.min(parentMaxSize.getY(), itemHeight);
         this.setSize(new Vector2d(newWidth, realHeight));
         this.currentPage = Math.min(this.currentPage, this.getPages());
+        if (this.showDefaultControls()) {
+            this.setLowerPane(this.defaultControls);
+        } else {
+            this.setLowerPane(null);
+        }
     }
 
     @Override

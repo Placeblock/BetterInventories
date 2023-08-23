@@ -60,10 +60,33 @@ publishing {
         maven {
             name = "ScharkIO"
             url = uri("https://repo.schark.io/private")
-            isAllowInsecureProtocol = true
             credentials{
                 username = project.properties["reposilite.username"] as String?
                 password = project.properties["reposilite.token"] as String?
+            }
+        }
+        maven {
+            name = "Placeblock"
+            url = uri("https://repo.codelix.de/releases")
+            credentials{
+                username = project.properties["placerepo.username"] as String?
+                password = project.properties["placerepo.token"] as String?
+            }
+        }
+        maven {
+            name = "Placeblock"
+            url = uri("https://repo.codelix.de/snapshots")
+            credentials{
+                username = project.properties["placerepo.username"] as String?
+                password = project.properties["placerepo.token"] as String?
+            }
+        }
+        maven {
+            name = "Placeblock"
+            url = uri("https://repo.codelix.de/private")
+            credentials{
+                username = project.properties["placerepo.username"] as String?
+                password = project.properties["placerepo.token"] as String?
             }
         }
     }
