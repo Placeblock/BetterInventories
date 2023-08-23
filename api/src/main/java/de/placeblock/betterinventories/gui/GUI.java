@@ -116,7 +116,7 @@ public abstract class GUI implements Listener {
             int slot = event.getSlot();
             GUISection clicked = this.getClickedSection(slot);
             ClickData clickData = new ClickData(player, slot, event.getAction(), event);
-            if (clicked instanceof GUIButton button) {
+            if (clicked instanceof GUIButton button && button.hasPermission(player)) {
                 button.click(player);
                 if (event.isShiftClick()) {
                     button.onShiftClick(clickData);

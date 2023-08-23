@@ -3,12 +3,16 @@ package de.placeblock.betterinventories.builder.content;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
+import org.bukkit.Sound;
 
 import java.util.function.Consumer;
 
 
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGUIButtonBuilder<G, B>> extends BaseGUIItemBuilder<G, B> {
+    private String permission = null;
+    private Sound clickSound = null;
+    private int cooldown = 0;
     private Consumer<ClickData> onClick;
     private Consumer<ClickData> onRightClick;
     private Consumer<ClickData> onLeftClick;
@@ -51,6 +55,21 @@ public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGU
         return (B) this;
     }
 
+    public B permission(String permission) {
+        this.permission = permission;
+        return (B) this;
+    }
+
+    public B clickSound(Sound sound) {
+        this.clickSound = sound;
+        return (B) this;
+    }
+
+    public B cooldown(int cooldown) {
+        this.cooldown = cooldown;
+        return (B) this;
+    }
+
     protected Consumer<ClickData> getOnClick() {
         return this.onClick;
     }
@@ -74,4 +93,8 @@ public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGU
     protected Consumer<ClickData> getOnShiftRightClick() {
         return this.onShiftRightClick;
     }
+
+    protected int getCooldown() {return this.cooldown;}
+    protected Sound getClickSound() {return this.clickSound;}
+    protected String getPermission() {return this.permission;}
 }

@@ -19,8 +19,13 @@ import org.bukkit.inventory.ItemStack;
 public abstract class GUIButton extends GUIItem {
     private final int cooldown;
     private final Sound clickSound;
+    private final String permission;
 
     public GUIButton(GUI gui, ItemStack item) {
+        this(gui, item, 0, Sound.UI_BUTTON_CLICK);
+    }
+
+    public GUIButton(GUI gui, ItemStack item, String permission) {
         this(gui, item, 0, Sound.UI_BUTTON_CLICK);
     }
 
@@ -29,13 +34,24 @@ public abstract class GUIButton extends GUIItem {
     }
 
     public GUIButton(GUI gui, ItemStack item, int cooldown) {
-        this(gui, item, cooldown, null);
+        this(gui, item, cooldown, null, null);
+    }
+    public GUIButton(GUI gui, ItemStack item, int cooldown, String permission) {
+        this(gui, item, cooldown, null, permission);
+    }
+    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound) {
+        this(gui, item, cooldown, clickSound, null);
     }
 
-    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound) {
+    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound, String permission) {
         super(gui, item);
         this.cooldown = cooldown;
         this.clickSound = clickSound;
+        this.permission = permission;
+    }
+
+    public boolean hasPermission(Player player) {
+        return this.permission == null || player.hasPermission(this.permission);
     }
 
     public void click(Player player) {

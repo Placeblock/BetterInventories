@@ -6,4 +6,5 @@ pluginManagement {
 }
 
 rootProject.name = "BetterInventories"
-
+include("api")
+include("examples")
