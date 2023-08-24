@@ -15,9 +15,9 @@ public class CanvasGUIBuilder extends BaseCanvasGUIBuilder<SimpleGUIPane, Canvas
     @Override
     public CanvasGUI build() {
         if (this.height != null) {
-            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight());
+            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight(), this.getRegisterDefaultHandlers());
         } else {
-            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getType());
+            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getType(), this.getRegisterDefaultHandlers());
         }
     }
 }

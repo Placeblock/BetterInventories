@@ -24,8 +24,17 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
         this(plugin, title, height, height);
     }
 
+    @SuppressWarnings("unused")
+    public ChestGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
+        this(plugin, title, height, height, registerDefaultHandlers);
+    }
+
     public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
-        super(plugin, title, minHeight, maxHeight);
+        this(plugin, title, minHeight, maxHeight, true);
+    }
+
+    public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean registerDefaultHandlers) {
+        super(plugin, title, minHeight, maxHeight, registerDefaultHandlers);
         this.setCanvas(new SimpleGUIPane(this, this.getMinSize(), this.getMaxSize(), true));
     }
 }

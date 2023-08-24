@@ -21,8 +21,8 @@ import java.util.List;
 public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     protected C canvas;
 
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        super(plugin, title, type);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
+        super(plugin, title, type, registerDefaultHandlers);
     }
 
     /**

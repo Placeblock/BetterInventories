@@ -22,8 +22,8 @@ public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements
     @Setter
     private int minHeight;
 
-    public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
-        super(plugin, title, InventoryType.CHEST);
+    public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean registerDefaultHandlers) {
+        super(plugin, title, InventoryType.CHEST, registerDefaultHandlers);
         this.maxHeight = maxHeight;
         this.minHeight = minHeight;
     }

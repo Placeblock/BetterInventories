@@ -31,6 +31,11 @@ public class AnvilGUI extends GUI {
         super(plugin, title, InventoryType.ANVIL);
     }
 
+    @SuppressWarnings("unused")
+    public AnvilGUI(Plugin plugin, TextComponent title, boolean registerDefaultHandlers) {
+        super(plugin, title, InventoryType.ANVIL, registerDefaultHandlers);
+    }
+
     @Override
     public Inventory createBukkitInventory() {
         return Bukkit.createInventory(null, InventoryType.ANVIL, this.getTitle());

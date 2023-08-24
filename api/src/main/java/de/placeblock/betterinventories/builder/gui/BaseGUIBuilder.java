@@ -16,6 +16,8 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     private TextComponent title;
     private InventoryType type;
 
+    private boolean registerDefaultHandlers = true;
+
     /**
      * Sets the title of the Inventory.
      */
@@ -33,6 +35,15 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
         return (B) this;
     }
 
+    /**
+     * Sets the type of the Inventory.
+     * Does not need to be set in many implementing GUIBuilders.
+     */
+    public B registerDefaultHandlers(boolean register) {
+        this.registerDefaultHandlers = register;
+        return (B) this;
+    }
+
     protected TextComponent getTitle() {
         return this.getValue(this.title);
     }
@@ -44,6 +55,8 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     protected Plugin getPlugin() {
         return this.plugin;
     }
+
+    protected boolean getRegisterDefaultHandlers() {return this.registerDefaultHandlers;}
 
     public abstract G build();
 }

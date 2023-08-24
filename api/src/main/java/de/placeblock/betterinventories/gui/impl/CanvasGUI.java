@@ -14,17 +14,30 @@ import org.bukkit.plugin.Plugin;
  * <p></p>
  * Builder: {@link CanvasGUIBuilder}
  */
+@SuppressWarnings("unused")
 public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
     public CanvasGUI(Plugin plugin, TextComponent title, int height) {
         this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
+    }
+
+    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
+        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), registerDefaultHandlers);
     }
 
     public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
         this(plugin, title, type, InventoryTypeMapper.getSize(type));
     }
 
+    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
+        this(plugin, title, type, InventoryTypeMapper.getSize(type), registerDefaultHandlers);
+    }
+
     protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
-        super(plugin, title, type);
+        this(plugin, title, type, size, true);
+    }
+
+    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean registerDefaultHandlers) {
+        super(plugin, title, type, registerDefaultHandlers);
         this.setCanvas(new SimpleGUIPane(this, size, size, false));
     }
 }
