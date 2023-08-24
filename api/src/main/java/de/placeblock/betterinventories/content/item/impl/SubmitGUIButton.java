@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl;
 
+import de.placeblock.betterinventories.builder.content.SubmitGUIButtonBuilder;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Button which shows a confirm-item if clicked.
+ * Builder: {@link SubmitGUIButtonBuilder}
  */
 @SuppressWarnings("unused")
 public abstract class SubmitGUIButton extends GUIButton {
