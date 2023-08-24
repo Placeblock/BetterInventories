@@ -17,4 +17,20 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
     public SimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
+
+    public void flipX() {
+
+    }
+
+    public void flipY() {
+
+    }
+
+    public void shiftX() {
+
+    }
+
+    public void shiftY() {
+
+    }
 }

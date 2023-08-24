@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unchecked")
 public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
-    private final List<ChildData<C>> content = new ArrayList<>();
-    private final boolean autoSize;
+    protected final List<ChildData<C>> content = new ArrayList<>();
+    protected final boolean autoSize;
 
     /**
      * @param autoSize Whether to automatically resize the pane according to the children.
