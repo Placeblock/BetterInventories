@@ -29,6 +29,12 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     @Override
+    public void updateSizeRecursive(Vector2d parentMaxSize) {
+        this.updateChildrenRecursive(parentMaxSize);
+        this.updateSize(parentMaxSize);
+    }
+
+    @Override
     public void updateSize(Vector2d parentMaxSize) {
         if (this.autoSize) {
             Set<Vector2d> vectors = new HashSet<>();

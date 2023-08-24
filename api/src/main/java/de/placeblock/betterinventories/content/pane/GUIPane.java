@@ -44,10 +44,9 @@ public abstract class GUIPane extends GUISection {
         this.setSize(new Vector2d(width, this.getHeight()));
     }
 
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
-        this.updateChildrenRecursive(parentMaxSize);
-        this.updateSize(parentMaxSize);
-    }
+    abstract public void updateSizeRecursive(Vector2d parentMaxSize);
+
+    abstract public void updateSize(Vector2d parentMaxSize);
 
     protected void updateChildrenRecursive(Vector2d parentMaxSize) {
         for (GUISection child : this.getChildren()) {
@@ -56,8 +55,6 @@ public abstract class GUIPane extends GUISection {
             }
         }
     }
-
-    abstract public void updateSize(Vector2d parentMaxSize);
 
     /**
      * Can be overridden and is only called when the size of this GUIPane really changes.
@@ -68,7 +65,7 @@ public abstract class GUIPane extends GUISection {
 
     /**
      * Implemented by GUIPanes
-     * Child sections that aren't returned in this method won't update their sizes correctly.
+     * Should return all children sections
      * @return All child sections
      */
     abstract public Set<GUISection> getChildren();
