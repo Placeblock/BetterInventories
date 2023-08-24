@@ -3,7 +3,7 @@ plugins {
     id("io.papermc.paperweight.userdev") version "1.3.5"
 }
 
-group = "de.placeblock"
+group = "de.codelix"
 
 repositories {
     mavenCentral()

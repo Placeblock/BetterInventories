@@ -6,8 +6,9 @@ import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -20,8 +21,8 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unchecked")
 public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
-    private final List<ChildData<C>> content = new ArrayList<>();
-    private final boolean autoSize;
+    protected final List<ChildData<C>> content = new ArrayList<>();
+    protected final boolean autoSize;
 
     /**
      * @param autoSize Whether to automatically resize the pane according to the children.
@@ -170,9 +171,10 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     @Getter
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     protected static class ChildData<C extends GUISection> {
-        private final Vector2d position;
+        @Setter
+        private Vector2d position;
         private final C child;
     }
 }
