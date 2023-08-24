@@ -5,8 +5,11 @@ plugins {
     signing
 }
 
-group = "de.placeblock"
-version = "1.3.4"
+group = "de.codelix"
+version = "1.3.5-SNAPSHOT"
+
+var isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
+var artifactID = "betterinventories"
 
 repositories {
     mavenCentral()
@@ -34,55 +37,75 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
-
         options.release.set(17)
+    }
+
+    processResources {
+        filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
     }
 
     javadoc {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
         title = "BetterInventories API Documentation"
     }
-
-    processResources {
-        filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
-    }
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = project.group as String?
-            artifactId = "betterinventories"
-            version = project.version as String?
-
+            groupId = project.group.toString()
+            artifactId = artifactID
+            version = project.version.toString()
             from(components["java"])
+            pom {
+                packaging = "jar"
+                name.set("BetterInventories")
+                description.set("Easy to use and extensive InventoryAPI for Spigot")
+                url.set("https://github.com/Placeblock/BetterInventories")
+                licenses {
+                    license {
+                        name.set("GNU General Public License, Version 3")
+                        url.set("https://www.gnu.org/licenses/gpl-3.0.html")
+                    }
+                }
+                developers {
+                    developer {
+                        name.set("Felix")
+                        organization.set("Codelix")
+                        organizationUrl.set("https://codelix.de/")
+                    }
+                }
+                scm {
+                    url.set(
+                        "https://github.com/Placeblock/BetterInventories.git"
+                    )
+                    connection.set(
+                        "scm:git:git://github.com/Placeblock/BetterInventories.git"
+                    )
+                    developerConnection.set(
+                        "scm:git:git://github.com/Placeblock/BetterInventories.git"
+                    )
+                }
+                issueManagement {
+                    url.set("https://github.com/Placeblock/BetterInventories/issues")
+                }
+            }
         }
     }
     repositories {
         maven {
-            name = "PlaceblockRelease"
-            url = uri("https://repo.codelix.de/releases")
+            name = "mavenCentral" + if(isReleaseVersion) "Release" else "Snapshot"
+            url = uri(if (isReleaseVersion) "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    else "https://s01.oss.sonatype.org/content/repositories/snapshots")
             credentials{
-                username = project.properties["placerepo.username"] as String?
-                password = project.properties["placerepo.token"] as String?
-            }
-        }
-        maven {
-            name = "PlaceblockSnapshot"
-            url = uri("https://repo.codelix.de/snapshots")
-            credentials{
-                username = project.properties["placerepo.username"] as String?
-                password = project.properties["placerepo.token"] as String?
-            }
-        }
-        maven {
-            name = "PlaceblockPrivate"
-            url = uri("https://repo.codelix.de/private")
-            isAllowInsecureProtocol = true
-            credentials{
-                username = project.properties["placerepo.username"] as String?
-                password = project.properties["placerepo.token"] as String?
+                username = project.properties["ossrh.username"] as String?
+                password = project.properties["ossrh.password"] as String?
             }
         }
     }
 }
+
+signing {
+    sign(publishing.publications)
+}
+

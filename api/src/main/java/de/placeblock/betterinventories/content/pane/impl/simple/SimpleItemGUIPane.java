@@ -3,13 +3,17 @@ package de.placeblock.betterinventories.content.pane.impl.simple;
 import de.placeblock.betterinventories.builder.content.SimpleItemGUIPaneBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
+
+import java.util.function.Function;
 
 /**
  * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}s.
  * <p></p>
  * Builder: {@link SimpleItemGUIPaneBuilder}
  */
+@SuppressWarnings("unused")
 public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIPane> {
     public SimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
         this(gui, minSize, maxSize, false);
@@ -19,18 +23,43 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
     }
 
     public void flipX() {
-
+        this.applyTransformation(v -> {
+            int spaceLeft = v.getX() + 1;
+            return new Vector2d(this.getWidth()-spaceLeft, v.getY());
+        });
     }
 
     public void flipY() {
-
+        this.applyTransformation(v -> {
+            int spaceTop = v.getY() + 1;
+            return new Vector2d(v.getX(), this.getHeight()-spaceTop);
+        });
     }
 
-    public void shiftX() {
-
+    public void shiftX(int delta) {
+        this.applyTransformation(v -> {
+            if (v.getX() >= 0 && v.getX() < this.getWidth()) {
+                int newX = Util.modulo((v.getX() + delta),this.getWidth());
+                return new Vector2d(newX, v.getY());
+            }
+            return v;
+        });
     }
 
-    public void shiftY() {
+    public void shiftY(int delta) {
+        this.applyTransformation(v -> {
+            if (v.getY() >= 0 && v.getY() < this.getHeight()) {
+                int newY = Util.modulo((v.getY()+delta),this.getHeight());
+                return new Vector2d(v.getX(), newY);
+            }
+            return v;
+        });
+    }
 
+    private void applyTransformation(Function<Vector2d, Vector2d> transformer) {
+        for (ChildData<GUIItem> childData : this.content) {
+            Vector2d newPos = transformer.apply(childData.getPosition());
+            childData.setPosition(newPos);
+        }
     }
 }
