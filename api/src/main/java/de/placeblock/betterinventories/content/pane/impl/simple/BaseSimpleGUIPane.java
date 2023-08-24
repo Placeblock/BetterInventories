@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.simple;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
@@ -32,13 +33,13 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     @Override
-    public void updateSizeRecursive(GUIPane parent) {
+    public void updateSizeRecursive(Sizeable parent) {
         this.updateChildrenRecursive(parent);
         this.updateSize(parent);
     }
 
     @Override
-    public void updateSize(GUIPane parent) {
+    public void updateSize(Sizeable parent) {
         if (this.autoSize) {
             Set<Vector2d> vectors = new HashSet<>();
             for (ChildData<C> childData : this.content) {

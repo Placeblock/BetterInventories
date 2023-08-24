@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.HorizontalSplitGUIPane;
@@ -53,7 +54,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     }
 
     @Override
-    public void updateSize(GUIPane parent) {
+    public void updateSize(Sizeable parent) {
         int newWidth = Math.max(this.items.size(),2);
         int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
         this.setSize(new Vector2d(newWidth, newHeight));
@@ -66,7 +67,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     }
 
     @Override
-    public void updateSizeRecursive(GUIPane parent) {
+    public void updateSizeRecursive(Sizeable parent) {
         this.updateSize(parent);
         this.contentPane.updateSizeRecursive(parent);
         if (this.defaultControls != null) {

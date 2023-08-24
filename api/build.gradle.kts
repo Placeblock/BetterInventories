@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("io.papermc.paperweight.userdev") version "1.3.5"
     id("maven-publish")
+    signing
 }
 
 group = "de.placeblock"

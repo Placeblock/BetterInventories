@@ -1,9 +1,9 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIButton;
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
-import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
@@ -76,7 +76,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     }
 
     @Override
-    public void updateSize(GUIPane parent) {
+    public void updateSize(Sizeable parent) {
         if (this.autoSize) {
             this.setSize(new Vector2d(this.paginatorGUIPane.getWidth(), 1));
         }

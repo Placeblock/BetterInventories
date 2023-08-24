@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -44,11 +45,11 @@ public abstract class GUIPane extends GUISection {
         this.setSize(new Vector2d(width, this.getHeight()));
     }
 
-    abstract public void updateSizeRecursive(GUIPane parent);
+    abstract public void updateSizeRecursive(Sizeable parent);
 
-    abstract public void updateSize(GUIPane parent);
+    abstract public void updateSize(Sizeable parent);
 
-    protected void updateChildrenRecursive(GUIPane parent) {
+    protected void updateChildrenRecursive(Sizeable parent) {
         for (GUISection child : this.getChildren()) {
             if (child instanceof GUIPane pane) {
                 pane.updateSizeRecursive(parent);

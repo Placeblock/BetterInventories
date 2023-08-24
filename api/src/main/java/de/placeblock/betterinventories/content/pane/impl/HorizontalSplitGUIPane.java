@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.builder.content.HorizontalSplitGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
@@ -28,7 +29,7 @@ public class HorizontalSplitGUIPane extends GUIPane {
     }
 
     @Override
-    public void updateSizeRecursive(GUIPane parent) {
+    public void updateSizeRecursive(Sizeable parent) {
         if (this.upperPane != null) {
             this.upperPane.updateSizeRecursive(parent);
         }
@@ -39,7 +40,7 @@ public class HorizontalSplitGUIPane extends GUIPane {
     }
 
     @Override
-    public void updateSize(GUIPane parent) {
+    public void updateSize(Sizeable parent) {
         int width = this.getNewWidth();
         int height = this.getNewHeight();
         Vector2d newSize = new Vector2d(width, height);

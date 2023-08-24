@@ -31,7 +31,7 @@ public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements
     @Override
     public void update() {
         Vector2d oldSize = this.canvas.getSize();
-        this.canvas.updateSizeRecursive(this.getMaxSize());
+        this.canvas.updateSizeRecursive(this);
         Vector2d newSize = this.canvas.getSize();
         if (!oldSize.equals(newSize)) {
             this.reloadViews();
