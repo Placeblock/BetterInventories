@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -17,7 +18,7 @@ import java.util.Set;
  * <p></p>
  * Updating the {@link GUIPane}'s size works as follows:
  * At first the size of the children is updated, then the own size.
- * To modify this update process you can override {@link #updateSizeRecursive(Vector2d)}.
+ * To modify this update process you can override {@link #updateSizeRecursive(GUIPane)}.
  * How the own size is updated can be implemented by the different {@link GUIPane}s.
  */
 @Getter
@@ -44,20 +45,17 @@ public abstract class GUIPane extends GUISection {
         this.setSize(new Vector2d(width, this.getHeight()));
     }
 
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
-        this.updateChildrenRecursive(parentMaxSize);
-        this.updateSize(parentMaxSize);
-    }
+    abstract public void updateSizeRecursive(Sizeable parent);
 
-    protected void updateChildrenRecursive(Vector2d parentMaxSize) {
+    abstract public void updateSize(Sizeable parent);
+
+    protected void updateChildrenRecursive(Sizeable parent) {
         for (GUISection child : this.getChildren()) {
             if (child instanceof GUIPane pane) {
-                pane.updateSizeRecursive(parentMaxSize);
+                pane.updateSizeRecursive(parent);
             }
         }
     }
-
-    abstract public void updateSize(Vector2d parentMaxSize);
 
     /**
      * Can be overridden and is only called when the size of this GUIPane really changes.
@@ -68,7 +66,7 @@ public abstract class GUIPane extends GUISection {
 
     /**
      * Implemented by GUIPanes
-     * Child sections that aren't returned in this method won't update their sizes correctly.
+     * Should return all children sections
      * @return All child sections
      */
     abstract public Set<GUISection> getChildren();
@@ -85,9 +83,12 @@ public abstract class GUIPane extends GUISection {
         for (int i = 0; i < childContent.size(); i++) {
             Vector2d relative = section.slotToVector(i);
             Vector2d absolute = position.add(relative);
-            int slot = this.vectorToSlot(absolute);
-            ItemStack item = childContent.get(i);
-            content.set(slot, item);
+            if (absolute.getX() < this.getWidth() &&
+                absolute.getY() < this.getHeight()) {
+                int slot = this.vectorToSlot(absolute);
+                ItemStack item = childContent.get(i);
+                content.set(slot, item);
+            }
         }
     }
 }
