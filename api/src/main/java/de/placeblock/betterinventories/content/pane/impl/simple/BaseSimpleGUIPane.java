@@ -1,13 +1,18 @@
 package de.placeblock.betterinventories.content.pane.impl.simple;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The Base for {@link GUIPane}s where content can be just placed with a {@link Vector2d} as the position.
@@ -16,8 +21,8 @@ import java.util.*;
  */
 @SuppressWarnings("unchecked")
 public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
-    private final Map<Vector2d, C> content = new HashMap<>();
-    private final boolean autoSize;
+    protected final List<ChildData<C>> content = new ArrayList<>();
+    protected final boolean autoSize;
 
     /**
      * @param autoSize Whether to automatically resize the pane according to the children.
@@ -29,28 +34,33 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
+    public void updateSizeRecursive(Sizeable parent) {
+        this.updateChildrenRecursive(parent);
+        this.updateSize(parent);
+    }
+
+    @Override
+    public void updateSize(Sizeable parent) {
         if (this.autoSize) {
             Set<Vector2d> vectors = new HashSet<>();
-            for (Map.Entry<Vector2d, C> childEntry : this.content.entrySet()) {
-                vectors.add(childEntry.getKey().add(childEntry.getValue().getSize()));
+            for (ChildData<C> childData : this.content) {
+                vectors.add(childData.getPosition().add(childData.getChild().getSize()));
             }
-            Vector2d largest = Vector2d.largest(vectors);
-            this.setSize(Vector2d.min(largest, parentMaxSize));
+            this.setSize(Vector2d.largest(vectors));
         }
     }
 
     @Override
     public Set<GUISection> getChildren() {
-        return new HashSet<>(this.content.values());
+        return this.content.stream().map(ChildData::getChild).collect(Collectors.toSet());
     }
 
     @Override
     public List<ItemStack> render() {
         List<ItemStack> content = this.getEmptyContentList(ItemStack.class);
         if (!content.isEmpty()) {
-            for (Map.Entry<Vector2d, C> sectionEntry : this.content.entrySet()) {
-                this.renderOnList(sectionEntry.getValue(), sectionEntry.getKey(), content);
+            for (ChildData<C> childData : this.content) {
+                this.renderOnList(childData.getChild(), childData.getPosition(), content);
             }
         }
         return content;
@@ -58,8 +68,9 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
 
     public GUISection getSectionAt(Vector2d position) {
         if (position == null) return null;
-        for (Vector2d pos : this.content.keySet()) {
-            C section = this.content.get(pos);
+        for (ChildData<C> childData : this.content) {
+            Vector2d pos = childData.getPosition();
+            C section = childData.getChild();
             if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
                     && pos.getY() <= position.getY() && pos.getY() + section.getHeight() - 1 >= position.getY()) {
                 return section.getSectionAt(position.subtract(pos));
@@ -108,11 +119,15 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeSection(C section) {
-        for (Vector2d vector2d : this.content.keySet()) {
-            if (this.content.get(vector2d).equals(section)) {
-                this.content.remove(vector2d);
-                return true;
+        ChildData<C> removal = null;
+        for (ChildData<C> childData : this.content) {
+            if (childData.getChild().equals(section)) {
+                removal = childData;
             }
+        }
+        if (removal != null) {
+            this.content.remove(removal);
+            return true;
         }
         return false;
     }
@@ -143,7 +158,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * Sets a section at a specific position
      */
     public S setSectionAt(Vector2d position, C section) {
-        this.content.put(position, section);
+        this.content.add(new ChildData<>(position, section));
         return (S) this;
     }
 
@@ -153,5 +168,13 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public S setSection(C section) {
         return this.setSectionAt(new Vector2d(), section);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    protected static class ChildData<C extends GUISection> {
+        @Setter
+        private Vector2d position;
+        private final C child;
     }
 }

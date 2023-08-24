@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.builder.content.HorizontalSplitGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
@@ -28,22 +29,22 @@ public class HorizontalSplitGUIPane extends GUIPane {
     }
 
     @Override
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
+    public void updateSizeRecursive(Sizeable parent) {
         if (this.upperPane != null) {
-            this.upperPane.updateSizeRecursive(this.maxSize);
+            this.upperPane.updateSizeRecursive(parent);
         }
         if (this.lowerPane != null) {
-            this.lowerPane.updateSizeRecursive(this.maxSize);
+            this.lowerPane.updateSizeRecursive(parent);
         }
-        this.updateSize(parentMaxSize);
+        this.updateSize(parent);
     }
 
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
+    public void updateSize(Sizeable parent) {
         int width = this.getNewWidth();
         int height = this.getNewHeight();
-        Vector2d potSize = new Vector2d(width, height);
-        this.setSize(Vector2d.min(this.maxSize, Vector2d.min(parentMaxSize, potSize)));
+        Vector2d newSize = new Vector2d(width, height);
+        this.setSize(Vector2d.min(this.maxSize, newSize));
     }
 
     private int getNewWidth() {
