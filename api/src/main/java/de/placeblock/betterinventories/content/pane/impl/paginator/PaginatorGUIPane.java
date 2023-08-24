@@ -53,11 +53,10 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     }
 
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
-        int newWidth = Math.max(Math.min(parentMaxSize.getX(), this.items.size()),2);
-        int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
-        int realHeight = Math.min(parentMaxSize.getY(), itemHeight);
-        this.setSize(new Vector2d(newWidth, realHeight));
+    public void updateSize(GUIPane parent) {
+        int newWidth = Math.max(this.items.size(),2);
+        int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
+        this.setSize(new Vector2d(newWidth, newHeight));
         this.currentPage = Math.min(this.currentPage, this.getPages());
         if (this.showDefaultControls()) {
             this.setLowerPane(this.defaultControls);
@@ -67,11 +66,11 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     }
 
     @Override
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
-        this.updateSize(parentMaxSize);
-        this.contentPane.updateSizeRecursive(parentMaxSize);
+    public void updateSizeRecursive(GUIPane parent) {
+        this.updateSize(parent);
+        this.contentPane.updateSizeRecursive(parent);
         if (this.defaultControls != null) {
-            this.defaultControls.updateSizeRecursive(parentMaxSize);
+            this.defaultControls.updateSizeRecursive(parent);
         }
     }
 

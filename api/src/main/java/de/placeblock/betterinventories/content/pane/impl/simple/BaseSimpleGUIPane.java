@@ -29,20 +29,19 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     @Override
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
-        this.updateChildrenRecursive(parentMaxSize);
-        this.updateSize(parentMaxSize);
+    public void updateSizeRecursive(GUIPane parent) {
+        this.updateChildrenRecursive(parent);
+        this.updateSize(parent);
     }
 
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
+    public void updateSize(GUIPane parent) {
         if (this.autoSize) {
             Set<Vector2d> vectors = new HashSet<>();
             for (Map.Entry<Vector2d, C> childEntry : this.content.entrySet()) {
                 vectors.add(childEntry.getKey().add(childEntry.getValue().getSize()));
             }
-            Vector2d largest = Vector2d.largest(vectors);
-            this.setSize(Vector2d.min(largest, parentMaxSize));
+            this.setSize(Vector2d.largest(vectors));
         }
     }
 

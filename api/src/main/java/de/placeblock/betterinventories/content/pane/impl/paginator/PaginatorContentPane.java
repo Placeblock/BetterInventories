@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.content.item.GUIItem;
+import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -20,7 +21,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
     }
 
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
+    public void updateSize(GUIPane parent) {
         this.setSize(this.paginatorGUIPane.getContentPaneSize());
     }
 

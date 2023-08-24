@@ -17,7 +17,7 @@ import java.util.Set;
  * <p></p>
  * Updating the {@link GUIPane}'s size works as follows:
  * At first the size of the children is updated, then the own size.
- * To modify this update process you can override {@link #updateSizeRecursive(Vector2d)}.
+ * To modify this update process you can override {@link #updateSizeRecursive(GUIPane)}.
  * How the own size is updated can be implemented by the different {@link GUIPane}s.
  */
 @Getter
@@ -44,14 +44,14 @@ public abstract class GUIPane extends GUISection {
         this.setSize(new Vector2d(width, this.getHeight()));
     }
 
-    abstract public void updateSizeRecursive(Vector2d parentMaxSize);
+    abstract public void updateSizeRecursive(GUIPane parent);
 
-    abstract public void updateSize(Vector2d parentMaxSize);
+    abstract public void updateSize(GUIPane parent);
 
-    protected void updateChildrenRecursive(Vector2d parentMaxSize) {
+    protected void updateChildrenRecursive(GUIPane parent) {
         for (GUISection child : this.getChildren()) {
             if (child instanceof GUIPane pane) {
-                pane.updateSizeRecursive(parentMaxSize);
+                pane.updateSizeRecursive(parent);
             }
         }
     }
