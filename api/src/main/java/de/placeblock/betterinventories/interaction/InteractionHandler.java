@@ -13,10 +13,23 @@ import org.bukkit.event.inventory.InventoryDragEvent;
  */
 @RequiredArgsConstructor
 public abstract class InteractionHandler {
+    /**
+     * The according GUI
+     */
     protected final GUI gui;
 
+    /**
+     * Called on-click
+     * @param event The Event
+     * @return Whether to stop handler-calling
+     */
     public abstract boolean onClick(InventoryClickEvent event);
 
+    /**
+     * Called on-drag
+     * @param event The Event
+     * @return Whether to stop handler-calling
+     */
     public abstract boolean onDrag(InventoryDragEvent event);
 
 }

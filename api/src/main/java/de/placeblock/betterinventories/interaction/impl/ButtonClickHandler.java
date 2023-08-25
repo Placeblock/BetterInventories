@@ -10,11 +10,23 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
+/**
+ * InteractionHandler for handling Button clicks
+ */
 public class ButtonClickHandler extends InteractionHandler {
+    /**
+     * Creates a new ButtonClickHandler
+     * @param gui The according GUI
+     */
     public ButtonClickHandler(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Called on inventory-click
+     * @param event The Event
+     * @return true if handler-calling should stop
+     */
     @Override
     public boolean onClick(InventoryClickEvent event) {
         ClickType clickType = event.getClick();
@@ -48,6 +60,11 @@ public class ButtonClickHandler extends InteractionHandler {
         return false;
     }
 
+    /**
+     * Called on inventory-drag
+     * @param event The Event
+     * @return true if handler-calling should stop
+     */
     @Override
     public boolean onDrag(InventoryDragEvent event) {
         return false;

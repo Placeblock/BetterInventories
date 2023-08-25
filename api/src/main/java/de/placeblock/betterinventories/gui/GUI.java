@@ -219,6 +219,11 @@ public abstract class GUI implements Listener {
         this.interactionHandlers.remove(priority, handler);
     }
 
+    /**
+     * Called by Bukkit when Player clicks an Inventory
+     * Calls the InteractionHandlers
+     * @param event The Event
+     */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -228,6 +233,11 @@ public abstract class GUI implements Listener {
         this.handleInteraction(i -> i.onClick(event));
     }
 
+    /**
+     * Called by Bukkit when Player drags an Inventory
+     * Calls the InteractionHandlers
+     * @param event The Event
+     */
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -237,6 +247,10 @@ public abstract class GUI implements Listener {
         this.handleInteraction(i -> i.onDrag(event));
     }
 
+    /**
+     * Calls the InteractionHandlers
+     * @param handler Handler callback. Handler calling breaks if Handler callback returns true
+     */
     private void handleInteraction(Function<InteractionHandler, Boolean> handler) {
         outer:
         for (HandlerPriority priority : this.interactionHandlers.keySet()) {
@@ -251,6 +265,10 @@ public abstract class GUI implements Listener {
 
     //  HANDLE GUI REMOVAL
 
+    /**
+     * Called by Bukkit when a Player closes an Inventory
+     * @param event The Event
+     */
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player player)) return;

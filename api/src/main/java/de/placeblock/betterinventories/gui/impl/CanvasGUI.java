@@ -75,6 +75,7 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param title The title of the GUI
      * @param type The type of the GUI
      * @param size The size of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
      */
     protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean registerDefaultHandlers) {
         super(plugin, title, type, registerDefaultHandlers);
