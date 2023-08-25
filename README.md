@@ -24,34 +24,24 @@ For the build-tool users out there:
 #### Repository
 Gradle Kotlin
 ```kotlin
-maven { // Repository
-    url = uri("https://repo.codelix.de/releases")
-}
+mavenCentral()
 ```
 ```kotlin
-implementation("de.placeblock:betterinventories:1.3.4") // Dependency
+implementation("de.codelix:betterinventories:VERSION") // Dependency
 ```
 Gradle Groovy
 ```groovy
-maven { // Repository
-    url "https://repo.codelix.de/releases"
-}
+mavenCentral()
 ```
 ```groovy
-implementation "de.placeblock:betterinventories:1.3.4" // Dependency
+implementation "de.codelix:betterinventories:VERSION" // Dependency
 ```
 Maven
 ```xml
-<repository>
-    <id>codelix-repo</id>
-    <url>https://repo.codelix.de/releases</url>
-</repository>
-```
-```xml
 <dependency>
-    <groupId>de.placeblock</groupId>
+    <groupId>de.codelix</groupId>
     <artifactId>betterinventories</artifactId>
-    <version>1.3.4</version>
+    <version>VERSION</version>
 </dependency>
 ```
 
