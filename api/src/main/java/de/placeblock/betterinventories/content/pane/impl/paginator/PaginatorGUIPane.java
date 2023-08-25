@@ -75,7 +75,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     }
 
     /**
-     * Updates the size of the paginator based on how many Items are added.
+     * Updates the size of the Paginator based on how many Items are added.
      * @param parent The parent Pane or GUI (Sizeable)
      */
     @Override
