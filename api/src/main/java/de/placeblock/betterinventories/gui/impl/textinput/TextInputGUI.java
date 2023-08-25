@@ -19,18 +19,56 @@ import java.util.function.Function;
  * GUI for getting Text Input
  */
 public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
+    /**
+     * The input-material
+     */
     public static final Material INPUT_MATERIAL = Material.PAPER;
+
+    /**
+     * The result-material
+     */
     public static final Material RESULT_MATERIAL = Material.LIME_DYE;
 
+    /**
+     * The player which enters text
+     */
     private final Player player;
+
+    /**
+     * The packet-listener used to receive the anvil's text.
+     */
     private final TextInputPacketListener packetListener;
+
+    /**
+     * Called when a player clicks on the submit-item
+     */
     private final FinishConsumer onFinish;
+
+    /**
+     * Called when a player types
+     */
     private final Consumer<String> onUpdate;
+
+    /**
+     * Is called to convert the current text to the title of the submit item
+     */
     private final Function<String, TextComponent> titleConverter;
+
+    /**
+     * The current text the player entered
+     */
     private String currentText;
+
+    /**
+     * Whether this inventory is closed (Needed for internal stuff)
+     */
     private boolean closed = false;
 
     /**
+     * Creates a new TextInputGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param player The player which enters text
      * @param text The initial Text
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      */
@@ -42,6 +80,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     }
 
     /**
+     * Creates a new TextInputGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param player The player which enters text
      * @param text The initial Text
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      * @param titleConverter Is called to convert the current text to the title of the submit item
@@ -54,6 +96,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     }
 
     /**
+     * Creates a new TextInputGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param player The player which enters text
      * @param text The initial Text
      * @param titleConverter Is called to convert the current text to the title of the submit item
      */
@@ -65,6 +111,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     }
 
     /**
+     * Creates a new TextInputGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param player The player which enters text
      * @param text The initial Text
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      * @param onUpdate Is called whenever the player types something
@@ -88,6 +138,9 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this.packetListener.inject();
     }
 
+    /**
+     * Sets the input-item into the GUI
+     */
     private void setInputItem() {
         TextComponent title = Component.text(this.currentText);
         ItemStack inputItem = new ItemBuilder(title, INPUT_MATERIAL).build();
@@ -96,6 +149,9 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this.setInputItem(inputButton);
     }
 
+    /**
+     * Sets the result-button into the GUI
+     */
     private void setResultButton() {
         TextComponent title = this.titleConverter.apply(this.currentText);
         ItemStack resultItem = new ItemBuilder(title, RESULT_MATERIAL).build();
@@ -105,6 +161,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this.setResultItem(resultButton);
     }
 
+    /**
+     * Is called by the {@link TextInputPacketListener} to update the text
+     * @param text The new text
+     */
     public void updateText(String text) {
         this.onUpdate.accept(text);
         this.onUpdate(text);
@@ -113,11 +173,20 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         this.update();
     }
 
+    /**
+     * Is called when the player closes the GUI.
+     * Aborts the text-input.
+     * @param player The player, who closed the GUI
+     */
     @Override
     public void onClose(Player player) {
         this.finish(true);
     }
 
+    /**
+     * Is called to finish text-input
+     * @param abort Whether the player aborted, e.g. by closing the Inventory
+     */
     private void finish(boolean abort) {
         if (!this.closed) {
             this.closed = true;
@@ -129,11 +198,25 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
         }
     }
 
+
+    /**
+     * Called when a player types
+     * @param text The new text
+     */
     @SuppressWarnings("unused")
     public void onUpdate(String text) {}
+
+    /**
+     * Called when a player clicks on the submit-item
+     * @param text The final text
+     * @param abort Whether the player aborted, e.g. by closing the Inventory
+     */
     @SuppressWarnings("unused")
     public boolean onFinish(String text, boolean abort) {return true;}
 
+    /**
+     * @return The player, who is entering text
+     */
     @Override
     public Player getPlayer() {
         return this.player;

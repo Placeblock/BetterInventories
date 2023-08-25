@@ -16,18 +16,34 @@ import org.bukkit.plugin.Plugin;
  * @param <P>
  */
 public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
-
+    /**
+     * The maximum height of the GUI
+     */
     @Setter
     private int maxHeight;
+
+    /**
+     * The minimum height of the GUI
+     */
     @Setter
     private int minHeight;
 
+    /**
+     * Creates a new BaseChestGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param minHeight The minimum height of the GUI
+     * @param maxHeight The maximum height of the GUI
+     */
     public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
         super(plugin, title, InventoryType.CHEST);
         this.maxHeight = maxHeight;
         this.minHeight = minHeight;
     }
 
+    /**
+     * Updates the GUI and reloads all Views if needed
+     */
     @Override
     public void update() {
         Vector2d oldSize = this.canvas.getSize();
@@ -39,11 +55,17 @@ public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements
         super.update();
     }
 
+    /**
+     * @return The maximum size of the GUI
+     */
     @Override
     public Vector2d getMaxSize() {
         return new Vector2d(9, this.maxHeight);
     }
 
+    /**
+     * @return The minimum size of the GUI
+     */
     @Override
     public Vector2d getMinSize() {
         return new Vector2d(9, this.minHeight);
