@@ -39,11 +39,18 @@ public enum PaginatorControlsPosition {
         return new int[]{value, size-1-value};
     });
 
-    private static float getCenter(Integer size) {
-        return (size - 1) / 2F;
+    /**
+     * Returns the center given the width of a Pane
+     * @param width The width
+     * @return The center
+     */
+    private static float getCenter(Integer width) {
+        return (width - 1) / 2F;
     }
 
-
+    /**
+     * Calculates the indices where the Buttons should get placed
+     */
     public final Function<Integer, int[]> calculateIndices;
 
 }

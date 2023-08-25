@@ -14,6 +14,10 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 public interface ItemAddable<O extends ItemAddable<O>> {
 
+    /**
+     * Has to return all Items currently added
+     * @return All added Items
+     */
     List<GUIItem> getItems();
 
     /**

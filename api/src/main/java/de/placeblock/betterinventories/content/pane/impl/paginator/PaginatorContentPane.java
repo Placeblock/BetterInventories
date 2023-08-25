@@ -13,23 +13,44 @@ import java.util.List;
  * Internal use only.
  */
 public class PaginatorContentPane extends SimpleItemGUIPane {
+    /**
+     * The according Paginator
+     */
     private final PaginatorGUIPane paginatorGUIPane;
 
+    /**
+     * Creates a new PaginatorContentPane
+     * @param gui The GUI
+     * @param minSize The minimum size of the Pane
+     * @param maxSize The maximum size of the Pane
+     * @param paginatorGUIPane The according Paginator
+     */
     public PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
         super(gui, minSize, maxSize);
         this.paginatorGUIPane = paginatorGUIPane;
     }
 
+    /**
+     * Updates the size of the pane based on the size of the paginator.
+     * @param parent The parent Pane or GUI (Sizeable)
+     */
     @Override
     public void updateSize(Sizeable parent) {
         this.setSize(this.paginatorGUIPane.getContentPaneSize());
     }
 
+    /**
+     * Is called when the size of the Pane changes.
+     * Here it resets the Items in the Paginator.
+     */
     @Override
     public void onSizeChange() {
         this.setItems();
     }
 
+    /**
+     * Sets the Items in the Paginator
+     */
     public void setItems() {
         this.clear();
         int startIndex = this.getSlots()*this.paginatorGUIPane.getCurrentPage();
