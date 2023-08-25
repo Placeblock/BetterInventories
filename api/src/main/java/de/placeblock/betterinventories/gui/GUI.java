@@ -27,33 +27,70 @@ import java.util.List;
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI implements Listener {
+    /**
+     * The plugin
+     */
     private final Plugin plugin;
+
+    /**
+     * The title of the GUI
+     */
     private final TextComponent title;
+
+    /**
+     * The current Views of the GUI
+     */
     private final List<GUIView> views = new ArrayList<>();
+
+    /**
+     * The type of the GUI
+     */
     private final InventoryType type;
+
+    /**
+     * The current rendered content of the GUI
+     */
     private List<ItemStack> content = new ArrayList<>();
 
+    /**
+     * Creates a new GUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param type The type of the GUI
+     */
     public GUI(Plugin plugin, TextComponent title, InventoryType type) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
     }
 
+    /**
+     * Updates the GUI, renders the GUI and updates the Views
+     */
     public void update() {
         this.render();
         this.updateViews();
     }
 
+    /**
+     * Renders the GUI
+     */
     protected void render() {
         this.content = this.renderContent();
     }
 
+    /**
+     * Updates the content of all Views
+     */
     protected void updateViews() {
         for (GUIView view : this.views) {
             view.update(this.content);
         }
     }
 
+    /**
+     * @return All players, which can see the GUI
+     */
     public List<Player> getPlayers() {
         return this.views.stream().map(GUIView::getPlayer).toList();
     }
@@ -73,8 +110,17 @@ public abstract class GUI implements Listener {
         return view;
     }
 
+    /**
+     * Creates a new Bukkit Inventory for the GUI when implemented
+     * @return The Bukkit Inventory
+     */
     public abstract Inventory createBukkitInventory();
 
+    /**
+     * Returns the GUIView to the according Inventory
+     * @param inventory The Inventory
+     * @return The GUIView
+     */
     public GUIView getView(Inventory inventory) {
         for (GUIView view : this.views) {
             if (view.getInventory().equals(inventory)) {
@@ -84,6 +130,10 @@ public abstract class GUI implements Listener {
         return null;
     }
 
+    /**
+     * Reloads all Views (Removes all Players and adds all Players).
+     * Needed when resizing the GUI or changing the GUI's title
+     */
     public void reloadViews() {
         List<Player> players = this.getPlayers();
         List<GUIView> views = new ArrayList<>(this.getViews());
@@ -95,10 +145,28 @@ public abstract class GUI implements Listener {
         }
     }
 
+    /**
+     * @return The amount of slots this GUI has
+     */
     public abstract int getSlots();
+
+    /**
+     * Renders the GUI on a list
+     * @return The List
+     */
     protected abstract List<ItemStack> renderContent();
+
+    /**
+     * Returns the GUISection at a specific slot.
+     * @param slot The slot
+     * @return The GUISection at the slot or null
+     */
     public abstract GUISection getClickedSection(int slot);
 
+    /**
+     * Is called when the player closes the GUI.
+     * @param player The player, who closed the GUI
+     */
     public void onClose(Player player) {}
 
     @EventHandler
@@ -146,6 +214,10 @@ public abstract class GUI implements Listener {
         }
     }
 
+    /**
+     * Removes a player without closing the Inventory of the Player
+     * @param view The View of the Player
+     */
     private void removePlayer(GUIView view) {
         this.views.remove(view);
         this.onClose(view.getPlayer());

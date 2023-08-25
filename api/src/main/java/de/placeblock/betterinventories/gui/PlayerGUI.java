@@ -7,6 +7,9 @@ package de.placeblock.betterinventories.gui;
 @SuppressWarnings("unused")
 public interface PlayerGUI<P> {
 
+    /**
+     * @return The player
+     */
     P getPlayer();
 
 }

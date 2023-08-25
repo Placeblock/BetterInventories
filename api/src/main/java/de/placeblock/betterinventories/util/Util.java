@@ -3,7 +3,9 @@ package de.placeblock.betterinventories.util;
 import java.util.Collection;
 import java.util.List;
 
-
+/**
+ * Utility Functions
+ */
 @SuppressWarnings("unused")
 public class Util {
     /**
