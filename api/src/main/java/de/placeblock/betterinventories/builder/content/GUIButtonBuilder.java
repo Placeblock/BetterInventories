@@ -4,13 +4,23 @@ import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 
+/**
+ * Builder for creating GUIButtons
+ */
 public class GUIButtonBuilder extends BaseGUIButtonBuilder<GUIButton, GUIButtonBuilder> {
 
+    /**
+     * Creates a new GUIButtonBuilder
+     * @param gui The GUI for the Button
+     */
     public GUIButtonBuilder(GUI gui) {
         super(gui);
     }
 
-
+    /**
+     * Buildes the GUIButton
+     * @return The new GUIButton
+     */
     @Override
     public GUIButton build() {
         return new GUIButton(this.getGui(), this.getItem(), this.getCooldown(), this.getClickSound(), this.getPermission()) {

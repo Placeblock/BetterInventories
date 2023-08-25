@@ -9,17 +9,47 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+/**
+ * GUIButton which cycles through values of an Enum
+ * @param <E> The Enum
+ */
 public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
+    /**
+     * All Values of the Enum
+     */
     private final List<E> values;
+    /**
+     * The current selected Enum Value
+     */
     @Getter
     private E currentValue;
 
+    /**
+     * Creates a new CycleGUIButton
+     * @param gui The GUI
+     * @param values The Enum values
+     */
+    public CycleGUIButton(GUI gui, E[] values) {
+        this(gui, values, values[0]);
+    }
+
+    /**
+     * Creates a new CycleGUIButton
+     * @param gui The GUI
+     * @param values The Enum values
+     * @param startValue The Start-value
+     */
     public CycleGUIButton(GUI gui, E[] values, E startValue) {
         super(gui, getItem(startValue));
         this.values = List.of(values);
         this.currentValue = startValue;
     }
 
+    /**
+     * Returns the Item to be displayed for an Enum-value
+     * @param cycleEnum The Enum-value
+     * @return The according ItemStack
+     */
     private static ItemStack getItem(CycleEnum cycleEnum) {
         return new ItemBuilder(cycleEnum.getTitle(), cycleEnum.getMaterial())
                 .lore(cycleEnum.getLore())
@@ -36,5 +66,10 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
         this.onCycle(data, this.currentValue);
     }
 
+    /**
+     * Is called when cycling through the Enum-values
+     * @param data The ClickData
+     * @param newValue The new Enum-value
+     */
     abstract void onCycle(ClickData data, E newValue);
 }

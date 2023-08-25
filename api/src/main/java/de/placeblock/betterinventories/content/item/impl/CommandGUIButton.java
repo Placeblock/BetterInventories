@@ -11,8 +11,17 @@ import org.bukkit.inventory.ItemStack;
  */
 @SuppressWarnings("unused")
 public class CommandGUIButton extends GUIButton {
+    /**
+     * The command to be executed
+     */
     private final String command;
 
+    /**
+     * Creates a new CommandGUIButton
+     * @param gui The GUI
+     * @param item The ItemStack of the Button
+     * @param command The command to be executed
+     */
     public CommandGUIButton(GUI gui, ItemStack item, String command) {
         super(gui, item);
         this.command = command;

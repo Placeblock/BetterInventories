@@ -12,10 +12,21 @@ import java.util.List;
  */
 @Getter
 public class GUIView {
-
+    /**
+     * The Player of this View
+     */
     private final Player player;
+
+    /**
+     * The Bukkit Inventory of this View
+     */
     private final Inventory inventory;
 
+    /**
+     * Creates a new GUIView
+     * @param player The Player of this View
+     * @param inventory The Bukkit Inventory of this View
+     */
     public GUIView(Player player, Inventory inventory) {
         this.player = player;
         this.inventory = inventory;

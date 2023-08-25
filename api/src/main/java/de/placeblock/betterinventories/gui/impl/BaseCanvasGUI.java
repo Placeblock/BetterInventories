@@ -19,8 +19,17 @@ import java.util.List;
  * @param <C> The type of the Canvas
  */
 public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
+    /**
+     * The main canvas to which Sections can be added
+     */
     protected C canvas;
 
+    /**
+     * Creates a new BaseCanvasGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param type The type of the GUI
+     */
     protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
         super(plugin, title, type);
     }
@@ -78,6 +87,9 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
         return this.canvas.getSectionAt(slot);
     }
 
+    /**
+     * @return The main canvas
+     */
     @SuppressWarnings("unused")
     public C getCanvas() {
         return this.canvas;
