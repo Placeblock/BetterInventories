@@ -6,13 +6,14 @@ plugins {
 }
 
 group = "de.codelix"
-version = "1.3.6"
+version = "1.3.5a-SNAPSHOT"
 
 var isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 var artifactID = "betterinventories"
 
 repositories {
     mavenCentral()
+
 }
 
 dependencies {
@@ -29,9 +30,15 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
+signing {
+    for (sign in sign(publishing.publications)) {
+        sign.dependsOn(tasks.reobfJar)
+    }
+}
+
 tasks {
     // Configure reobfJar to run when invoking the build task
-    assemble {
+    javadoc {
         dependsOn(reobfJar)
     }
 
@@ -103,9 +110,5 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    sign(publishing.publications)
 }
 
