@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.codelix"
-version = "1.3.5-SNAPSHOT"
+version = "1.3.6"
 
 var isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 var artifactID = "betterinventories"
