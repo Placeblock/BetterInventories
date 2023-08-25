@@ -33,6 +33,11 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     private InventoryType type;
 
     /**
+     * Whether to register default-handlers
+     */
+    private boolean registerDefaultHandlers = true;
+
+    /**
      * Sets the title of the Inventory.
      * @param title The title
      * @return this
@@ -50,6 +55,17 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
      */
     public B type(@NotNull InventoryType type) {
         this.type = type;
+        return (B) this;
+    }
+
+    /**
+     * Sets the type of the Inventory.
+     * Does not need to be set in many implementing GUIBuilders.
+     * @param register Do register
+     * @return this
+     */
+    public B registerDefaultHandlers(boolean register) {
+        this.registerDefaultHandlers = register;
         return (B) this;
     }
 
@@ -74,6 +90,10 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
         return this.plugin;
     }
 
+    /**
+     * @return Wheter to register default-handlers
+     */
+    protected boolean getRegisterDefaultHandlers() {return this.registerDefaultHandlers;}
 
     /**
      * Builds the GUI

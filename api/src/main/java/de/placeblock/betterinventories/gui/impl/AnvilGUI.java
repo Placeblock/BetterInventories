@@ -46,6 +46,16 @@ public class AnvilGUI extends GUI {
     public AnvilGUI(Plugin plugin, TextComponent title) {
         super(plugin, title, InventoryType.ANVIL);
     }
+    /**
+     * Creates a new AnvilGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param registerDefaultHandlers Wheter to register default-handlers
+     */
+    @SuppressWarnings("unused")
+    public AnvilGUI(Plugin plugin, TextComponent title, boolean registerDefaultHandlers) {
+        super(plugin, title, InventoryType.ANVIL, registerDefaultHandlers);
+    }
 
     /**
      * Creates the Bukkit Inventory for this GUI

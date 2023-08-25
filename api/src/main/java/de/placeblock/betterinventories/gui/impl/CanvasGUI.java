@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
  * <br>
  * Builder: {@link CanvasGUIBuilder}
  */
+@SuppressWarnings("unused")
 public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
     /**
      * Creates a new CanvasGUI
@@ -23,6 +24,17 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      */
     public CanvasGUI(Plugin plugin, TextComponent title, int height) {
         this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
+    }
+
+    /**
+     * Creates a new CanvasGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param height The height of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
+     */
+    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
+        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), registerDefaultHandlers);
     }
 
     /**
@@ -40,10 +52,33 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
+     */
+    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
+        this(plugin, title, type, InventoryTypeMapper.getSize(type), registerDefaultHandlers);
+    }
+
+    /**
+     * Creates a new CanvasGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param type The type of the GUI
      * @param size The size of the GUI
      */
     protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
-        super(plugin, title, type);
+        this(plugin, title, type, size, true);
+    }
+
+    /**
+     * Creates a new CanvasGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param type The type of the GUI
+     * @param size The size of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
+     */
+    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean registerDefaultHandlers) {
+        super(plugin, title, type, registerDefaultHandlers);
         this.setCanvas(new SimpleGUIPane(this, size, size, false));
     }
 }

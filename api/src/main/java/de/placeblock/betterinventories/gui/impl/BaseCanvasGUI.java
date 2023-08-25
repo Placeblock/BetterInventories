@@ -29,9 +29,10 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
      */
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        super(plugin, title, type);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
+        super(plugin, title, type, registerDefaultHandlers);
     }
 
     /**
