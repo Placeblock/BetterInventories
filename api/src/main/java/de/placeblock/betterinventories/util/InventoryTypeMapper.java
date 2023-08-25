@@ -10,6 +10,9 @@ import java.util.Map;
  */
 public class InventoryTypeMapper {
 
+    /**
+     * Contains all availible mappings
+     */
     private static final Map<InventoryType, Vector2d> mappings = new HashMap<>();
 
     static {
@@ -24,6 +27,10 @@ public class InventoryTypeMapper {
         mappings.put(InventoryType.CHEST, new Vector2d(9, 3));
     }
 
+    /**
+     * @param type The {@link InventoryType}
+     * @return The size for this {@link InventoryType} or null if unsupported
+     */
     public static Vector2d getSize(InventoryType type) {
         return mappings.get(type);
     }

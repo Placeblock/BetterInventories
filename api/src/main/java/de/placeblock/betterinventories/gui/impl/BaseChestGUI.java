@@ -13,25 +13,42 @@ import org.bukkit.plugin.Plugin;
  * If you don't want the gui to resize you should consider setting the minHeight
  * equals the maxHeight or use {@link CanvasGUI}
  * To instantiate use {@link ChestGUI}
- * @param <P>
+ * @param <P> The type of the main canvas
  */
 public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
-
+    /**
+     * The maximum height of the GUI
+     */
     @Setter
     private int maxHeight;
+
+    /**
+     * The minimum height of the GUI
+     */
     @Setter
     private int minHeight;
 
+    /**
+     * Creates a new BaseChestGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param minHeight The minimum height of the GUI
+     * @param maxHeight The maximum height of the GUI
+     * @param registerDefaultHandlers Whether to register default-handlers
+     */
     public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean registerDefaultHandlers) {
         super(plugin, title, InventoryType.CHEST, registerDefaultHandlers);
         this.maxHeight = maxHeight;
         this.minHeight = minHeight;
     }
 
+    /**
+     * Updates the GUI and reloads all Views if needed
+     */
     @Override
     public void update() {
         Vector2d oldSize = this.canvas.getSize();
-        this.canvas.updateSizeRecursive(this.getMaxSize());
+        this.canvas.updateSizeRecursive(this);
         Vector2d newSize = this.canvas.getSize();
         if (!oldSize.equals(newSize)) {
             this.reloadViews();
@@ -39,11 +56,17 @@ public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements
         super.update();
     }
 
+    /**
+     * @return The maximum size of the GUI
+     */
     @Override
     public Vector2d getMaxSize() {
         return new Vector2d(9, this.maxHeight);
     }
 
+    /**
+     * @return The minimum size of the GUI
+     */
     @Override
     public Vector2d getMinSize() {
         return new Vector2d(9, this.minHeight);

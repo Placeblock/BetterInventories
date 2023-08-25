@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
+import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.HorizontalSplitGUIPane;
@@ -14,24 +15,45 @@ import java.util.*;
 
 /**
  * A Paginator is a {@link GUIPane} that can contain items. If there are too many items you can switch pages to see all items.
- * <p></p>
+ * <br>
  * Builder: {@link PaginatorBuilder}
  */
 @SuppressWarnings("unused")
 public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAddable<PaginatorGUIPane> {
+    /**
+     * The Items added to the Paginator
+     */
     @Getter
     private final List<GUIItem> items = new ArrayList<>();
+
+    /**
+     * The default-controls or null
+     */
     private final PaginatorControlsPane defaultControls;
+
+    /**
+     * The content-Pane where the Items are placed onto
+     */
     private final PaginatorContentPane contentPane;
 
+    /**
+     * The current active Page
+     */
     @Getter
     private int currentPage;
 
+    /**
+     * Whether to jump back to the first page when reaching the last page (and via versa)
+     */
     @Getter
     @Setter
     private boolean repeat;
 
     /**
+     * Creates a new PaginatorGUIPane
+     * @param gui The GUI
+     * @param minSize The minimum size of the Pane
+     * @param maxSize The minimum size of the Pane
      * @param repeat Whether to jump back to the first page when reaching the last page (and via versa)
      * @param startPage The start page
      * @param defaultControlsPosition The default controls automatically appear if there
@@ -52,12 +74,15 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         }
     }
 
+    /**
+     * Updates the size of the Paginator based on how many Items are added.
+     * @param parent The parent Pane or GUI (Sizeable)
+     */
     @Override
-    public void updateSize(Vector2d parentMaxSize) {
-        int newWidth = Math.max(Math.min(parentMaxSize.getX(), this.items.size()),2);
-        int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
-        int realHeight = Math.min(parentMaxSize.getY(), itemHeight);
-        this.setSize(new Vector2d(newWidth, realHeight));
+    public void updateSize(Sizeable parent) {
+        int newWidth = Math.max(this.items.size(),2);
+        int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
+        this.setSize(new Vector2d(newWidth, newHeight));
         this.currentPage = Math.min(this.currentPage, this.getPages());
         if (this.showDefaultControls()) {
             this.setLowerPane(this.defaultControls);
@@ -66,15 +91,25 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         }
     }
 
+    /**
+     * Is called to recursively update the size of all {@link GUIPane}s
+     * @param parent The parent Pane or GUI (Sizeable)
+     */
     @Override
-    public void updateSizeRecursive(Vector2d parentMaxSize) {
-        this.updateSize(parentMaxSize);
-        this.contentPane.updateSizeRecursive(parentMaxSize);
+    public void updateSizeRecursive(Sizeable parent) {
+        this.updateSize(parent);
+        this.contentPane.updateSizeRecursive(parent);
         if (this.defaultControls != null) {
-            this.defaultControls.updateSizeRecursive(parentMaxSize);
+            this.defaultControls.updateSizeRecursive(parent);
         }
     }
 
+    /**
+     * Sets all Items in the Paginator.
+     * @param items The new Items
+     * @return this
+     * @param <I> The type of the items
+     */
     public <I extends GUIItem> PaginatorGUIPane setItems(List<I> items) {
         this.items.clear();
         this.items.addAll(items);
@@ -82,6 +117,10 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         return this;
     }
 
+    /**
+     * Is called whenever Items are added to the Paginator.
+     * Resets Items in the content-pane
+     */
     @Override
     public void onItemAdd() {
         this.contentPane.setItems();
@@ -89,6 +128,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Clears all Items in this Paginator
+     * @return this
      */
     public PaginatorGUIPane clearItems() {
         this.items.clear();
@@ -98,6 +138,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Skips to the next page.
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane nextPage() {
@@ -105,6 +146,9 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         return this;
     }
 
+    /**
+     * @return The next page index
+     */
     private int getNextPage() {
         int pages = this.getPages();
         if (this.currentPage + 1 > pages && !this.repeat) return this.currentPage;
@@ -113,6 +157,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Returns to the previous page.
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane previousPage() {
@@ -120,6 +165,9 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         return this;
     }
 
+    /**
+     * @return The previous page index
+     */
     private int getPreviousPage() {
         if (this.currentPage == 0 && !this.repeat) return 0;
         return Util.modulo(this.currentPage - 1, this.getPages());
@@ -127,6 +175,8 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Sets the current page
+     * @param index The current page
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane setCurrentPage(int index) {
@@ -142,15 +192,24 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         return (int) Math.ceil(this.items.size()*1F/this.contentPane.getSlots());
     }
 
+    /**
+     * @return The size of the content-pane according to the size of the Paginator
+     */
     public Vector2d getContentPaneSize() {
         int height = this.showDefaultControls() ? this.getHeight() - 1 : this.getHeight();
         return new Vector2d(this.getWidth(), height);
     }
 
+    /**
+     * @return True if default-controls should get displayed
+     */
     private boolean showDefaultControls() {
         return this.showDefaultControls(this.items.size(), this.getSlots());
     }
 
+    /**
+     * @return True if default-controls should get displayed
+     */
     private boolean showDefaultControls(int itemSize, int slots) {
         return itemSize > slots && this.defaultControls != null;
     }

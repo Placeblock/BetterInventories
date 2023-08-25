@@ -12,12 +12,25 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+/**
+ * The packet-listener used by {@link TextInputGUI} to receive anvil text
+ */
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
 public class TextInputPacketListener {
+    /**
+     * The according {@link TextInputGUI}
+     */
     private final TextInputGUI gui;
+
+    /**
+     * The channel where the listener is added
+     */
     private Channel channel;
 
+    /**
+     * Injects the listener into the pipeline of the players connection
+     */
     public void inject() {
         Player player = this.gui.getPlayer();
         ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
@@ -34,6 +47,9 @@ public class TextInputPacketListener {
         });
     }
 
+    /**
+     * Uninjects the listener
+     */
     public void uninject() {
         this.channel.pipeline().remove("textInputPacketListener");
     }

@@ -22,33 +22,81 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 public class ItemBuilder {
+    /**
+     * The title of the Item
+     */
     private final TextComponent title;
+
+    /**
+     * The Material of the Item
+     */
     private final Material material;
+
+    /**
+     * The amount
+     */
     private final int amount;
+
+    /**
+     * The lore of the Item
+     */
     private final List<Component> lore;
+
+    /**
+     * The Enchantments of the Item
+     */
     private final Map<Enchantment, Integer> enchantments;
+
+    /**
+     * The attributes of the Item
+     */
     private final Map<Attribute, AttributeModifier> attributes;
+
+    /**
+     * The flags of the Item
+     */
     private final List<ItemFlag> flags;
+
+    /**
+     * Whether the Item is unbreakable
+     */
     private boolean unbreakable;
+
+    /**
+     * The skinURL of the Head
+     */
     private URL skinURL;
 
+    /**
+     * Creates a new ItemBuilder
+     * @param title The title of the Item
+     * @param material The Material of the Item
+     */
     public ItemBuilder(TextComponent title, Material material) {
         this(title, material, 1);
     }
 
+    /**
+     * Creates a new ItemBuilder
+     * @param title The title of the Item
+     * @param material The Material of the Item
+     * @param amount The amount
+     */
     public ItemBuilder(TextComponent title, Material material, int amount) {
         this(title, material, amount, true);
     }
 
-    public ItemBuilder(TextComponent title, Material material, int amount, boolean unbreakable) {
-        this(title, material, amount, unbreakable, true);
-    }
-
-    public ItemBuilder(TextComponent title, Material material, int amount, boolean unbreakable, boolean hideInfo) {
+    /**
+     * Creates a new ItemBuilder
+     * @param title The title of the Item
+     * @param material The Material of the Item
+     * @param amount The amount
+     * @param hideInfo Whether to hide general Information about the Item
+     */
+    public ItemBuilder(TextComponent title, Material material, int amount, boolean hideInfo) {
         this.title = title;
         this.material = material;
         this.amount = amount;
-        this.unbreakable = unbreakable;
         this.lore = new ArrayList<>();
         this.attributes = new HashMap<>();
         this.flags = new ArrayList<>();
@@ -57,7 +105,10 @@ public class ItemBuilder {
             this.flag(ItemFlag.HIDE_ATTRIBUTES).flag(ItemFlag.HIDE_ENCHANTS).flag(ItemFlag.HIDE_UNBREAKABLE);
         }
     }
-
+    /**
+     * Clones another ItemBuilder
+     * @param itemBuilder The ItemBuilder to be cloned
+     */
     public ItemBuilder(ItemBuilder itemBuilder) {
         this.title = itemBuilder.title;
         this.material = itemBuilder.material;
@@ -70,40 +121,83 @@ public class ItemBuilder {
         this.skinURL = itemBuilder.skinURL;
     }
 
+    /**
+     * Sets the lore of the Item
+     * @param lore The lore
+     * @return this
+     */
     public ItemBuilder lore(TextComponent... lore) {
         return this.lore(List.of(lore));
     }
 
+    /**
+     * Sets the lore of the Item
+     * @param lore The lore
+     * @return this
+     */
     public ItemBuilder lore(Collection<TextComponent> lore) {
         this.lore.addAll(lore);
         return this;
     }
 
+    /**
+     * Adds an enchantment to the Item
+     * @param enchantment The Enchantment
+     * @param level The level of the Enchantment
+     * @return this
+     */
     public ItemBuilder enchantment(Enchantment enchantment, int level) {
         this.enchantments.put(enchantment, level);
         return this;
     }
 
+    /**
+     * Adds an attribute to the Item
+     * @param attribute The Attribute
+     * @param amount The amount to set
+     * @param operation The operation
+     * @return this
+     */
     public ItemBuilder attribute(Attribute attribute, double amount, AttributeModifier.Operation operation) {
         this.attributes.put(attribute, new AttributeModifier(attribute.getKey().getNamespace(), amount, operation));
         return this;
     }
 
+    /**
+     * Adds a Flag to the Item
+     * @param flag The Flag
+     * @return this
+     */
     public ItemBuilder flag(ItemFlag flag) {
         this.flags.add(flag);
         return this;
     }
 
+    /**
+     * Sets the unbreakable tag of the Item
+     * @param unbreakable Whether the Item is unbreakable
+     * @return self
+     */
     public ItemBuilder unbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
         return this;
     }
 
+    /**
+     * Sets the skin-texture of the Item
+     * Only effective when using {@link Material#PLAYER_HEAD} as type
+     * @param skinTexture The skin-texture
+     * @return this
+     */
     public ItemBuilder skinTexture(URL skinTexture) {
         this.skinURL = skinTexture;
         return this;
     }
 
+    /**
+     * Builds the ItemStack
+     * @return The ItemStack
+     */
     public ItemStack build() {
         ItemStack item = new ItemStack(this.material, this.amount);
         ItemMeta meta = item.getItemMeta();

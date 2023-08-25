@@ -15,12 +15,28 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 public class SwitchGUIButton extends GUIButton {
+    /**
+     * The GUI to be opened
+     */
     private final Function<Player, GUI> targetGUI;
 
+    /**
+     * Creates a new SwitchGUIButton
+     * @param gui The GUI
+     * @param item The ItemStack of the Button
+     * @param targetGUI The GUI to be opened
+     */
     public SwitchGUIButton(GUI gui, ItemStack item, Supplier<GUI> targetGUI) {
         this(gui, item, player -> targetGUI.get());
     }
 
+    /**
+     * Creates a new SwitchGUIButton
+     * The creation of the targetGUI can use the player which clicked the button
+     * @param gui The GUI
+     * @param item The ItemStack of the Button
+     * @param targetGUI The GUI to be opened
+     */
     public SwitchGUIButton(GUI gui, ItemStack item, Function<Player, GUI> targetGUI) {
         super(gui, item, targetGUI == null ? null : Sound.UI_BUTTON_CLICK);
         this.targetGUI = targetGUI;

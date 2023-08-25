@@ -12,8 +12,17 @@ import org.bukkit.inventory.ItemStack;
  */
 @SuppressWarnings("unused")
 public class TeleportGUIButton extends GUIButton {
+    /**
+     * The location to which the player is teleported
+     */
     private final Location location;
 
+    /**
+     * Creates a new TeleportGUIButton
+     * @param gui The GUI
+     * @param item The ItemStack of the GUIButton
+     * @param location The location to which the player is teleported
+     */
     public TeleportGUIButton(GUI gui, ItemStack item, Location location) {
         super(gui, item);
         this.location = location;
