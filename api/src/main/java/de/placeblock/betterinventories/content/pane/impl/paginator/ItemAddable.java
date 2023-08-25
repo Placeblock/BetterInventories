@@ -14,11 +14,16 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 public interface ItemAddable<O extends ItemAddable<O>> {
 
+    /**
+     * Has to return all Items currently added
+     * @return All added Items
+     */
     List<GUIItem> getItems();
 
     /**
      * Adds an Item.
      * @param item The Item
+     * @return this
      */
     @SuppressWarnings({"unchecked", "UnusedReturnValue"})
     default O addItem(GUIItem item) {
@@ -30,6 +35,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
     /**
      * Adds multiple Items.
      * @param items The Items
+     * @return this
      */
     @SuppressWarnings("unchecked")
     default O addItems(Collection<GUIItem> items) {
@@ -41,6 +47,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
     /**
      * Adds multiple Items.
      * @param items The Items
+     * @return this
      */
     default O addItems(GUIItem... items) {
         return this.addItems(List.of(items));
@@ -50,6 +57,8 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * Adds multiple Items.
      * @param converter The converter to convert the generic type to a {@link GUIItem}
      * @param items The Items
+     * @param <T> The type of the Items
+     * @return this
      */
     default <T> O addItems(Function<T, GUIItem> converter, Collection<T> items) {
         List<GUIItem> guiItems = new ArrayList<>();
@@ -63,6 +72,8 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * Adds multiple Items.
      * @param converter The converter to convert the generic type to a {@link GUIItem}
      * @param items The Items
+     * @param <T> The type of the Items
+     * @return this
      */
     default <T> O addItems(Function<T, GUIItem> converter, T[] items) {
         return this.addItems(converter, new ArrayList<>(List.of(items)));

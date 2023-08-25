@@ -23,24 +23,61 @@ import java.util.List;
 @Getter
 @Setter
 public class AnvilGUI extends GUI {
+    /**
+     * The Item in the input-slot
+     */
     private GUIItem inputItem;
+
+    /**
+     * The Item in the additional-slot
+     */
     private GUIItem additionalItem;
+
+    /**
+     * The Item in the result-slot
+     */
     private GUIItem resultItem;
 
+    /**
+     * Creates a new AnvilGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     */
     public AnvilGUI(Plugin plugin, TextComponent title) {
         super(plugin, title, InventoryType.ANVIL);
     }
+    /**
+     * Creates a new AnvilGUI
+     * @param plugin The plugin
+     * @param title The title of the GUI
+     * @param registerDefaultHandlers Wheter to register default-handlers
+     */
+    @SuppressWarnings("unused")
+    public AnvilGUI(Plugin plugin, TextComponent title, boolean registerDefaultHandlers) {
+        super(plugin, title, InventoryType.ANVIL, registerDefaultHandlers);
+    }
 
+    /**
+     * Creates the Bukkit Inventory for this GUI
+     * @return The Bukkit Inventory
+     */
     @Override
     public Inventory createBukkitInventory() {
         return Bukkit.createInventory(null, InventoryType.ANVIL, this.getTitle());
     }
 
+    /**
+     * @return The amount of slots this GUI has
+     */
     @Override
     public int getSlots() {
         return 3;
     }
 
+    /**
+     * Renders the GUI on a list
+     * @return The List
+     */
     @Override
     protected List<ItemStack> renderContent() {
         ItemStack inputItem = this.inputItem == null ? null : this.inputItem.getItemStack();
@@ -49,6 +86,11 @@ public class AnvilGUI extends GUI {
         return Arrays.asList(inputItem, additionalItem, resultItem);
     }
 
+    /**
+     * Returns the GUISection at a specific slot.
+     * @param slot The slot
+     * @return The GUISection at the slot or null
+     */
     @Override
     public GUISection getClickedSection(int slot) {
         return switch (slot) {
