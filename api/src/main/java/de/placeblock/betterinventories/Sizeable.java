@@ -22,10 +22,11 @@ public interface Sizeable {
     Vector2d getMinSize();
 
     /**
+     * @param vector The Vector to clamp
      * @return Clamps a Vector to the minimum and maximum
      */
-    default Vector2d clampSize(Vector2d vector2d) {
-        return Vector2d.clamp(vector2d, this.getMinSize(), this.getMaxSize());
+    default Vector2d clampSize(Vector2d vector) {
+        return Vector2d.clamp(vector, this.getMinSize(), this.getMaxSize());
     }
 
 }

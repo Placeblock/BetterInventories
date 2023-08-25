@@ -7,7 +7,7 @@ import de.placeblock.betterinventories.util.Vector2d;
 
 /**
  * Implementation of {@link BaseSimpleGUIPane} that can contain all {@link GUISection}s.
- * <p></p>
+ * <br>
  * Builder: {@link SimpleGUIPaneBuilder}
  */
 @SuppressWarnings("unused")

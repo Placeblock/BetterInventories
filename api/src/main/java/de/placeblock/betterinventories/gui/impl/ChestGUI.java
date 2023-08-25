@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Implementation of {@link BaseChestGUI} using SimpleGUIPane that auto resizes
- * <p></p>
+ * <br>
  * Builder: {@link ChestGUIBuilder}
  */
 public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {

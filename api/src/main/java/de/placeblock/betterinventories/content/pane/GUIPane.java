@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * A {@link GUISection} that can contain other {@link GUISection}s.
  * Renders to a List.
- * <p></p>
+ * <br>
  * How the own size is updated can be implemented by the different {@link GUIPane}s.
  */
 @Getter

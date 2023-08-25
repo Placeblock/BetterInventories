@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
  * If you don't want the gui to resize you should consider setting the minHeight
  * equals the maxHeight or use {@link CanvasGUI}
  * To instantiate use {@link ChestGUI}
- * @param <P>
+ * @param <P> The type of the main canvas
  */
 public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
     /**

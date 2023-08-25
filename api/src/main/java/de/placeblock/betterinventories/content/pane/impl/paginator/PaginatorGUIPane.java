@@ -15,7 +15,7 @@ import java.util.*;
 
 /**
  * A Paginator is a {@link GUIPane} that can contain items. If there are too many items you can switch pages to see all items.
- * <p></p>
+ * <br>
  * Builder: {@link PaginatorBuilder}
  */
 @SuppressWarnings("unused")
@@ -128,6 +128,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Clears all Items in this Paginator
+     * @return this
      */
     public PaginatorGUIPane clearItems() {
         this.items.clear();
@@ -137,6 +138,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Skips to the next page.
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane nextPage() {
@@ -155,6 +157,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Returns to the previous page.
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane previousPage() {
@@ -172,6 +175,8 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
 
     /**
      * Sets the current page
+     * @param index The current page
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public PaginatorGUIPane setCurrentPage(int index) {

@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * A {@link GUIPane} with an upper and lower pane.
  * Renders the lower pane always below the upper pane.
- * <p></p>
+ * <br>
  * Builder: {@link HorizontalSplitGUIPaneBuilder}
  */
 @Setter

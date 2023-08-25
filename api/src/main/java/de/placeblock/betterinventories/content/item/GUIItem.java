@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * A {@link GUISection} with a size of 1x1 containing an {@link ItemStack}
- * <p></p>
+ * <br>
  * Builder: {@link GUIItemBuilder}
  */
 @Getter

@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 /**
  * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}s.
- * <p></p>
+ * <br>
  * Builder: {@link SimpleItemGUIPaneBuilder}
  */
 @SuppressWarnings("unused")

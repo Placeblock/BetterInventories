@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Used for creating GUIs that only have one canvas e.g. HopperGUIs and a fixed size.
  * Bear in mind that for creating Chest Inventories you should use {@link ChestGUI}
- * <p></p>
+ * <br>
  * Builder: {@link CanvasGUIBuilder}
  */
 public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {

@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * A {@link GUIItem} with the ability to get clicked.
  * Various onclick methods can be implemented and overridden.
  * The cooldown is being set for the whole material of the {@link ItemStack}.
- * <p></p>
+ * <br>
  * Builder: {@link GUIButtonBuilder}
  */
 @SuppressWarnings("unused")
@@ -120,6 +120,10 @@ public abstract class GUIButton extends GUIItem {
         return this.permission == null || player.hasPermission(this.permission);
     }
 
+    /**
+     * Is called when a player clicks on the Button
+     * @param player The Player
+     */
     public void click(Player player) {
         if (this.cooldown > 0) {
             this.applyCooldown();

@@ -114,6 +114,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     /**
      * Adds an Item to an empty slot on the pane.
      * @param item The Item
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public S addItemEmptySlot(GUIItem item) {
@@ -126,6 +127,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     /**
      * Fills all empty slots with this Item.
      * @param item The Item
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public S fill(GUIItem item) {
@@ -169,6 +171,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
 
     /**
      * Removes all sections from the pane
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public S clear() {
@@ -183,6 +186,9 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * Bear in mind that the vector conversion happens at the time calling this method, which means
      * if you change the size afterward the position will stay the same.
      * If it comes to issues you can use {@link #setSectionAt(Vector2d, GUISection)}
+     * @param slot The slot
+     * @param section The section
+     * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
     public S setSectionAt(int slot, C section) {
@@ -191,6 +197,9 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
 
     /**
      * Sets a section at a specific position
+     * @param position The position
+     * @param section The Section
+     * @return this
      */
     public S setSectionAt(Vector2d position, C section) {
         this.content.add(new ChildData<>(position, section));
@@ -199,6 +208,8 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
 
     /**
      * Sets a section at coordinates 0,0
+     * @param section The Section
+     * @return this
      */
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public S setSection(C section) {

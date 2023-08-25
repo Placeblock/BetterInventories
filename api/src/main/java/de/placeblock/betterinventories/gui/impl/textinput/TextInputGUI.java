@@ -207,9 +207,10 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     public void onUpdate(String text) {}
 
     /**
-     * Called when a player clicks on the submit-item
+     * Called when a player clicks on the submit-item and can be overridden
      * @param text The final text
      * @param abort Whether the player aborted, e.g. by closing the Inventory
+     * @return GUI closes when true is returned
      */
     @SuppressWarnings("unused")
     public boolean onFinish(String text, boolean abort) {return true;}

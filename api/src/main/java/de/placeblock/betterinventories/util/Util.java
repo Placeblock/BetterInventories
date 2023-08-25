@@ -11,6 +11,7 @@ public class Util {
     /**
      * Can be used to calculate the size of an Inventory based on the amount of Items this Inventory should contain.
      * @param items The Items Array
+     * @param <T> The type of the Items
      * @return The Inventory size
      */
     public static <T> Vector2d calculateGUISize(T[] items) {
@@ -21,6 +22,7 @@ public class Util {
      * Can be used to calculate the size of an Inventory based on the amount of Items this Inventory should contain.
      * @param items The Items Array
      * @param width The width of the GUI
+     * @param <T> The type of the Items
      * @return The Inventory size
      */
     public static <T> Vector2d calculateGUISize(T[] items, int width) {

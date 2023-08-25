@@ -7,31 +7,68 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 
+/**
+ * Builder for creating SubmitGUIButtons
+ */
 @SuppressWarnings("unused")
 public class SubmitGUIButtonBuilder extends BaseGUIButtonBuilder<SubmitGUIButton, SubmitGUIButtonBuilder>{
+    /**
+     * The item to be displayed on submit
+     */
     private ItemStack submitItem;
+
+    /**
+     *  The delay before the submit item is shown
+     */
     private int submitDelay = 0;
+
+    /**
+     * Is called on submit
+     */
     private Consumer<ClickData> onSubmit;
 
+    /**
+     * Creates a new SubmitGUIButtonBuilder
+     * @param gui The GUI for the Button
+     */
     public SubmitGUIButtonBuilder(GUI gui) {
         super(gui);
     }
 
+    /**
+     * Sets the submit-item
+     * @param item The submit-item
+     * @return this
+     */
     public SubmitGUIButtonBuilder submitItem(ItemStack item) {
         this.submitItem = item;
         return this;
     }
 
+    /**
+     * Sets the submit-delay
+     * @param delay The submit-delay
+     * @return this
+     */
     public SubmitGUIButtonBuilder submitDelay(int delay) {
         this.submitDelay = delay;
         return this;
     }
 
+    /**
+     * Sets the submit Handler
+     * @param callback The submit Handler
+     * @return this
+     */
     public SubmitGUIButtonBuilder onSubmit(Consumer<ClickData> callback) {
         this.onSubmit = callback;
         return this;
     }
 
+    /**
+     * Builds the Button
+     * @return The new Button
+     */
     @Override
     public SubmitGUIButton build() {
         return new SubmitGUIButton(this.getGui(), this.getItem(), this.submitItem, this.getPermission(), this.submitDelay) {

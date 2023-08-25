@@ -97,6 +97,8 @@ public abstract class GUI implements Listener {
 
     /**
      * Shows the GUI to a player.
+     * @param player The Player
+     * @return The newly created GUIView
      */
     @SuppressWarnings("UnusedReturnValue")
     public GUIView showPlayer(Player player) {

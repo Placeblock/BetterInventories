@@ -157,6 +157,7 @@ public abstract class SubmitGUIButton extends GUIButton {
 
     /**
      * Is called on submit
+     * @param data The ClickData of the click
      */
     public abstract void onSubmit(ClickData data);
 }
