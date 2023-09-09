@@ -16,18 +16,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 public class PaginatorGUIPaneTest {
     private MockPlugin plugin;
 
     @BeforeEach
-    public void setUp() {
+    public void setup() {
         MockBukkit.getOrCreateMock();
         this.plugin = MockBukkit.createMockPlugin();
     }
 
     @Test
-    public void testPaginatorWithoutControls() {
+    public void withoutControlsTest() {
         ChestGUI chestGUI = new ChestGUIBuilder(this.plugin)
                 .minHeight(1).maxHeight(6)
                 .title(Component.empty())
@@ -41,11 +42,14 @@ public class PaginatorGUIPaneTest {
                 .build();
         chestGUI.getCanvas().setSection(paginator);
         chestGUI.update();
-        System.out.println(chestGUI.renderContent());
+        List<ItemStack> content = chestGUI.renderContent();
+        assert content.size() == 9;
+        assert content.get(0) != null;
+        assert content.get(1) == null;
     }
 
     @Test
-    public void testPaginatorWithControls() {
+    public void withControlsTest() {
         ChestGUI gui = new ChestGUIBuilder(this.plugin)
                 .minHeight(1).maxHeight(6)
                 .title(Component.empty())
@@ -57,7 +61,31 @@ public class PaginatorGUIPaneTest {
         paginator.addItems(Collections.nCopies(20, new GUIItem(gui, new ItemStack(Material.DIAMOND_BLOCK))));
         gui.getCanvas().setSection(paginator);
         gui.update();
-        System.out.println(gui.renderContent());
+        List<ItemStack> content = gui.renderContent();
+        assert content.size() == 27;
+        assert content.get(19) != null;
+        assert content.get(20) == null;
+    }
+
+    @Test
+    public void resizeTest() {
+        int maxHeight = 6;
+        ChestGUI gui = new ChestGUIBuilder(this.plugin)
+                .minHeight(1).maxHeight(maxHeight)
+                .title(Component.empty())
+                .build();
+        PaginatorGUIPane paginator = new PaginatorBuilder(gui)
+                .adoptMinMax(gui.getCanvas())
+                .defaultControls(PaginatorControlsPosition.SPACE_EVENLY)
+                .build();
+        gui.getCanvas().setSection(paginator);
+        for (int i = 1; i < 90; i++) {
+            paginator.addItem(new GUIItem(gui, new ItemStack(Material.DIAMOND)));
+            gui.update();
+            List<ItemStack> content = gui.renderContent();
+            float contentHeight = content.size() / 9F;
+            assert contentHeight == maxHeight || contentHeight == Math.ceil(i / 9F);
+        }
     }
 
 }
