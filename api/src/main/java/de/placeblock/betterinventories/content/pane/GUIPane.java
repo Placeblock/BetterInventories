@@ -111,6 +111,7 @@ public abstract class GUIPane extends GUISection {
         for (int i = 0; i < childContent.size(); i++) {
             Vector2d relative = section.slotToVector(i);
             Vector2d absolute = position.add(relative);
+
             if (absolute.getX() < this.getWidth() &&
                 absolute.getY() < this.getHeight()) {
                 int slot = this.vectorToSlot(absolute);

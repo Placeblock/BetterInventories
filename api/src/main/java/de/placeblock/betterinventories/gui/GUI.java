@@ -162,7 +162,7 @@ public abstract class GUI implements Listener {
      * Renders the GUI on a list
      * @return The List
      */
-    protected abstract List<ItemStack> renderContent();
+    public abstract List<ItemStack> renderContent();
 
     /**
      * Returns the GUISection at a specific slot.

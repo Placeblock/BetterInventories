@@ -19,7 +19,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     /**
      * The default fill-item for the Pane
      */
-    public static final GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
+    public static GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
 
     /**
      * The according Paginator
