@@ -79,7 +79,7 @@ public class AnvilGUI extends GUI {
      * @return The List
      */
     @Override
-    protected List<ItemStack> renderContent() {
+    public List<ItemStack> renderContent() {
         ItemStack inputItem = this.inputItem == null ? null : this.inputItem.getItemStack();
         ItemStack additionalItem = this.additionalItem == null ? null : this.additionalItem.getItemStack();
         ItemStack resultItem = this.resultItem == null ? null : this.resultItem.getItemStack();

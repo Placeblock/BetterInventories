@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.codelix"
-version = "1.3.5"
+version = "1.3.6"
 
 var isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 var artifactID = "BetterInventories"
@@ -18,8 +18,16 @@ repositories {
 dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
+
     compileOnly("org.projectlombok:lombok:1.18.28")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.9.0")
+}
+
+configurations.testImplementation {
+    exclude(group = "io.papermc.paper", module = "paper-server")
 }
 
 java {
@@ -36,6 +44,10 @@ signing {
 tasks {
     jar {
         setFinalizedBy(listOf(reobfJar))
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
     compileJava {
