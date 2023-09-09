@@ -1,25 +1,25 @@
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev") version "1.3.5"
+    id("io.papermc.paperweight.userdev") version "1.5.5"
     id("maven-publish")
     signing
 }
 
 group = "de.codelix"
-version = "1.3.6"
+version = "1.3.5"
 
 var isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
-var artifactID = "betterinventories"
+var artifactID = "BetterInventories"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
-    compileOnly("org.projectlombok:lombok:1.18.24")
-    annotationProcessor("org.projectlombok:lombok:1.18.24")
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
 }
 
 java {
@@ -29,10 +29,13 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
+signing {
+    sign(publishing.publications)
+}
+
 tasks {
-    // Configure reobfJar to run when invoking the build task
-    assemble {
-        dependsOn(reobfJar)
+    jar {
+        setFinalizedBy(listOf(reobfJar))
     }
 
     compileJava {
@@ -56,7 +59,11 @@ publishing {
             groupId = project.group.toString()
             artifactId = artifactID
             version = project.version.toString()
-            from(components["java"])
+            artifact(tasks["jar"]) {
+                classifier=""
+            }
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
             pom {
                 packaging = "jar"
                 name.set("BetterInventories")
@@ -92,20 +99,5 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            name = "mavenCentral" + if(isReleaseVersion) "Release" else "Snapshot"
-            url = uri(if (isReleaseVersion) "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                    else "https://s01.oss.sonatype.org/content/repositories/snapshots")
-            credentials{
-                username = project.properties["ossrh.username"] as String?
-                password = project.properties["ossrh.password"] as String?
-            }
-        }
-    }
-}
-
-signing {
-    sign(publishing.publications)
 }
 
