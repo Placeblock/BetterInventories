@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * A Paginator is a {@link GUIPane} that can contain items. If there are too many items you can switch pages to see all items.
@@ -60,13 +61,15 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself.
      */
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, PaginatorControlsPane defaultControls) {
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls) {
         super(gui, minSize, maxSize);
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
         this.setUpperPane(this.contentPane);
         this.currentPage = startPage;
         this.repeat = repeat;
-        this.defaultControls = defaultControls;
+        if (defaultControls != null) {
+            this.defaultControls = defaultControls.apply(this);
+        }
     }
 
     /**

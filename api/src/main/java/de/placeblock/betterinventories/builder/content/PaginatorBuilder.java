@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Builder for creating PaginatorBuilders
@@ -44,7 +45,7 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
      * is not enough space for all items. Set to null if you don't want
      * automatic controls, or you want to handle them yourself.
      */
-    private PaginatorControlsPane defaultControls = null;
+    private Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls = null;
 
     /**
      * Creates a new PaginatorBuilder
@@ -86,10 +87,10 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
 
     /**
      * Sets the default-controls
-     * @param pane The default-controls
+     * @param pane Function returning the default-controls
      * @return this
      */
-    public PaginatorBuilder defaultControls(PaginatorControlsPane pane) {
+    public PaginatorBuilder defaultControls(Function<PaginatorGUIPane, PaginatorControlsPane> pane) {
         this.defaultControls = pane;
         return this;
     }
