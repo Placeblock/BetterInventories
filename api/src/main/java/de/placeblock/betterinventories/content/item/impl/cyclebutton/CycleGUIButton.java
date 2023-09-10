@@ -29,6 +29,7 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      * @param gui The GUI
      * @param values The Enum values
      */
+    @SuppressWarnings("unused")
     public CycleGUIButton(GUI gui, E[] values) {
         this(gui, values, values[0]);
     }
@@ -71,5 +72,5 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      * @param data The ClickData
      * @param newValue The new Enum-value
      */
-    abstract void onCycle(ClickData data, E newValue);
+    protected abstract void onCycle(ClickData data, E newValue);
 }
