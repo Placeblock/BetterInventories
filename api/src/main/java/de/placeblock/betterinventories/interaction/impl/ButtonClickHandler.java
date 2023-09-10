@@ -1,7 +1,9 @@
 package de.placeblock.betterinventories.interaction.impl;
 
+import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
+import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.interaction.InteractionHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,14 +17,14 @@ public class ButtonClickHandler extends InteractionHandler {
     /**
      * The according GUI
      */
-    protected final GUIButton button;
+    protected final GUI gui;
 
     /**
      * Creates a new ButtonClickHandler
-     * @param button The according GUIButton
+     * @param gui The according GUI
      */
-    public ButtonClickHandler(GUIButton button) {
-        this.button = button;
+    public ButtonClickHandler(GUI gui) {
+        this.gui = gui;
     }
 
     /**
@@ -38,25 +40,29 @@ public class ButtonClickHandler extends InteractionHandler {
         if (!leftClick && !rightClick) return false;
 
         int slot = event.getSlot();
+        GUISection clicked = this.gui.getClickedSection(slot);
         Player player = ((Player) event.getWhoClicked());
         ClickData clickData = new ClickData(player, slot, event.getAction(), event);
-        button.click(player);
-        if (event.isShiftClick()) {
-            button.onShiftClick(clickData);
-            if (leftClick) {
-                button.onShiftLeftClick(clickData);
+        if (clicked instanceof GUIButton button && button.hasPermission(player)) {
+            button.click(player);
+            if (event.isShiftClick()) {
+                button.onShiftClick(clickData);
+                if (leftClick) {
+                    button.onShiftLeftClick(clickData);
+                } else {
+                    button.onShiftRightClick(clickData);
+                }
             } else {
-                button.onShiftRightClick(clickData);
+                button.onClick(clickData);
+                if (leftClick) {
+                    button.onLeftClick(clickData);
+                } else {
+                    button.onRightClick(clickData);
+                }
             }
-        } else {
-            button.onClick(clickData);
-            if (leftClick) {
-                button.onLeftClick(clickData);
-            } else {
-                button.onRightClick(clickData);
-            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**

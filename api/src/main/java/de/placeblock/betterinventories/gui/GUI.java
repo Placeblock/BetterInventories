@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.interaction.InteractionHandler;
+import de.placeblock.betterinventories.interaction.impl.ButtonClickHandler;
 import de.placeblock.betterinventories.interaction.impl.CancelInteractionHandler;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
@@ -82,6 +83,7 @@ public abstract class GUI implements Listener {
         if (preventInteraction) {
             this.registerInteractionHandler(new CancelInteractionHandler());
         }
+        this.registerInteractionHandler(new ButtonClickHandler(this));
     }
 
     /**
