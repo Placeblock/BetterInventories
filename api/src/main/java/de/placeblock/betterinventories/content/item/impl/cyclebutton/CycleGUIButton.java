@@ -57,8 +57,11 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
                 .build();
     }
 
-    @Override
-    public void onClick(ClickData data) {
+    /**
+     * Cycles the Values
+     * @param data The clickData if the click event
+     */
+    public void cycle(ClickData data) {
         int currentIndex = this.values.indexOf(this.currentValue);
         int newIndex = (++currentIndex)%this.values.size();
         this.currentValue = this.values.get(newIndex);
