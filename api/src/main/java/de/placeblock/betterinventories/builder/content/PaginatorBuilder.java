@@ -2,10 +2,10 @@ package de.placeblock.betterinventories.builder.content;
 
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.paginator.ItemAddable;
+import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPane;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPosition;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -35,10 +35,16 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
     /**
      * The default controls automatically appear if there
      * is not enough space for all items. Set to null if you don't want
-     * automatic controls, or you want to handle them yourself. To add custom controls
-     * you can instantiate the {@link PaginatorControlsPane}
+     * automatic controls, or you want to handle them yourself.
      */
     private PaginatorControlsPosition defaultControlsPosition = null;
+
+    /**
+     * The default controls automatically appear if there
+     * is not enough space for all items. Set to null if you don't want
+     * automatic controls, or you want to handle them yourself.
+     */
+    private PaginatorControlsPane defaultControls = null;
 
     /**
      * Creates a new PaginatorBuilder
@@ -79,6 +85,16 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
     }
 
     /**
+     * Sets the default-controls
+     * @param pane The default-controls
+     * @return this
+     */
+    public PaginatorBuilder defaultControls(PaginatorControlsPane pane) {
+        this.defaultControls = pane;
+        return this;
+    }
+
+    /**
      * @return Whether repeat is enabled
      */
     protected boolean getRepeat() {
@@ -91,11 +107,20 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
      */
     @Override
     public PaginatorGUIPane build() {
-        PaginatorGUIPane paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
-                this.getBestMinSize(), this.getBestMaxSize(),
-                this.getRepeat(),
-                this.startPage,
-                this.defaultControlsPosition);
+        PaginatorGUIPane paginatorGUIPane;
+        if (this.defaultControls != null) {
+            paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
+                    this.getBestMinSize(), this.getBestMaxSize(),
+                    this.getRepeat(),
+                    this.defaultControlsPosition,
+                    this.startPage);
+        } else {
+            paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
+                    this.getBestMinSize(), this.getBestMaxSize(),
+                    this.getRepeat(),
+                    this.startPage,
+                    this.defaultControls);
+        }
         paginatorGUIPane.addItems(this.items);
         return paginatorGUIPane;
     }

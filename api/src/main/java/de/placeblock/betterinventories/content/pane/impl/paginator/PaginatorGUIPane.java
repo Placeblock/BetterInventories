@@ -29,7 +29,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     /**
      * The default-controls or null
      */
-    private final PaginatorControlsPane defaultControls;
+    private PaginatorControlsPane defaultControls;
 
     /**
      * The content-Pane where the Items are placed onto
@@ -56,22 +56,34 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
      * @param maxSize The minimum size of the Pane
      * @param repeat Whether to jump back to the first page when reaching the last page (and via versa)
      * @param startPage The start page
-     * @param defaultControlsPosition The default controls automatically appear if there
+     * @param defaultControls The default controls automatically appear if there
      *                                is not enough space for all items. Set to null if you don't want
-     *                                automatic controls, or you want to handle them yourself. To add custom controls
-     *                                you can instantiate the {@link PaginatorControlsPane}
+     *                                automatic controls, or you want to handle them yourself.
      */
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, PaginatorControlsPosition defaultControlsPosition) {
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, PaginatorControlsPane defaultControls) {
         super(gui, minSize, maxSize);
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
         this.setUpperPane(this.contentPane);
         this.currentPage = startPage;
         this.repeat = repeat;
-        if (defaultControlsPosition != null) {
-            this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
-        } else {
-            this.defaultControls = null;
-        }
+        this.defaultControls = defaultControls;
+    }
+
+    /**
+     * Creates a new PaginatorGUIPane
+     * @param gui The GUI
+     * @param minSize The minimum size of the Pane
+     * @param maxSize The minimum size of the Pane
+     * @param repeat Whether to jump back to the first page when reaching the last page (and via versa)
+     * @param startPage The start page
+     * @param defaultControlsPosition The default controls automatically appear if there
+     *                                is not enough space for all items. Set to null if you don't want
+     *                                automatic controls, or you want to handle them yourself. To add custom controls
+     *                                you can instantiate the {@link PaginatorControlsPane}
+     */
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, PaginatorControlsPosition defaultControlsPosition, int startPage) {
+        this(gui, minSize, maxSize, repeat, startPage, null);
+        this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
     }
 
     /**
