@@ -88,4 +88,29 @@ public class PaginatorGUIPaneTest {
         }
     }
 
+    @Test
+    public void controlsTest() {
+        ChestGUI gui = new ChestGUIBuilder(this.plugin)
+                .height(3)
+                .title(Component.empty())
+                .build();
+        PaginatorGUIPane paginator = new PaginatorBuilder(gui)
+                .adoptMinMax(gui.getCanvas())
+                .defaultControls(PaginatorControlsPosition.SPACE_EVENLY)
+                .build();
+        paginator.addItems(Collections.nCopies(40, new GUIItem(gui, new ItemStack(Material.DIAMOND_BLOCK))));
+        gui.getCanvas().setSection(paginator);
+        gui.update();
+        assert paginator.getPages() == 2;
+        assert paginator.getCurrentPage() == 0;
+        paginator.nextPage();
+        assert paginator.getCurrentPage() == 1;
+        paginator.nextPage();
+        assert paginator.getCurrentPage() == 0;
+        paginator.previousPage();
+        assert paginator.getCurrentPage() == 1;
+        paginator.previousPage();
+        assert paginator.getCurrentPage() == 0;
+    }
+
 }

@@ -100,7 +100,8 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      */
     public GUISection getSectionAt(Vector2d position) {
         if (position == null) return null;
-        for (ChildData<C> childData : this.content) {
+        for (int i = this.content.size()-1; i >= 0; i--) {
+            ChildData<C> childData = this.content.get(i);
             Vector2d pos = childData.getPosition();
             C section = childData.getChild();
             if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
