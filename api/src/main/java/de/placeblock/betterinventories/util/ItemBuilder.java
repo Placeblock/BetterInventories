@@ -69,6 +69,14 @@ public class ItemBuilder {
 
     /**
      * Creates a new ItemBuilder
+     * @param material The Material of the Item
+     */
+    public ItemBuilder(Material material) {
+        this(null, material);
+    }
+
+    /**
+     * Creates a new ItemBuilder
      * @param title The title of the Item
      * @param material The Material of the Item
      */
@@ -200,31 +208,35 @@ public class ItemBuilder {
      */
     public ItemStack build() {
         ItemStack item = new ItemStack(this.material, this.amount);
-        ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(this.title);
-        meta.lore(this.lore);
-        for (Enchantment enchantment : this.enchantments.keySet()) {
-            meta.addEnchant(enchantment, this.enchantments.get(enchantment), true);
-        }
-        for (Attribute attribute : this.attributes.keySet()) {
-            meta.addAttributeModifier(attribute, this.attributes.get(attribute));
-        }
-        for (ItemFlag flag : this.flags) {
-            meta.addItemFlags(flag);
-        }
-        if (this.unbreakable) {
-            meta.setUnbreakable(true);
-        }
-        if (meta instanceof SkullMeta skullMeta && this.skinURL != null) {
-            PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-            PlayerTextures textures = profile.getTextures();
-            textures.setSkin(this.skinURL);
-            profile.setTextures(textures);
-            skullMeta.setPlayerProfile(profile);
-        }
+        if (this.title != null || !this.lore.isEmpty() || !this.enchantments.isEmpty() || !this.attributes.isEmpty()
+            || !this.flags.isEmpty() || this.unbreakable || this.skinURL != null) {
+            ItemMeta meta = item.getItemMeta();
 
-        item.setItemMeta(meta);
+            meta.displayName(this.title);
+            meta.lore(this.lore);
+            for (Enchantment enchantment : this.enchantments.keySet()) {
+                meta.addEnchant(enchantment, this.enchantments.get(enchantment), true);
+            }
+            for (Attribute attribute : this.attributes.keySet()) {
+                meta.addAttributeModifier(attribute, this.attributes.get(attribute));
+            }
+            for (ItemFlag flag : this.flags) {
+                meta.addItemFlags(flag);
+            }
+            if (this.unbreakable) {
+                meta.setUnbreakable(true);
+            }
+            if (meta instanceof SkullMeta skullMeta && this.skinURL != null) {
+                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                PlayerTextures textures = profile.getTextures();
+                textures.setSkin(this.skinURL);
+                profile.setTextures(textures);
+                skullMeta.setPlayerProfile(profile);
+            }
+
+            item.setItemMeta(meta);
+        }
         return item;
     }
 }

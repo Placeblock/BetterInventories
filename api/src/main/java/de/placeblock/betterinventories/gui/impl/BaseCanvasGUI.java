@@ -74,7 +74,7 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @return The rendered representation of the canvas
      */
     @Override
-    protected List<ItemStack> renderContent() {
+    public List<ItemStack> renderContent() {
         return this.canvas.render();
     }
 

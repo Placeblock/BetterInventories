@@ -80,9 +80,10 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
      */
     @Override
     public void updateSize(Sizeable parent) {
-        int newWidth = Math.max(this.items.size(),2);
-        int newHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
-        this.setSize(new Vector2d(newWidth, newHeight));
+        int newWidth = Math.max(Math.min(parent.getMaxSize().getX(), this.items.size()),2);
+        int itemHeight = (int) Math.ceil(this.items.size() * 1F / newWidth);
+        int realHeight = Math.min(parent.getMaxSize().getY(), itemHeight);
+        this.setSize(new Vector2d(newWidth, realHeight));
         this.currentPage = Math.min(this.currentPage, this.getPages());
         if (this.showDefaultControls()) {
             this.setLowerPane(this.defaultControls);
