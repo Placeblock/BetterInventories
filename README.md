@@ -27,20 +27,20 @@ Gradle Kotlin
 mavenCentral()
 ```
 ```kotlin
-implementation("de.codelix:betterinventories:VERSION") // Dependency
+implementation("de.codelix:BetterInventories:VERSION") // Dependency
 ```
 Gradle Groovy
 ```groovy
 mavenCentral()
 ```
 ```groovy
-implementation "de.codelix:betterinventories:VERSION" // Dependency
+implementation "de.codelix:BetterInventories:VERSION" // Dependency
 ```
 Maven
 ```xml
 <dependency>
     <groupId>de.codelix</groupId>
-    <artifactId>betterinventories</artifactId>
+    <artifactId>BetterInventories</artifactId>
     <version>VERSION</version>
 </dependency>
 ```
