@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.content.item;
 import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.GUIView;
+import de.placeblock.betterinventories.interaction.impl.ButtonClickHandler;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -109,6 +110,7 @@ public abstract class GUIButton extends GUIItem {
         this.cooldown = cooldown;
         this.clickSound = clickSound;
         this.permission = permission;
+        this.registerInteractionHandler(new ButtonClickHandler(this));
     }
 
     /**

@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.gui.impl;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Vector2d;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * The Base Class for GUIs which only have just one canvas e.g. Chest, Hopper, Crafting...
@@ -29,10 +31,10 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * @param preventInteraction Whether to register cancel-interaction handler
      */
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
-        super(plugin, title, type, registerDefaultHandlers);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean preventInteraction) {
+        super(plugin, title, type, preventInteraction);
     }
 
     /**
@@ -94,5 +96,11 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @SuppressWarnings("unused")
     public C getCanvas() {
         return this.canvas;
+    }
+
+    @Override
+    protected void handleInteraction(Function<InteractionHandler, Boolean> handler) {
+        super.handleInteraction(handler);
+        this.canvas.handleInteraction(handler);
     }
 }

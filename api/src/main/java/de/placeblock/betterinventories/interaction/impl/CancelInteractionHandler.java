@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.interaction.impl;
 
-import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.interaction.InteractionHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -9,14 +8,6 @@ import org.bukkit.event.inventory.InventoryDragEvent;
  * InteractionHandler for cancelling GUI interaction
  */
 public class CancelInteractionHandler extends InteractionHandler {
-    /**
-     * Creates a new CancelInteractionHandler
-     * @param gui The according GUI
-     */
-    public CancelInteractionHandler(GUI gui) {
-        super(gui);
-    }
-
     /**
      * Called on-click
      * @param event The Event

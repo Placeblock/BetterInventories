@@ -31,10 +31,10 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param height The height of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * @param preventInteraction Whether to register cancel-interaction handler
      */
-    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
-        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), registerDefaultHandlers);
+    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean preventInteraction) {
+        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), preventInteraction);
     }
 
     /**
@@ -52,10 +52,10 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * @param preventInteraction Whether to register cancel-interaction handler
      */
-    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
-        this(plugin, title, type, InventoryTypeMapper.getSize(type), registerDefaultHandlers);
+    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean preventInteraction) {
+        this(plugin, title, type, InventoryTypeMapper.getSize(type), preventInteraction);
     }
 
     /**
@@ -75,10 +75,10 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param title The title of the GUI
      * @param type The type of the GUI
      * @param size The size of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * @param preventInteraction Whether to register cancel-interaction handler
      */
-    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean registerDefaultHandlers) {
-        super(plugin, title, type, registerDefaultHandlers);
+    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean preventInteraction) {
+        super(plugin, title, type, preventInteraction);
         this.setCanvas(new SimpleGUIPane(this, size, size, false));
     }
 }

@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.content.pane;
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.gui.GUI;
+import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 
 /**
@@ -118,6 +120,14 @@ public abstract class GUIPane extends GUISection {
                 ItemStack item = childContent.get(i);
                 content.set(slot, item);
             }
+        }
+    }
+
+    @Override
+    public void handleInteraction(Function<InteractionHandler, Boolean> handler) {
+        super.handleInteraction(handler);
+        for (GUISection child : this.getChildren()) {
+            child.handleInteraction(handler);
         }
     }
 }

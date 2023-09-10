@@ -50,11 +50,11 @@ public class AnvilGUI extends GUI {
      * Creates a new AnvilGUI
      * @param plugin The plugin
      * @param title The title of the GUI
-     * @param registerDefaultHandlers Wheter to register default-handlers
+     * @param preventInteraction Whether to register cancel-interaction handler
      */
     @SuppressWarnings("unused")
-    public AnvilGUI(Plugin plugin, TextComponent title, boolean registerDefaultHandlers) {
-        super(plugin, title, InventoryType.ANVIL, registerDefaultHandlers);
+    public AnvilGUI(Plugin plugin, TextComponent title, boolean preventInteraction) {
+        super(plugin, title, InventoryType.ANVIL, preventInteraction);
     }
 
     /**

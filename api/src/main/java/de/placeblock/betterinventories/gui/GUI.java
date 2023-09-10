@@ -1,11 +1,7 @@
 package de.placeblock.betterinventories.gui;
 
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
 import de.placeblock.betterinventories.content.GUISection;
-import de.placeblock.betterinventories.interaction.HandlerPriority;
 import de.placeblock.betterinventories.interaction.InteractionHandler;
-import de.placeblock.betterinventories.interaction.impl.ButtonClickHandler;
 import de.placeblock.betterinventories.interaction.impl.CancelInteractionHandler;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
@@ -19,9 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.function.Function;
 
 
@@ -62,7 +56,7 @@ public abstract class GUI implements Listener {
     /**
      * The registered InteractionHandlers
      */
-    private final SortedSetMultimap<HandlerPriority, InteractionHandler> interactionHandlers = TreeMultimap.create(Comparator.comparingInt(HandlerPriority::ordinal), Comparator.comparing(Object::hashCode));
+    private final List<InteractionHandler> interactionHandlers = new ArrayList<>();
 
     /**
      * Creates a new GUI
@@ -79,15 +73,14 @@ public abstract class GUI implements Listener {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * @param preventInteraction Whether to register the cancel-interaction handler
      */
-    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
+    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean preventInteraction) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
-        if (registerDefaultHandlers) {
-            this.registerInteractionHandler(HandlerPriority.HIGH, new CancelInteractionHandler(this));
-            this.registerInteractionHandler(HandlerPriority.LOW, new ButtonClickHandler(this));
+        if (preventInteraction) {
+            this.registerInteractionHandler(new CancelInteractionHandler());
         }
     }
 
@@ -203,20 +196,18 @@ public abstract class GUI implements Listener {
     /**
      * Registers a new InteractionHandler.
      * InteractionHandlers will receive Inventory Click- and DragEvents
-     * @param priority The priority for the new Handler.
      * @param handler The handler
      */
-    public void registerInteractionHandler(HandlerPriority priority, InteractionHandler handler) {
-        this.interactionHandlers.put(priority, handler);
+    public void registerInteractionHandler(InteractionHandler handler) {
+        this.interactionHandlers.add(handler);
     }
 
     /**
      * Unregisters a new InteractionHandler
-     * @param priority The priority of the Handler.
      * @param handler The handler
      */
-    public void unregisterInteractionHandler(HandlerPriority priority, InteractionHandler handler) {
-        this.interactionHandlers.remove(priority, handler);
+    public void unregisterInteractionHandler(InteractionHandler handler) {
+        this.interactionHandlers.remove(handler);
     }
 
     /**
@@ -251,14 +242,10 @@ public abstract class GUI implements Listener {
      * Calls the InteractionHandlers
      * @param handler Handler callback. Handler calling breaks if Handler callback returns true
      */
-    private void handleInteraction(Function<InteractionHandler, Boolean> handler) {
-        outer:
-        for (HandlerPriority priority : this.interactionHandlers.keySet()) {
-            SortedSet<InteractionHandler> pInteractionHandlers = this.interactionHandlers.get(priority);
-            for (InteractionHandler interactionHandler : pInteractionHandlers) {
-                boolean processed = handler.apply(interactionHandler);
-                if (processed) break outer;
-            }
+    protected void handleInteraction(Function<InteractionHandler, Boolean> handler) {
+        for (InteractionHandler interactionHandler : this.interactionHandlers) {
+            boolean processed = handler.apply(interactionHandler);
+            if (processed) break;
         }
     }
 
