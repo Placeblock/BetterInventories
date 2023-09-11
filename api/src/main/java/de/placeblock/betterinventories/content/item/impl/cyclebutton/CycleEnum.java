@@ -29,4 +29,8 @@ public interface CycleEnum {
      */
     List<TextComponent> getLore();
 
+    default String getPermission() {
+        return null;
+    }
+
 }
