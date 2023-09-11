@@ -109,7 +109,7 @@ public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, Pagin
     @Override
     public PaginatorGUIPane build() {
         PaginatorGUIPane paginatorGUIPane;
-        if (this.defaultControls != null) {
+        if (this.defaultControlsPosition != null) {
             paginatorGUIPane = new PaginatorGUIPane(this.getGui(),
                     this.getBestMinSize(), this.getBestMaxSize(),
                     this.getRepeat(),
