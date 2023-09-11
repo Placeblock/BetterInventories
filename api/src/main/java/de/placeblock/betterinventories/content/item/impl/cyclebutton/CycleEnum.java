@@ -29,4 +29,13 @@ public interface CycleEnum {
      */
     List<TextComponent> getLore();
 
+    /**
+     * Should return the permission for the specific value
+     * {@link CycleGUIButton} will skip values for which the player doesn't have permission
+     * @return The permission
+     */
+    default String getPermission() {
+        return null;
+    }
+
 }
