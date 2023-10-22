@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
  * To instantiate use {@link ChestGUI}
  * @param <P> The type of the main canvas
  */
-public class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
+public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
     /**
      * The maximum height of the GUI
      */
