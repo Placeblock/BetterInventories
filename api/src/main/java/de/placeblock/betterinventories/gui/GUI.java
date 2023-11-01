@@ -120,13 +120,26 @@ public abstract class GUI implements Listener {
     }
 
     /**
-     * Returns the GUIView to the according Inventory
+     * Returns the GUIView for the according Inventory
      * @param inventory The Inventory
      * @return The GUIView
      */
     public GUIView getView(Inventory inventory) {
         for (GUIView view : this.views) {
             if (view.getInventory().equals(inventory)) {
+                return view;
+            }
+        }
+        return null;
+    }
+    /**
+     * Returns the GUIView of the player
+     * @param player The Player
+     * @return The GUIView
+     */
+    public GUIView getView(Player player) {
+        for (GUIView view : this.views) {
+            if (view.getPlayer().equals(player)) {
                 return view;
             }
         }

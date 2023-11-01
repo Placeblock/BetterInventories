@@ -18,6 +18,9 @@ Features:
 ## Examples
 Examples can be found in the example module.
 
+## Versioning
+Semantic versioning is used since version 1.3.7
+
 ## Installation
 You can download and use the sourcecode at any time.<br>
 For the build-tool users out there:

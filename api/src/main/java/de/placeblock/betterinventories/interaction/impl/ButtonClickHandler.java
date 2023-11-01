@@ -42,6 +42,7 @@ public class ButtonClickHandler extends InteractionHandler {
         int slot = event.getSlot();
         GUISection clicked = this.gui.getClickedSection(slot);
         Player player = ((Player) event.getWhoClicked());
+        if (this.gui.getView(player) == null || this.gui.getView(event.getInventory()) == null) return true;
         ClickData clickData = new ClickData(player, slot, event.getAction(), event);
         if (clicked instanceof GUIButton button && button.hasPermission(player)) {
             button.click(player);
