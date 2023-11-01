@@ -34,10 +34,9 @@ public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> i
      * @param title The title of the GUI
      * @param minHeight The minimum height of the GUI
      * @param maxHeight The maximum height of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
      */
-    public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean preventInteraction) {
-        super(plugin, title, InventoryType.CHEST, preventInteraction);
+    public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
+        super(plugin, title, InventoryType.CHEST);
         this.maxHeight = maxHeight;
         this.minHeight = minHeight;
     }

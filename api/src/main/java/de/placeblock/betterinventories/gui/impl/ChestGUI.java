@@ -22,17 +22,6 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
         this(plugin, title, height, height);
     }
 
-    /**
-     * Creates a new ChestGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param height The height of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
-     */
-    @SuppressWarnings("unused")
-    public ChestGUI(Plugin plugin, TextComponent title, int height, boolean preventInteraction) {
-        this(plugin, title, height, height, preventInteraction);
-    }
 
     /**
      * Creates a new ChestGUI
@@ -42,19 +31,8 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
      * @param maxHeight The maximum height of the GUI
      */
     public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
-        this(plugin, title, minHeight, maxHeight, true);
-    }
-
-    /**
-     * Creates a new ChestGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param minHeight The minimum height of the GUI
-     * @param maxHeight The maximum height of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
-     */
-    public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean preventInteraction) {
-        super(plugin, title, minHeight, maxHeight, preventInteraction);
+        super(plugin, title, minHeight, maxHeight);
         this.setCanvas(new SimpleGUIPane(this, this.getMinSize(), this.getMaxSize(), true));
     }
+
 }

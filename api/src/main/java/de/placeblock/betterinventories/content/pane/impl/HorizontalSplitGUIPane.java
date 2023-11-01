@@ -130,16 +130,16 @@ public class HorizontalSplitGUIPane extends GUIPane {
      * @return The GUISection
      */
     @Override
-    public GUISection getSectionAt(Vector2d position) {
+    public SearchData search(Vector2d position) {
         if (this.upperPane == null) {
             if (this.lowerPane == null) return null;
-            return this.lowerPane.getSectionAt(position.subtract(this.getLowerPanePos()));
+            return this.lowerPane.search(position.subtract(this.getLowerPanePos()));
         } else {
             if (this.lowerPane == null ||
                 position.getY() < this.upperPane.getHeight()) {
-                return this.upperPane.getSectionAt(position);
+                return this.upperPane.search(position);
             } else {
-                return this.lowerPane.getSectionAt(position.subtract(this.getLowerPanePos()));
+                return this.lowerPane.search(position.subtract(this.getLowerPanePos()));
             }
         }
     }

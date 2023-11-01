@@ -30,17 +30,6 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * Creates a new CanvasGUI
      * @param plugin The plugin
      * @param title The title of the GUI
-     * @param height The height of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
-     */
-    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean preventInteraction) {
-        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), preventInteraction);
-    }
-
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
      * @param type The type of the GUI
      */
     public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
@@ -52,33 +41,10 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
-     */
-    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean preventInteraction) {
-        this(plugin, title, type, InventoryTypeMapper.getSize(type), preventInteraction);
-    }
-
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
      * @param size The size of the GUI
      */
     protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
-        this(plugin, title, type, size, true);
-    }
-
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param size The size of the GUI
-     * @param preventInteraction Whether to register cancel-interaction handler
-     */
-    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean preventInteraction) {
-        super(plugin, title, type, preventInteraction);
+        super(plugin, title, type);
         this.setCanvas(new SimpleGUIPane(this, size, size, false));
     }
 }

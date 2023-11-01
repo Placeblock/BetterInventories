@@ -2,14 +2,15 @@ package de.placeblock.betterinventories.content;
 
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * A GUISection is the most basic element that can be put inside GUIs.
@@ -36,12 +37,6 @@ public abstract class GUISection implements Sizeable {
      * The maximum size of the Section
      */
     protected Vector2d maxSize;
-
-    /**
-     * The registered InteractionHandlers
-     */
-    protected final List<InteractionHandler> interactionHandlers = new ArrayList<>();
-
 
     /**
      * Creates a new GUISection
@@ -76,8 +71,8 @@ public abstract class GUISection implements Sizeable {
      * @param slot The slot
      * @return The GUISection at the slot or null
      */
-    public GUISection getSectionAt(int slot) {
-        return this.getSectionAt(this.slotToVector(slot));
+    public SearchData search(int slot) {
+        return this.search(this.slotToVector(slot));
     }
 
     /**
@@ -85,7 +80,7 @@ public abstract class GUISection implements Sizeable {
      * @param position The position
      * @return The GUISection at the slot or null
      */
-    public abstract GUISection getSectionAt(Vector2d position);
+    public abstract SearchData search(Vector2d position);
 
     /**
      * Converts a slot to a vector based on the width of this Section
@@ -137,32 +132,14 @@ public abstract class GUISection implements Sizeable {
         return this.size.getX();
     }
 
+    public abstract void onClick(InventoryClickEvent event);
 
-    /**
-     * Registers a new InteractionHandler.
-     * InteractionHandlers will receive Inventory Click- and DragEvents
-     * @param handler The handler
-     */
-    public void registerInteractionHandler(InteractionHandler handler) {
-        this.interactionHandlers.add(handler);
-    }
+    public abstract void onDrag(InventoryDragEvent event);
 
-    /**
-     * Unregisters a new InteractionHandler
-     * @param handler The handler
-     */
-    public void unregisterInteractionHandler(InteractionHandler handler) {
-        this.interactionHandlers.remove(handler);
-    }
-
-    /**
-     * Calls the InteractionHandlers
-     * @param handler Handler callback. Handler calling breaks if Handler callback returns true
-     */
-    public void handleInteraction(Function<InteractionHandler, Boolean> handler) {
-        for (InteractionHandler interactionHandler : this.interactionHandlers) {
-            boolean processed = handler.apply(interactionHandler);
-            if (processed) break;
-        }
+    @Getter
+    @RequiredArgsConstructor
+    public static class SearchData {
+        private final GUISection section;
+        private final Vector2d absolutePos;
     }
 }

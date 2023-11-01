@@ -98,7 +98,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @param position The position
      * @return The GUISection at the slot or null
      */
-    public GUISection getSectionAt(Vector2d position) {
+    public SearchData search(Vector2d position) {
         if (position == null) return null;
         for (int i = this.content.size()-1; i >= 0; i--) {
             ChildData<C> childData = this.content.get(i);
@@ -106,10 +106,10 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
             C section = childData.getChild();
             if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
                     && pos.getY() <= position.getY() && pos.getY() + section.getHeight() - 1 >= position.getY()) {
-                return section.getSectionAt(position.subtract(pos));
+                return section.search(position.subtract(pos));
             }
         }
-        return null;
+        return new SearchData(this, position);
     }
 
     /**
@@ -143,7 +143,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      */
     private int getNextEmptySlot() {
         for (int i = 0; i < this.getSlots(); i++) {
-            if (this.getSectionAt(this.slotToVector(i)) == null) {
+            if (this.search(this.slotToVector(i)) == null) {
                 return i;
             }
         }

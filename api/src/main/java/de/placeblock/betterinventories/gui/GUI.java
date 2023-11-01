@@ -1,13 +1,14 @@
 package de.placeblock.betterinventories.gui;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import de.placeblock.betterinventories.content.GUISection;
-import de.placeblock.betterinventories.interaction.InteractionHandler;
-import de.placeblock.betterinventories.interaction.impl.ButtonClickHandler;
-import de.placeblock.betterinventories.interaction.impl.CancelInteractionHandler;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
@@ -15,9 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
+import java.util.*;
 
 
 /**
@@ -55,35 +54,15 @@ public abstract class GUI implements Listener {
     private List<ItemStack> content = new ArrayList<>();
 
     /**
-     * The registered InteractionHandlers
-     */
-    private final List<InteractionHandler> interactionHandlers = new ArrayList<>();
-
-    /**
      * Creates a new GUI
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
      */
     public GUI(Plugin plugin, TextComponent title, InventoryType type) {
-        this(plugin, title, type, true);
-    }
-
-    /**
-     * Creates a new GUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param preventInteraction Whether to register the cancel-interaction handler
-     */
-    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean preventInteraction) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
-        if (preventInteraction) {
-            this.registerInteractionHandler(new CancelInteractionHandler());
-        }
-        this.registerInteractionHandler(new ButtonClickHandler(this));
     }
 
     /**
@@ -177,7 +156,7 @@ public abstract class GUI implements Listener {
      * @param slot The slot
      * @return The GUISection at the slot or null
      */
-    public abstract GUISection getClickedSection(int slot);
+    public abstract GUISection.SearchData getClickedSection(int slot);
 
 
     //  UPDATE AND RENDERING
@@ -209,25 +188,7 @@ public abstract class GUI implements Listener {
     //  INTERACTION HANDLING
 
     /**
-     * Registers a new InteractionHandler.
-     * InteractionHandlers will receive Inventory Click- and DragEvents
-     * @param handler The handler
-     */
-    public void registerInteractionHandler(InteractionHandler handler) {
-        this.interactionHandlers.add(handler);
-    }
-
-    /**
-     * Unregisters a new InteractionHandler
-     * @param handler The handler
-     */
-    public void unregisterInteractionHandler(InteractionHandler handler) {
-        this.interactionHandlers.remove(handler);
-    }
-
-    /**
      * Called by Bukkit when Player clicks an Inventory
-     * Calls the InteractionHandlers
      * @param event The Event
      */
     @EventHandler
@@ -235,33 +196,100 @@ public abstract class GUI implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) return;
         GUIView view = this.getView(event.getInventory());
         if (view == null) return;
-
-        this.handleInteraction(i -> i.onClick(event));
+        if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+            event.setCancelled(true);
+            return;
+        }
+        view = this.getView(event.getClickedInventory());
+        if (view == null) return;
+        int slot = event.getSlot();
+        GUISection.SearchData clickedSection = this.getClickedSection(slot);
+        if (clickedSection == null) {
+            event.setCancelled(true);
+            return;
+        }
+        clickedSection.getSection().onClick(event);
     }
 
     /**
      * Called by Bukkit when Player drags an Inventory
-     * Calls the InteractionHandlers
      * @param event The Event
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.isCancelled()) return;
         if (!(event.getWhoClicked() instanceof Player player)) return;
         GUIView view = this.getView(event.getInventory());
         if (view == null) return;
-
-        this.handleInteraction(i -> i.onDrag(event));
+        List<Integer> guiSlots = event.getRawSlots().stream().filter(s -> s < this.getSlots()).toList();
+        // Get Sections from Slots
+        Multimap<GUISection.SearchData, Integer> sectionSlots = this.getSections(guiSlots);
+        Map<Integer, ItemStack> cancelledSlots = this.getRemovedItems(event, sectionSlots);
+        this.returnToCursor(event, cancelledSlots);
+        System.out.println(cancelledSlots);
+        this.removeItems(view, cancelledSlots);
     }
 
-    /**
-     * Calls the InteractionHandlers
-     * @param handler Handler callback. Handler calling breaks if Handler callback returns true
-     */
-    protected void handleInteraction(Function<InteractionHandler, Boolean> handler) {
-        for (InteractionHandler interactionHandler : this.interactionHandlers) {
-            boolean processed = handler.apply(interactionHandler);
-            if (processed) break;
+    private void removeItems(GUIView view, Map<Integer, ItemStack> cancelledSlots) {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            for (Integer slot : cancelledSlots.keySet()) {
+                ItemStack item = view.getInventory().getItem(slot);
+                if (item != null) {
+                    int amount = cancelledSlots.get(slot).getAmount();
+                    item.setAmount(item.getAmount()- amount);
+                }
+            }
+        }, 1);
+    }
+
+    private void returnToCursor(InventoryDragEvent event, Map<Integer, ItemStack> cancelledSlots) {
+        ItemStack cursor = event.getCursor();
+        for (Integer slot : cancelledSlots.keySet()) {
+            ItemStack itemStack = cancelledSlots.get(slot);
+            if (cursor != null) {
+                cursor.setAmount(cursor.getAmount()+ itemStack.getAmount());
+            } else {
+                cursor = itemStack.clone();
+            }
         }
+        event.setCursor(cursor);
+    }
+
+    private Map<Integer, ItemStack> getRemovedItems(InventoryDragEvent event, Multimap<GUISection.SearchData, Integer> sectionSlots) {
+        Map<Integer, ItemStack> removedItems = new HashMap<>();
+        for (GUISection.SearchData searchData : sectionSlots.keySet()) {
+            // Get Items for section
+            Map<Integer, ItemStack> items = new HashMap<>();
+            for (Integer slot : sectionSlots.get(searchData)) {
+                ItemStack newItem = event.getNewItems().get(slot).clone();
+                ItemStack existingItem = event.getView().getItem(slot);
+                int existingAmount = existingItem == null ? 0 : existingItem.getAmount();
+                newItem.setAmount(newItem.getAmount()-existingAmount);
+                items.put(slot, newItem);
+            }
+            InventoryDragEvent dragEvent = new InventoryDragEvent(
+                    event.getView(),
+                    event.getCursor(),
+                    event.getOldCursor(),
+                    event.getType() == DragType.SINGLE,
+                    items);
+            //TODO: SLOT AUS SEARCHDATA VERARBEITEN
+            searchData.getSection().onDrag(dragEvent);
+            if (dragEvent.isCancelled()) {
+                removedItems.putAll(items);
+            }
+        }
+        System.out.println(removedItems);
+        return removedItems;
+    }
+
+    private Multimap<GUISection.SearchData, Integer> getSections(List<Integer> guiSlots) {
+        Multimap<GUISection.SearchData, Integer> sectionSlots = MultimapBuilder.hashKeys().arrayListValues().build();
+        for (Integer guiSlot : guiSlots) {
+            GUISection.SearchData searchData = this.getClickedSection(guiSlot);
+            sectionSlots.put(searchData, guiSlot);
+        }
+        return sectionSlots;
     }
 
 

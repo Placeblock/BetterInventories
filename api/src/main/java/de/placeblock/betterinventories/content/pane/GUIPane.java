@@ -7,6 +7,8 @@ import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -124,10 +126,12 @@ public abstract class GUIPane extends GUISection {
     }
 
     @Override
-    public void handleInteraction(Function<InteractionHandler, Boolean> handler) {
-        super.handleInteraction(handler);
-        for (GUISection child : this.getChildren()) {
-            child.handleInteraction(handler);
-        }
+    public void onClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public void onDrag(InventoryDragEvent event) {
+        event.setCancelled(true);
     }
 }

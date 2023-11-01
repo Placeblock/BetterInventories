@@ -7,6 +7,8 @@ import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -56,8 +58,8 @@ public class GUIItem extends GUISection {
      * @return The GUISection
      */
     @Override
-    public GUISection getSectionAt(int slot) {
-        return this;
+    public SearchData search(int slot) {
+        return new SearchData(this, new Vector2d());
     }
 
     /**
@@ -67,7 +69,17 @@ public class GUIItem extends GUISection {
      * @return The GUISection
      */
     @Override
-    public GUISection getSectionAt(Vector2d position) {
-        return this;
+    public SearchData search(Vector2d position) {
+        return new SearchData(this, position);
+    }
+
+    @Override
+    public void onClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public void onDrag(InventoryDragEvent event) {
+        event.setCancelled(true);
     }
 }

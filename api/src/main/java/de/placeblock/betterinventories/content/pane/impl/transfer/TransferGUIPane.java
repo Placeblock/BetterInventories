@@ -2,7 +2,6 @@ package de.placeblock.betterinventories.content.pane.impl.transfer;
 
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -42,18 +41,33 @@ public class TransferGUIPane extends SimpleItemGUIPane {
      */
     public TransferGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
-        this.registerInteractionHandler(new InteractionHandler() {
+        /*this.registerInteractionHandler(new InteractionHandler() {
             @Override
             public boolean onClick(InventoryClickEvent event) {
-                System.out.println(event);
+                System.out.println(event.getAction());
+                System.out.println(event.getRawSlot());
+                System.out.println(event.getSlot());
+                System.out.println(event.getHotbarButton());
+                System.out.println(event.getCurrentItem());
                 return false;
             }
-
             @Override
             public boolean onDrag(InventoryDragEvent event) {
                 System.out.println(event);
                 return false;
             }
-        });
+        });*/
     }
+
+
+    @Override
+    public void onClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public void onDrag(InventoryDragEvent event) {
+        event.setCancelled(true);
+    }
+
 }

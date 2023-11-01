@@ -25,6 +25,6 @@ public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, ChestGUI
      */
     @Override
     public ChestGUI build() {
-        return new ChestGUI(this.getPlugin(), this.getTitle(), this.getBestMinHeight(), this.getBestMaxHeight(), this.getRegisterDefaultHandlers());
+        return new ChestGUI(this.getPlugin(), this.getTitle(), this.getBestMinHeight(), this.getBestMaxHeight());
     }
 }
