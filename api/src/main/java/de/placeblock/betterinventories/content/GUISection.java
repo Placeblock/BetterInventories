@@ -1,16 +1,17 @@
 package de.placeblock.betterinventories.content;
 
 import de.placeblock.betterinventories.Sizeable;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A GUISection is the most basic element that can be put inside GUIs.
@@ -69,18 +70,22 @@ public abstract class GUISection implements Sizeable {
     /**
      * Returns the GUISection at a specific slot.
      * @param slot The slot
+     * @param onlyPanes Whether to return only panes even
+     *                  if there is an item at the clicked slot
      * @return The GUISection at the slot or null
      */
-    public SearchData search(int slot) {
-        return this.search(this.slotToVector(slot));
+    public SearchData search(int slot, boolean onlyPanes) {
+        return this.search(this.slotToVector(slot), onlyPanes);
     }
 
     /**
      * Returns the GUISection at a specific position.
      * @param position The position
+     * @param onlyPanes Whether to return only panes even
+     *                  if there is an item at the clicked slot
      * @return The GUISection at the slot or null
      */
-    public abstract SearchData search(Vector2d position);
+    public abstract SearchData search(Vector2d position, boolean onlyPanes);
 
     /**
      * Converts a slot to a vector based on the width of this Section
@@ -132,14 +137,49 @@ public abstract class GUISection implements Sizeable {
         return this.size.getX();
     }
 
-    public abstract void onClick(InventoryClickEvent event);
+    /**
+     * Called when a user clicks on an item.
+     * Usually after this method one of the add/remove/amount methods is called.
+     * @param data The clickdata
+     */
+    public abstract void onItemClick(ClickData data);
 
-    public abstract void onDrag(InventoryDragEvent event);
+    /**
+     * Called when an item is added to an empty slot
+     * @param position The relative position of the slot
+     * @param itemStack The itemstack that was added
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemAdd(Vector2d position, ItemStack itemStack);
 
+    /**
+     * Called when an item is removed from an empty slot
+     * @param position The relative position of the slot
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemRemove(Vector2d position);
+
+    /**
+     * Called when the amount of an item in a slot changes
+     * @param position The relative position of the slot
+     * @param amount The new amount of the item
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemAmount(Vector2d position, int amount);
+
+    /**
+     * Returned by search methods.
+     */
     @Getter
     @RequiredArgsConstructor
     public static class SearchData {
+        /**
+         * The found section.
+         */
         private final GUISection section;
-        private final Vector2d absolutePos;
+        /**
+         * The position of the section relative to its parent.
+         */
+        private final Vector2d relativePos;
     }
 }

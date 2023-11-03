@@ -6,7 +6,6 @@ import de.placeblock.betterinventories.gui.GUIView;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -195,25 +194,23 @@ public abstract class GUIButton extends GUIItem {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player player) {
-            boolean leftClick = event.isLeftClick();
-            boolean rightClick = event.isRightClick();
-            boolean shiftClick = event.isShiftClick();
-            ClickData clickData = new ClickData(player, event.getSlot(), event.getAction(), event);
-            this.onClick(clickData);
-            if (leftClick) {
-                if (shiftClick) {
-                    this.onShiftLeftClick(clickData);
-                } else {
-                    this.onLeftClick(clickData);
-                }
-            } else if (rightClick) {
-                if (shiftClick) {
-                    this.onShiftRightClick(clickData);
-                } else {
-                    this.onRightClick(clickData);
-                }
+    public void onItemClick(ClickData data) {
+        InventoryClickEvent event = data.getEvent();
+        boolean leftClick = event.isLeftClick();
+        boolean rightClick = event.isRightClick();
+        boolean shiftClick = event.isShiftClick();
+        this.onClick(data);
+        if (leftClick) {
+            if (shiftClick) {
+                this.onShiftLeftClick(data);
+            } else {
+                this.onLeftClick(data);
+            }
+        } else if (rightClick) {
+            if (shiftClick) {
+                this.onShiftRightClick(data);
+            } else {
+                this.onRightClick(data);
             }
         }
     }

@@ -83,8 +83,8 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @return The section which lies at the specific slot, or null if there is no section.
      */
     @Override
-    public GUISection.SearchData getClickedSection(int slot) {
-        return this.canvas.search(slot);
+    public GUISection.SearchData searchSection(int slot, boolean onlyPanes) {
+        return this.canvas.search(slot, onlyPanes);
     }
 
     /**

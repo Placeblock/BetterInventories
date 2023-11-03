@@ -127,19 +127,21 @@ public class HorizontalSplitGUIPane extends GUIPane {
     /**
      * Returns the GUISection at a specific position.
      * @param position The position
+     * @param onlyPanes Whether to return only panes even
+     *                  if there is an item at the clicked slot
      * @return The GUISection
      */
     @Override
-    public SearchData search(Vector2d position) {
+    public SearchData search(Vector2d position, boolean onlyPanes) {
         if (this.upperPane == null) {
             if (this.lowerPane == null) return null;
-            return this.lowerPane.search(position.subtract(this.getLowerPanePos()));
+            return this.lowerPane.search(position.subtract(this.getLowerPanePos()), onlyPanes);
         } else {
             if (this.lowerPane == null ||
                 position.getY() < this.upperPane.getHeight()) {
-                return this.upperPane.search(position);
+                return this.upperPane.search(position, onlyPanes);
             } else {
-                return this.lowerPane.search(position.subtract(this.getLowerPanePos()));
+                return this.lowerPane.search(position.subtract(this.getLowerPanePos()), onlyPanes);
             }
         }
     }

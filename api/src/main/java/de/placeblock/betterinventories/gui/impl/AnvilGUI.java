@@ -83,11 +83,14 @@ public class AnvilGUI extends GUI {
      * @return The GUISection at the slot or null
      */
     @Override
-    public GUISection getClickedSection(int slot) {
+    public GUISection.SearchData searchSection(int slot, boolean onlyPanes) {
+        if (onlyPanes) {
+            throw new IllegalStateException("Cannot search for panes in anvil");
+        }
         return switch (slot) {
-            case 0 -> this.inputItem;
-            case 1 -> this.additionalItem;
-            case 2 -> this.resultItem;
+            case 0 -> this.inputItem.search(0, true);
+            case 1 -> this.additionalItem.search(0, true);
+            case 2 -> this.resultItem.search(0, true);
             default -> null;
         };
     }

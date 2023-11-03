@@ -2,18 +2,15 @@ package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
-import de.placeblock.betterinventories.interaction.InteractionHandler;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 
 /**
@@ -126,12 +123,20 @@ public abstract class GUIPane extends GUISection {
     }
 
     @Override
-    public void onClick(InventoryClickEvent event) {
-        event.setCancelled(true);
+    public void onItemClick(ClickData data) {}
+
+    @Override
+    public boolean onItemAdd(Vector2d position, ItemStack itemStack) {
+        return true;
     }
 
     @Override
-    public void onDrag(InventoryDragEvent event) {
-        event.setCancelled(true);
+    public boolean onItemRemove(Vector2d position) {
+        return true;
+    }
+
+    @Override
+    public boolean onItemAmount(Vector2d position, int amount) {
+        return true;
     }
 }

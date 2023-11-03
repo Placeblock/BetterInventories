@@ -44,7 +44,7 @@ public class SimpleGUIPaneTest {
                 .build();
         pane.setSectionAt(2, button);
         chestGUI.update();
-        assert chestGUI.getClickedSection(2).equals(button);
+        assert chestGUI.searchSection(2, false).getSection().equals(button);
     }
 
 }

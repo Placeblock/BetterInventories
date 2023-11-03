@@ -1,8 +1,7 @@
 package de.placeblock.betterinventories.gui;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.item.ClickData;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
@@ -16,7 +15,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -154,9 +156,11 @@ public abstract class GUI implements Listener {
     /**
      * Returns the GUISection at a specific slot.
      * @param slot The slot
+     * @param onlyPanes Whether to return only panes even
+     *                  if there is an item at the clicked slot
      * @return The GUISection at the slot or null
      */
-    public abstract GUISection.SearchData getClickedSection(int slot);
+    public abstract GUISection.SearchData searchSection(int slot, boolean onlyPanes);
 
 
     //  UPDATE AND RENDERING
@@ -203,12 +207,86 @@ public abstract class GUI implements Listener {
         view = this.getView(event.getClickedInventory());
         if (view == null) return;
         int slot = event.getSlot();
-        GUISection.SearchData clickedSection = this.getClickedSection(slot);
-        if (clickedSection == null) {
+        GUISection.SearchData searchData = this.searchSection(slot, true);
+        if (searchData == null) {
             event.setCancelled(true);
             return;
         }
-        clickedSection.getSection().onClick(event);
+        ItemStack currentItem = event.getCurrentItem();
+        ClickData clickData = new ClickData(player, searchData.getRelativePos(), event.getAction(), event);
+        GUISection section = searchData.getSection();
+        section.onItemClick(clickData);
+        GUIAction action;
+        int newAmount = 0;
+        switch (event.getAction()) {
+            case PICKUP_HALF -> {
+                assert currentItem != null;
+                if (currentItem.getAmount() == 1) {
+                    action = GUIAction.REMOVE;
+                } else {
+                    newAmount = currentItem.getAmount()/2;
+                    action = GUIAction.AMOUNT;
+                }
+            }
+            case PICKUP_ONE, DROP_ONE_SLOT -> {
+                assert currentItem != null;
+                if (currentItem.getAmount() == 1) {
+                    action = GUIAction.REMOVE;
+                } else {
+                    newAmount = currentItem.getAmount()-1;
+                    action = GUIAction.AMOUNT;
+                }
+            }
+            case MOVE_TO_OTHER_INVENTORY, PICKUP_ALL, DROP_ALL_SLOT -> action = GUIAction.REMOVE;
+            case PLACE_ALL -> {
+                if (currentItem == null) {
+                    action = GUIAction.ADD;
+                    newAmount = event.getCursor().getAmount();
+                } else {
+                    action = GUIAction.AMOUNT;
+                    newAmount = currentItem.getAmount()+event.getCursor().getAmount();
+                }
+            }
+            case PLACE_ONE -> {
+                if (currentItem == null) {
+                    action = GUIAction.ADD;
+                    newAmount = 1;
+                } else {
+                    action = GUIAction.AMOUNT;
+                    newAmount = currentItem.getAmount()+1;
+                }
+            }
+            case HOTBAR_SWAP -> {
+                if (currentItem == null) {
+                    event.setCancelled(true);
+                    return;
+                }
+                action = GUIAction.REMOVE;
+            }
+            default -> {
+                event.setCancelled(true);
+                return;
+            }
+        }
+        switch (action) {
+            case ADD -> {
+                ItemStack item = event.getCursor().clone();
+                item.setAmount(newAmount);
+                if (section.onItemAdd(searchData.getRelativePos(), item)) {
+                    event.setCancelled(true);
+                }
+            }
+            case REMOVE -> {
+                if (section.onItemRemove(searchData.getRelativePos())) {
+                    event.setCancelled(true);
+                }
+            }
+            case AMOUNT -> {
+                if (section.onItemAmount(searchData.getRelativePos(), newAmount)) {
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 
     /**
@@ -223,10 +301,9 @@ public abstract class GUI implements Listener {
         if (view == null) return;
         List<Integer> guiSlots = event.getRawSlots().stream().filter(s -> s < this.getSlots()).toList();
         // Get Sections from Slots
-        Multimap<GUISection.SearchData, Integer> sectionSlots = this.getSections(guiSlots);
-        Map<Integer, ItemStack> cancelledSlots = this.getRemovedItems(event, sectionSlots);
+        Map<GUISection.SearchData, Integer> sectionSlots = this.getSections(guiSlots);
+        Map<Integer, ItemStack> cancelledSlots = this.getCancelledSlots(event, sectionSlots);
         this.returnToCursor(event, cancelledSlots);
-        System.out.println(cancelledSlots);
         this.removeItems(view, cancelledSlots);
     }
 
@@ -255,38 +332,31 @@ public abstract class GUI implements Listener {
         event.setCursor(cursor);
     }
 
-    private Map<Integer, ItemStack> getRemovedItems(InventoryDragEvent event, Multimap<GUISection.SearchData, Integer> sectionSlots) {
+    private Map<Integer, ItemStack> getCancelledSlots(InventoryDragEvent event, Map<GUISection.SearchData, Integer> sectionSlots) {
         Map<Integer, ItemStack> removedItems = new HashMap<>();
         for (GUISection.SearchData searchData : sectionSlots.keySet()) {
-            // Get Items for section
-            Map<Integer, ItemStack> items = new HashMap<>();
-            for (Integer slot : sectionSlots.get(searchData)) {
-                ItemStack newItem = event.getNewItems().get(slot).clone();
-                ItemStack existingItem = event.getView().getItem(slot);
-                int existingAmount = existingItem == null ? 0 : existingItem.getAmount();
-                newItem.setAmount(newItem.getAmount()-existingAmount);
-                items.put(slot, newItem);
-            }
-            InventoryDragEvent dragEvent = new InventoryDragEvent(
-                    event.getView(),
-                    event.getCursor(),
-                    event.getOldCursor(),
-                    event.getType() == DragType.SINGLE,
-                    items);
-            //TODO: SLOT AUS SEARCHDATA VERARBEITEN
-            searchData.getSection().onDrag(dragEvent);
-            if (dragEvent.isCancelled()) {
-                removedItems.putAll(items);
+            GUISection section = searchData.getSection();
+            int slot = sectionSlots.get(searchData);
+            ItemStack newItem = event.getNewItems().get(slot).clone();
+            ItemStack existingItem = event.getView().getItem(slot);
+            if (existingItem == null) {
+                if (section.onItemAdd(searchData.getRelativePos(), newItem)) {
+                    removedItems.put(slot, newItem);
+                }
+            } else {
+                if (section.onItemAmount(searchData.getRelativePos(), newItem.getAmount())) {
+                    newItem.setAmount(newItem.getAmount()-existingItem.getAmount());
+                    removedItems.put(slot, newItem);
+                }
             }
         }
-        System.out.println(removedItems);
         return removedItems;
     }
 
-    private Multimap<GUISection.SearchData, Integer> getSections(List<Integer> guiSlots) {
-        Multimap<GUISection.SearchData, Integer> sectionSlots = MultimapBuilder.hashKeys().arrayListValues().build();
+    private Map<GUISection.SearchData, Integer> getSections(List<Integer> guiSlots) {
+        Map<GUISection.SearchData, Integer> sectionSlots = new HashMap<>();
         for (Integer guiSlot : guiSlots) {
-            GUISection.SearchData searchData = this.getClickedSection(guiSlot);
+            GUISection.SearchData searchData = this.searchSection(guiSlot, true);
             sectionSlots.put(searchData, guiSlot);
         }
         return sectionSlots;

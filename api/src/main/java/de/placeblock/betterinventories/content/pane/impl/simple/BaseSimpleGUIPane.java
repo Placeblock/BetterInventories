@@ -96,17 +96,18 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     /**
      * Returns the GUISection at a specific position.
      * @param position The position
+     * @param onlyPanes Whether to return only panes even if there is an item at the clicked slot
      * @return The GUISection at the slot or null
      */
-    public SearchData search(Vector2d position) {
+    public SearchData search(Vector2d position, boolean onlyPanes) {
         if (position == null) return null;
         for (int i = this.content.size()-1; i >= 0; i--) {
             ChildData<C> childData = this.content.get(i);
             Vector2d pos = childData.getPosition();
             C section = childData.getChild();
-            if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
+            if ((!(section instanceof GUIItem) || !onlyPanes) && pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
                     && pos.getY() <= position.getY() && pos.getY() + section.getHeight() - 1 >= position.getY()) {
-                return section.search(position.subtract(pos));
+                return section.search(position.subtract(pos), onlyPanes);
             }
         }
         return new SearchData(this, position);
@@ -143,7 +144,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      */
     private int getNextEmptySlot() {
         for (int i = 0; i < this.getSlots(); i++) {
-            if (this.search(this.slotToVector(i)) == null) {
+            if (this.search(this.slotToVector(i), false) == null) {
                 return i;
             }
         }
@@ -160,6 +161,25 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         ChildData<C> removal = null;
         for (ChildData<C> childData : this.content) {
             if (childData.getChild().equals(section)) {
+                removal = childData;
+            }
+        }
+        if (removal != null) {
+            this.content.remove(removal);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a section from the pane
+     * @param position The position of the section
+     * @return Whether the section existed
+     */
+    public boolean removeSection(Vector2d position) {
+        ChildData<C> removal = null;
+        for (ChildData<C> childData : this.content) {
+            if (childData.getPosition().equals(position)) {
                 removal = childData;
             }
         }
@@ -215,6 +235,21 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public S setSection(C section) {
         return this.setSectionAt(new Vector2d(), section);
+    }
+
+    /**
+     * Returns all sections at the given position
+     * @param position The position
+     * @return All sections at the position
+     */
+    public Collection<C> getSections(Vector2d position) {
+        Collection<C> sections = new ArrayList<>();
+        for (ChildData<C> childData : this.content) {
+            if (childData.getPosition().equals(position)) {
+                sections.add(childData.child);
+            }
+        }
+        return sections;
     }
 
     /**
