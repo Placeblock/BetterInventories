@@ -2,14 +2,12 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.item.ClickData;
+import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -211,10 +209,8 @@ public abstract class GUI implements Listener {
         if (view == null) {
             // Item Offer
             if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                System.out.println(event.getCurrentItem());
                 ItemStack offerItem = Objects.requireNonNull(event.getCurrentItem()).clone();
                 this.provideItem(offerItem);
-                System.out.println(offerItem);
                 if (offerItem.getAmount() == event.getCurrentItem().getAmount()) {
                     event.setCancelled(true);
                 } else {
@@ -230,79 +226,114 @@ public abstract class GUI implements Listener {
             return;
         }
         ItemStack currentItem = event.getCurrentItem();
-        ClickData clickData = new ClickData(player, searchData.getRelativePos(), event.getAction(), event);
+        Vector2d pos = searchData.getRelativePos();
         GUISection section = searchData.getSection();
+        ClickData clickData = new ClickData(player, pos, event.getAction(), event);
         section.onItemClick(clickData);
-        GUIAction action;
-        int newAmount = 0;
         switch (event.getAction()) {
             case PICKUP_HALF -> {
                 assert currentItem != null;
                 if (currentItem.getAmount() == 1) {
-                    action = GUIAction.REMOVE;
+                    dispatchRemove(event, section, pos);
                 } else {
-                    newAmount = currentItem.getAmount()/2;
-                    action = GUIAction.AMOUNT;
+                    int newAmount = currentItem.getAmount()/2;
+                    dispatchAmount(event, section, pos, newAmount);
                 }
             }
             case PICKUP_ONE, DROP_ONE_SLOT -> {
                 assert currentItem != null;
                 if (currentItem.getAmount() == 1) {
-                    action = GUIAction.REMOVE;
+                    dispatchRemove(event, section, pos);
                 } else {
-                    newAmount = currentItem.getAmount()-1;
-                    action = GUIAction.AMOUNT;
+                    dispatchAmount(event, section, pos, currentItem.getAmount()-1);
                 }
             }
-            case MOVE_TO_OTHER_INVENTORY, PICKUP_ALL, DROP_ALL_SLOT -> action = GUIAction.REMOVE;
+            case MOVE_TO_OTHER_INVENTORY, PICKUP_ALL, DROP_ALL_SLOT -> dispatchRemove(event, section, pos);
             case PLACE_ALL -> {
                 if (currentItem == null) {
-                    action = GUIAction.ADD;
-                    newAmount = event.getCursor().getAmount();
+                    int newAmount = event.getCursor().getAmount();
+                    dispatchAdd(event, section, pos, event.getCursor(), newAmount);
                 } else {
-                    action = GUIAction.AMOUNT;
-                    newAmount = currentItem.getAmount()+event.getCursor().getAmount();
+                    int newAmount = currentItem.getAmount()+event.getCursor().getAmount();
+                    dispatchAmount(event, section, pos, newAmount);
                 }
             }
             case PLACE_ONE -> {
                 if (currentItem == null) {
-                    action = GUIAction.ADD;
-                    newAmount = 1;
+                    dispatchAdd(event, section, pos, event.getCursor(), 1);
                 } else {
-                    action = GUIAction.AMOUNT;
-                    newAmount = currentItem.getAmount()+1;
+                    dispatchAmount(event, section, pos, currentItem.getAmount()+1);
                 }
             }
             case HOTBAR_SWAP -> {
                 if (currentItem == null) {
-                    event.setCancelled(true);
-                    return;
+                    ItemStack hotbarItem = getHotbarItem(event);
+                    dispatchAdd(event, section, pos, hotbarItem, hotbarItem.getAmount());
+                } else {
+                    dispatchRemove(event, section, pos);
                 }
-                action = GUIAction.REMOVE;
             }
-            default -> {
-                event.setCancelled(true);
-                return;
+            case HOTBAR_MOVE_AND_READD -> {
+                ItemStack hotbarItem = getHotbarItem(event);
+                if (hotbarItem.isSimilar(currentItem)) {
+                    dispatchAmount(event, section, pos, hotbarItem.getAmount());
+                } else {
+                    dispatchRemove(event, section, pos);
+                    dispatchAdd(event, section, pos, hotbarItem, hotbarItem.getAmount());
+                }
             }
+            default -> event.setCancelled(true);
         }
-        switch (action) {
-            case ADD -> {
-                ItemStack item = event.getCursor().clone();
-                item.setAmount(newAmount);
-                if (section.onItemAdd(searchData.getRelativePos(), item)) {
-                    event.setCancelled(true);
-                }
-            }
-            case REMOVE -> {
-                if (section.onItemRemove(searchData.getRelativePos())) {
-                    event.setCancelled(true);
-                }
-            }
-            case AMOUNT -> {
-                if (section.onItemAmount(searchData.getRelativePos(), newAmount)) {
-                    event.setCancelled(true);
-                }
-            }
+    }
+
+    /**
+     * Used to get hotbar items from events
+     * @param event The Event
+     * @return the hotbar item for the event
+     */
+    private static ItemStack getHotbarItem(InventoryClickEvent event) {
+        Inventory bottomInventory = event.getView().getBottomInventory();
+        return bottomInventory.getItem(event.getHotbarButton());
+    }
+
+    /**
+     * Dispatches an add action
+     * @param event The event
+     * @param section The section
+     * @param position The position
+     * @param item The itemStack that got added
+     * @param amount The amount of the itemStack
+     */
+    public void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
+        item = item.clone();
+        item.setAmount(amount);
+        if (section.onItemAdd(position, item)) {
+            event.setCancelled(true);
+        }
+    }
+
+    /**
+     * Dispatches a remove action
+     * @param event The event
+     * @param section The section
+     * @param position The position
+     */
+    public void dispatchRemove(Cancellable event, GUISection section, Vector2d position) {
+        if (section.onItemRemove(position)) {
+            event.setCancelled(true);
+        }
+    }
+
+    /**
+     * Dispatches an amount action
+     * @param event The event
+     * @param section The section
+     * @param position The position
+     * @param amount The new amount
+     */
+    public void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
+        if (section.onItemAmount(position, amount)) {
+            event.setCancelled(true);
         }
     }
 
@@ -324,6 +355,11 @@ public abstract class GUI implements Listener {
         this.removeItems(view, cancelledSlots);
     }
 
+    /**
+     * Removes Items from the View
+     * @param view The view
+     * @param cancelledSlots The cancelled slots
+     */
     private void removeItems(GUIView view, Map<Integer, ItemStack> cancelledSlots) {
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             for (Integer slot : cancelledSlots.keySet()) {
@@ -336,6 +372,11 @@ public abstract class GUI implements Listener {
         }, 1);
     }
 
+    /**
+     * Returns cancelled items to the cursor
+     * @param event The event
+     * @param cancelledSlots The cancelled slots
+     */
     private void returnToCursor(InventoryDragEvent event, Map<Integer, ItemStack> cancelledSlots) {
         ItemStack cursor = event.getCursor();
         for (Integer slot : cancelledSlots.keySet()) {
@@ -349,6 +390,12 @@ public abstract class GUI implements Listener {
         event.setCursor(cursor);
     }
 
+    /**
+     * Calculates the cancelled slots
+     * @param event The event
+     * @param sectionSlots All slots according to the sections
+     * @return The cancelled slots
+     */
     private Map<Integer, ItemStack> getCancelledSlots(InventoryDragEvent event, Map<GUISection.SearchData, Integer> sectionSlots) {
         Map<Integer, ItemStack> removedItems = new HashMap<>();
         for (GUISection.SearchData searchData : sectionSlots.keySet()) {
@@ -370,6 +417,11 @@ public abstract class GUI implements Listener {
         return removedItems;
     }
 
+    /**
+     * Used to get sections for each slot
+     * @param guiSlots The slots
+     * @return The sections that belong to the slots
+     */
     private Map<GUISection.SearchData, Integer> getSections(List<Integer> guiSlots) {
         Map<GUISection.SearchData, Integer> sectionSlots = new HashMap<>();
         for (Integer guiSlot : guiSlots) {

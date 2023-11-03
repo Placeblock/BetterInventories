@@ -98,10 +98,20 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
         }
     }
 
+    /**
+     * Returns an item for a given slot
+     * @param slot The slot
+     * @return The item or null
+     */
     public GUIItem getItem(int slot) {
         return this.getItem(this.slotToVector(slot));
     }
 
+    /**
+     * Returns an item for a given position
+     * @param position The position
+     * @return The item or null
+     */
     public GUIItem getItem(Vector2d position) {
         Collection<GUIItem> sections = this.getSections(position);
         for (GUIItem section : sections) {
