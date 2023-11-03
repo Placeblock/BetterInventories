@@ -139,4 +139,30 @@ public abstract class GUIPane extends GUISection {
     public boolean onItemAmount(Vector2d position, int amount) {
         return true;
     }
+
+    /**
+     * Called when an item is provided by an inventory MOVE_TO_OTHER_INVENTORY event
+     * @param itemStack The provided item. Method reduces the amount of the item by the number that got accepted.
+     */
+    public abstract void onItemProvide(ItemStack itemStack);
+
+    /**
+     * Used to provide items recursively
+     * @param itemStack The provided item. Method reduces the amount of the item by the number that got accepted.
+     */
+    public void provideItem(ItemStack itemStack) {
+        this.onItemProvide(itemStack);
+        if (itemStack.getAmount() < 0) {
+            throw new IllegalStateException("A GUIPane accepted more items of the provided itemstack then the itemstack holds");
+        }
+        if (itemStack.getAmount() == 0) {
+            return;
+        }
+        for (GUISection child : this.getChildren()) {
+            if (child instanceof GUIPane pane) {
+                pane.provideItem(itemStack);
+                if (itemStack.getAmount()==0) break;
+            }
+        }
+    }
 }

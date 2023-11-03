@@ -94,4 +94,9 @@ public class AnvilGUI extends GUI {
             default -> null;
         };
     }
+
+    @Override
+    public void provideItem(ItemStack itemStack) {
+        // Currently AnvilGUI doesn't support item offers
+    }
 }

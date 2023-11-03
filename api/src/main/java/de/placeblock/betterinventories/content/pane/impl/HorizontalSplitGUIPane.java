@@ -98,6 +98,11 @@ public class HorizontalSplitGUIPane extends GUIPane {
         return children;
     }
 
+    @Override
+    public void onItemProvide(ItemStack item) {
+
+    }
+
     /**
      * Renders the Pane on a list
      * @return The List

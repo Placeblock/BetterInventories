@@ -78,6 +78,10 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
         return this.content.stream().map(ChildData::getChild).collect(Collectors.toSet());
     }
 
+    @Override
+    public void onItemProvide(ItemStack item) {
+    }
+
     /**
      * Renders the Pane on a list
      * @return The List
@@ -140,9 +144,9 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     /**
-     * @return The next empty slot
+     * @return The next empty slot or -1
      */
-    private int getNextEmptySlot() {
+    public int getNextEmptySlot() {
         for (int i = 0; i < this.getSlots(); i++) {
             if (this.search(this.slotToVector(i), false) == null) {
                 return i;

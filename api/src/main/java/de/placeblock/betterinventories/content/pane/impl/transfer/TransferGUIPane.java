@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * GUIPane which allows Items to be inserted and taken out
@@ -81,15 +83,48 @@ public class TransferGUIPane extends SimpleItemGUIPane {
         if (this.locked.contains(position)) return true;
         this.locked.add(position);
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
-            for (GUIItem section : this.getSections(position)) {
-                ItemStack itemStack = section.getItemStack();
-                itemStack.setAmount(amount);
-                section.setItemStack(itemStack);
-            }
+            GUIItem item = this.getItem(position);
+            item.getItemStack().setAmount(amount);
             this.getGui().update();
             this.locked.remove(position);
         }, 1);
         return false;
+    }
+
+    @Override
+    public void onItemProvide(ItemStack itemStack) {
+        ItemStack itemClone = itemStack.clone();
+        Map<Integer, Integer> acceptedItems = new HashMap<>();
+        for (int slot = 0; slot < this.getSlots() && itemStack.getAmount() > 0; slot++) {
+            GUIItem item = this.getItem(slot);
+            int accepted;
+            if (item != null) {
+                ItemStack currentItemStack = item.getItemStack();
+                int currentAmount = currentItemStack.getAmount();
+                if (!currentItemStack.isSimilar(itemStack) || currentAmount >= 64) continue;
+                accepted = Math.min(64-currentAmount, itemStack.getAmount());
+            } else {
+                accepted = Math.min(64, itemStack.getAmount());
+            }
+            acceptedItems.put(slot, accepted);
+            itemStack.setAmount(itemStack.getAmount()-accepted);
+            this.locked.add(this.slotToVector(slot));
+        }
+        Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
+            for (Integer slot : acceptedItems.keySet()) {
+                int amount = acceptedItems.get(slot);
+                GUIItem item = this.getItem(slot);
+                if (item == null) {
+                    ItemStack slotItem = itemClone.clone();
+                    slotItem.setAmount(amount);
+                    this.setSectionAt(slot, new GUIItem(this.getGui(), slotItem));
+                } else {
+                    item.getItemStack().setAmount(amount);
+                }
+                this.getGui().update();
+                this.locked.remove(this.slotToVector(slot));
+            }
+        }, 1);
     }
 
 }

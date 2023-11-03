@@ -87,6 +87,11 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
         return this.canvas.search(slot, onlyPanes);
     }
 
+    @Override
+    public void provideItem(ItemStack item) {
+        this.canvas.provideItem(item);
+    }
+
     /**
      * @return The main canvas
      */

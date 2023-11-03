@@ -15,10 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -162,6 +159,12 @@ public abstract class GUI implements Listener {
      */
     public abstract GUISection.SearchData searchSection(int slot, boolean onlyPanes);
 
+    /**
+     * Used to provide items on MOVE_TO_OTHER_INVENTORY click event
+     * @param itemStack The ItemStack that is provided
+     */
+    public abstract void provideItem(ItemStack itemStack);
+
 
     //  UPDATE AND RENDERING
 
@@ -205,7 +208,21 @@ public abstract class GUI implements Listener {
             return;
         }
         view = this.getView(event.getClickedInventory());
-        if (view == null) return;
+        if (view == null) {
+            // Item Offer
+            if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                System.out.println(event.getCurrentItem());
+                ItemStack offerItem = Objects.requireNonNull(event.getCurrentItem()).clone();
+                this.provideItem(offerItem);
+                System.out.println(offerItem);
+                if (offerItem.getAmount() == event.getCurrentItem().getAmount()) {
+                    event.setCancelled(true);
+                } else {
+                    event.getCurrentItem().setAmount(offerItem.getAmount());
+                }
+            }
+            return;
+        }
         int slot = event.getSlot();
         GUISection.SearchData searchData = this.searchSection(slot, true);
         if (searchData == null) {
