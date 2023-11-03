@@ -211,9 +211,8 @@ public abstract class GUI implements Listener {
             if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                 ItemStack offerItem = Objects.requireNonNull(event.getCurrentItem()).clone();
                 this.provideItem(offerItem);
-                if (offerItem.getAmount() == event.getCurrentItem().getAmount()) {
-                    event.setCancelled(true);
-                } else {
+                event.setCancelled(true);
+                if (offerItem.getAmount() != event.getCurrentItem().getAmount()) {
                     event.getCurrentItem().setAmount(offerItem.getAmount());
                 }
             }
