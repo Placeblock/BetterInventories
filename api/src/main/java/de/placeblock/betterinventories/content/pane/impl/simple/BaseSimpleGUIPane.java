@@ -181,17 +181,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @return Whether the section existed
      */
     public boolean removeSection(Vector2d position) {
-        ChildData<C> removal = null;
-        for (ChildData<C> childData : this.content) {
-            if (childData.getPosition().equals(position)) {
-                removal = childData;
-            }
-        }
-        if (removal != null) {
-            this.content.remove(removal);
-            return true;
-        }
-        return false;
+        return this.content.removeIf(childData -> childData.getPosition().equals(position));
     }
 
     /**
@@ -227,7 +217,11 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @return this
      */
     public S setSectionAt(Vector2d position, C section) {
-        this.content.add(new ChildData<>(position, section));
+        if (section == null) {
+            this.removeSection(position);
+        } else {
+            this.content.add(new ChildData<>(position, section));
+        }
         return (S) this;
     }
 

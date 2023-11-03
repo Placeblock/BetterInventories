@@ -211,10 +211,10 @@ public abstract class GUI implements Listener {
             if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                 ItemStack offerItem = Objects.requireNonNull(event.getCurrentItem()).clone();
                 this.provideItem(offerItem);
-                event.setCancelled(true);
                 if (offerItem.getAmount() != event.getCurrentItem().getAmount()) {
                     event.getCurrentItem().setAmount(offerItem.getAmount());
                 }
+                event.setCancelled(true);
             }
             return;
         }
@@ -247,7 +247,28 @@ public abstract class GUI implements Listener {
                     dispatchAmount(event, section, pos, currentItem.getAmount()-1);
                 }
             }
-            case MOVE_TO_OTHER_INVENTORY, PICKUP_ALL, DROP_ALL_SLOT -> dispatchRemove(event, section, pos);
+            case MOVE_TO_OTHER_INVENTORY -> {
+                Inventory bottomInventory = event.getView().getBottomInventory();
+                if (bottomInventory.firstEmpty() != -1) {
+                    dispatchRemove(event, section, pos);
+                    return;
+                }
+                assert currentItem != null;
+                int availible = 0;
+                for (ItemStack item : bottomInventory.getContents()) {
+                    if (currentItem.isSimilar(item)) {
+                        assert item != null;
+                        availible += 64 - item.getAmount();
+                    }
+                }
+                if (availible == 0) return;
+                if (currentItem.getAmount() > availible) {
+                    dispatchAmount(event, section, pos, currentItem.getAmount()-availible);
+                } else {
+                    dispatchRemove(event, section, pos);
+                }
+            }
+            case PICKUP_ALL, DROP_ALL_SLOT -> dispatchRemove(event, section, pos);
             case PLACE_ALL -> {
                 if (currentItem == null) {
                     int newAmount = event.getCursor().getAmount();
