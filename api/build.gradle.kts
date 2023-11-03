@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.codelix"
-version = "1.4.0"
+version = "1.4.1"
 
 var artifactID = "BetterInventories"
 

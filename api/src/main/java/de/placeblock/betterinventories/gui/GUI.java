@@ -293,6 +293,10 @@ public abstract class GUI implements Listener {
                     dispatchRemove(event, section, pos);
                 }
             }
+            case SWAP_WITH_CURSOR -> {
+                dispatchRemove(event, section, pos);
+                dispatchAdd(event, section, pos, event.getCursor(), event.getCursor().getAmount());
+            }
             case HOTBAR_MOVE_AND_READD -> {
                 ItemStack hotbarItem = getHotbarItem(event);
                 if (hotbarItem.isSimilar(currentItem)) {
