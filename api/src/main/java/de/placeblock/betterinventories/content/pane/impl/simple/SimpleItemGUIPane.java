@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.content.pane.impl.simple;
 
-import de.placeblock.betterinventories.builder.content.SimpleItemGUIPaneBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
@@ -11,8 +10,6 @@ import java.util.function.Function;
 
 /**
  * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}s.
- * <br>
- * Builder: {@link SimpleItemGUIPaneBuilder}
  */
 @SuppressWarnings("unused")
 public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIPane> {
@@ -113,9 +110,6 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
         return null;
     }
 
-    public static Builder builder(GUI gui) {
-        return new Builder(gui);
-    }
 
     public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleItemGUIPane> {
         public Builder(GUI gui) {

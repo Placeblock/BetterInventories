@@ -23,6 +23,6 @@ public class SimpleItemGUIPaneBuilder extends BaseGUIPaneBuilder<SimpleItemGUIPa
      */
     @Override
     public SimpleItemGUIPane build() {
-        return new SimpleItemGUIPane(this.getGui(), getBestMinSize(), this.getBestMaxSize());
+        return new SimpleItemGUIPane(this.getGui(), getBestMinSize(), this.getBestMaxSize(), true);
     }
 }

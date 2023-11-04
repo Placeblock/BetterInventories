@@ -154,7 +154,7 @@ public abstract class GUISection implements Sizeable {
     public abstract boolean onItemAmount(Vector2d position, int amount);
 
     @RequiredArgsConstructor
-    public static abstract class Builder<B, P> {
+    public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> {
         private final GUI gui;
         private Vector2d size;
         private Vector2d minSize;
@@ -181,6 +181,9 @@ public abstract class GUISection implements Sizeable {
 
         protected Vector2d getMinSize() {
             if (this.minSize == null) {
+                if (this.size == null) {
+                    throw new IllegalStateException("minSize and size null");
+                }
                 return this.size;
             }
             return this.minSize;
@@ -188,6 +191,9 @@ public abstract class GUISection implements Sizeable {
 
         protected Vector2d getMaxSize() {
             if (this.maxSize == null) {
+                if (this.size == null) {
+                    throw new IllegalStateException("maxSize and size null");
+                }
                 return this.size;
             }
             return this.maxSize;

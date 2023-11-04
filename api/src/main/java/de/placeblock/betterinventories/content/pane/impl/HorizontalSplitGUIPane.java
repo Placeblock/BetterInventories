@@ -1,7 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl;
 
 import de.placeblock.betterinventories.Sizeable;
-import de.placeblock.betterinventories.builder.content.HorizontalSplitGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.pane.GUIPane;
@@ -16,8 +15,6 @@ import java.util.List;
 /**
  * A {@link GUIPane} with an upper and lower pane.
  * Renders the lower pane always below the upper pane.
- * <br>
- * Builder: {@link HorizontalSplitGUIPaneBuilder}
  */
 @Setter
 public class HorizontalSplitGUIPane extends GUIPane {
@@ -36,8 +33,10 @@ public class HorizontalSplitGUIPane extends GUIPane {
      * @param minSize The minimum size of the Pane
      * @param maxSize The maximum size of the Pane
      */
-    public HorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+    public HorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, GUIPane upperPane, GUIPane lowerPane) {
         super(gui, minSize, maxSize);
+        this.upperPane = upperPane;
+        this.lowerPane = lowerPane;
     }
 
     /**
@@ -155,6 +154,36 @@ public class HorizontalSplitGUIPane extends GUIPane {
             } else {
                 searchData.setSection(this);
             }
+        }
+    }
+
+
+    public static class Builder extends GUIPane.Builder<Builder, HorizontalSplitGUIPane> {
+        private GUIPane upperPane;
+        private GUIPane lowerPane;
+
+        public Builder(GUI gui) {
+            super(gui);
+        }
+
+        public Builder upperPane(GUIPane upperPane) {
+            this.upperPane = upperPane;
+            return this;
+        }
+
+        public Builder lowerPane(GUIPane lowerPane) {
+            this.lowerPane = lowerPane;
+            return this;
+        }
+
+        @Override
+        public HorizontalSplitGUIPane build() {
+            return new HorizontalSplitGUIPane(this.getGUI(), this.getMinSize(), this.getMaxSize(), this.upperPane, this.lowerPane);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
         }
     }
 }

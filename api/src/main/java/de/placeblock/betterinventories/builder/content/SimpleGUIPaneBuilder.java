@@ -23,6 +23,6 @@ public class SimpleGUIPaneBuilder extends BaseGUIPaneBuilder<SimpleGUIPane, Simp
      */
     @Override
     public SimpleGUIPane build() {
-        return new SimpleGUIPane(this.getGui(), getBestMinSize(), this.getBestMaxSize());
+        return new SimpleGUIPane(this.getGui(), getBestMinSize(), this.getBestMaxSize(), true);
     }
 }
