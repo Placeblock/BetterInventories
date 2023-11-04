@@ -5,6 +5,7 @@ import be.seeseemelk.mockbukkit.MockPlugin;
 import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
 import de.placeblock.betterinventories.builder.content.SimpleGUIPaneBuilder;
 import de.placeblock.betterinventories.builder.gui.ChestGUIBuilder;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
@@ -44,7 +45,9 @@ public class SimpleGUIPaneTest {
                 .build();
         pane.setSectionAt(2, button);
         chestGUI.update();
-        assert chestGUI.getClickedSection(2).equals(button);
+        SearchData searchData = new SearchData(2, (s) -> true);
+        chestGUI.searchSection(searchData);
+        assert searchData.getSection().equals(button);
     }
 
 }

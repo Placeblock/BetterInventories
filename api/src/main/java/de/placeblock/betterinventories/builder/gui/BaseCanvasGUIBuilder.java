@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
  * @param <G> The GUI type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseCanvasGUIBuilder<P extends GUIPane, G extends BaseCanvasGUI<P>, B extends BaseCanvasGUIBuilder<P, G, B>> extends BaseGUIBuilder<G, B> {
     /**

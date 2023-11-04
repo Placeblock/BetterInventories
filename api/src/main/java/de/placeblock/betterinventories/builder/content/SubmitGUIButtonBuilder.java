@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 /**
  * Builder for creating SubmitGUIButtons
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class SubmitGUIButtonBuilder extends BaseGUIButtonBuilder<SubmitGUIButton, SubmitGUIButtonBuilder>{
     /**

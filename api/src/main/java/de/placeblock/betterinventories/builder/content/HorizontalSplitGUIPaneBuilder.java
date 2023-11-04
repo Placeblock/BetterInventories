@@ -8,6 +8,7 @@ import lombok.Getter;
 /**
  * Builder for creating HorizontalSplitGUIPanes
  */
+@Deprecated(forRemoval = true)
 @Getter
 @SuppressWarnings("unused")
 public class HorizontalSplitGUIPaneBuilder extends BaseGUIPaneBuilder<HorizontalSplitGUIPane, HorizontalSplitGUIPaneBuilder> {

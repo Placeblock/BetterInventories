@@ -22,17 +22,6 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
         this(plugin, title, height, height);
     }
 
-    /**
-     * Creates a new ChestGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param height The height of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
-     */
-    @SuppressWarnings("unused")
-    public ChestGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
-        this(plugin, title, height, height, registerDefaultHandlers);
-    }
 
     /**
      * Creates a new ChestGUI
@@ -42,19 +31,8 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
      * @param maxHeight The maximum height of the GUI
      */
     public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
-        this(plugin, title, minHeight, maxHeight, true);
-    }
-
-    /**
-     * Creates a new ChestGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param minHeight The minimum height of the GUI
-     * @param maxHeight The maximum height of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
-     */
-    public ChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight, boolean registerDefaultHandlers) {
-        super(plugin, title, minHeight, maxHeight, registerDefaultHandlers);
+        super(plugin, title, minHeight, maxHeight);
         this.setCanvas(new SimpleGUIPane(this, this.getMinSize(), this.getMaxSize(), true));
     }
+
 }

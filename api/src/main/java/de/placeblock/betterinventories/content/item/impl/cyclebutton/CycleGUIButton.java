@@ -14,6 +14,7 @@ import java.util.List;
  * GUIButton which cycles through values of an Enum
  * @param <E> The Enum
  */
+@SuppressWarnings("unused")
 public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
     /**
      * All Values of the Enum

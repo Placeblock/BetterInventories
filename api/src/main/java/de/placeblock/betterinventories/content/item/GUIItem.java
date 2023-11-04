@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.item;
 
 import de.placeblock.betterinventories.builder.content.GUIItemBuilder;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -50,24 +51,31 @@ public class GUIItem extends GUISection {
     }
 
     /**
-     * Returns the GUISection at a specific slot.
-     * For GUIItems it will always return the GUIItem itself.
-     * @param slot The slot
-     * @return The GUISection
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public GUISection getSectionAt(int slot) {
-        return this;
+    public void search(SearchData searchData) {
+        searchData.setRelativePos(new Vector2d());
+        searchData.setSection(this);
     }
 
-    /**
-     * Returns the GUISection at a specific position.
-     * For GUIItems it will always return the GUIItem itself.
-     * @param position The position
-     * @return The GUISection
-     */
+
     @Override
-    public GUISection getSectionAt(Vector2d position) {
-        return this;
+    public void onItemClick(ClickData data) {}
+
+    @Override
+    public boolean onItemAdd(Vector2d position, ItemStack itemStack) {
+        return true;
+    }
+
+    @Override
+    public boolean onItemRemove(Vector2d position) {
+        return true;
+    }
+
+    @Override
+    public boolean onItemAmount(Vector2d position, int amount) {
+        return true;
     }
 }

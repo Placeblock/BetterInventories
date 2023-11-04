@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -29,10 +29,9 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
      */
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
-        super(plugin, title, type, registerDefaultHandlers);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
+        super(plugin, title, type);
     }
 
     /**
@@ -79,13 +78,19 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     }
 
     /**
-     * Uses recursion to find the GUISection which was clicked
-     * @param slot The slot that got clicked
-     * @return The section which lies at the specific slot, or null if there is no section.
+     * Searches the GUI recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public GUISection getClickedSection(int slot) {
-        return this.canvas.getSectionAt(slot);
+    public void searchSection(SearchData searchData) {
+        Vector2d relativePos = this.canvas.slotToVector(searchData.getSlot());
+        searchData.setRelativePos(relativePos);
+        this.canvas.search(searchData);
+    }
+
+    @Override
+    public void provideItem(ItemStack item) {
+        this.canvas.provideItem(item);
     }
 
     /**
@@ -95,4 +100,5 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     public C getCanvas() {
         return this.canvas;
     }
+
 }

@@ -1,28 +1,20 @@
 package de.placeblock.betterinventories.gui;
 
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
-import de.placeblock.betterinventories.content.GUISection;
-import de.placeblock.betterinventories.interaction.HandlerPriority;
-import de.placeblock.betterinventories.interaction.InteractionHandler;
-import de.placeblock.betterinventories.interaction.impl.ButtonClickHandler;
-import de.placeblock.betterinventories.interaction.impl.CancelInteractionHandler;
+import de.placeblock.betterinventories.content.SearchData;
+import de.placeblock.betterinventories.gui.listener.GUIItemListener;
+import de.placeblock.betterinventories.gui.listener.GUIListener;
 import lombok.Getter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.function.Function;
 
 
 /**
@@ -33,7 +25,7 @@ import java.util.function.Function;
  */
 @Getter
 @SuppressWarnings("unused")
-public abstract class GUI implements Listener {
+public abstract class GUI {
     /**
      * The plugin
      */
@@ -59,10 +51,8 @@ public abstract class GUI implements Listener {
      */
     private List<ItemStack> content = new ArrayList<>();
 
-    /**
-     * The registered InteractionHandlers
-     */
-    private final SortedSetMultimap<HandlerPriority, InteractionHandler> interactionHandlers = TreeMultimap.create(Comparator.comparingInt(HandlerPriority::ordinal), Comparator.comparing(Object::hashCode));
+    private final GUIListener guiListener;
+    private final GUIItemListener itemListener;
 
     /**
      * Creates a new GUI
@@ -71,24 +61,11 @@ public abstract class GUI implements Listener {
      * @param type The type of the GUI
      */
     public GUI(Plugin plugin, TextComponent title, InventoryType type) {
-        this(plugin, title, type, true);
-    }
-
-    /**
-     * Creates a new GUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
-     */
-    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
-        if (registerDefaultHandlers) {
-            this.registerInteractionHandler(HandlerPriority.HIGH, new CancelInteractionHandler(this));
-            this.registerInteractionHandler(HandlerPriority.LOW, new ButtonClickHandler(this));
-        }
+        this.guiListener = new GUIListener(this);
+        this.itemListener = new GUIItemListener(this);
     }
 
     /**
@@ -108,7 +85,9 @@ public abstract class GUI implements Listener {
     @SuppressWarnings("UnusedReturnValue")
     public GUIView showPlayer(Player player) {
         if (this.views.size() == 0) {
-            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+            PluginManager pluginManager = this.plugin.getServer().getPluginManager();
+            pluginManager.registerEvents(this.guiListener, this.plugin);
+            pluginManager.registerEvents(this.itemListener, this.plugin);
         }
         if (this.getPlayers().contains(player)) return null;
         GUIView view = new GUIView(player, this.createBukkitInventory());
@@ -155,7 +134,7 @@ public abstract class GUI implements Listener {
      * Reloads all Views (Removes all Players and adds all Players).
      * Needed when resizing the GUI or changing the GUI's title
      */
-    public void reloadViews() {
+    protected void reloadViews() {
         List<Player> players = this.getPlayers();
         List<GUIView> views = new ArrayList<>(this.getViews());
         for (GUIView view : views) {
@@ -175,14 +154,20 @@ public abstract class GUI implements Listener {
      * Renders the GUI on a list
      * @return The List
      */
-    public abstract List<ItemStack> renderContent();
+    protected abstract List<ItemStack> renderContent();
 
     /**
-     * Returns the GUISection at a specific slot.
-     * @param slot The slot
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
-    public abstract GUISection getClickedSection(int slot);
+    public abstract void searchSection(SearchData searchData);
+
+    /**
+     * Used to provide items to GUIPanes. The amount of the ItemStack
+     * will be modified if a pane accepted an ItemStack.
+     * @param itemStack The ItemStack that is provided.
+     */
+    public abstract void provideItem(ItemStack itemStack);
 
 
     //  UPDATE AND RENDERING
@@ -198,80 +183,16 @@ public abstract class GUI implements Listener {
     /**
      * Renders the GUI
      */
-    protected void render() {
+    private void render() {
         this.content = this.renderContent();
     }
 
     /**
      * Updates the content of all Views
      */
-    protected void updateViews() {
+    private void updateViews() {
         for (GUIView view : this.views) {
             view.update(this.content);
-        }
-    }
-
-    //  INTERACTION HANDLING
-
-    /**
-     * Registers a new InteractionHandler.
-     * InteractionHandlers will receive Inventory Click- and DragEvents
-     * @param priority The priority for the new Handler.
-     * @param handler The handler
-     */
-    public void registerInteractionHandler(HandlerPriority priority, InteractionHandler handler) {
-        this.interactionHandlers.put(priority, handler);
-    }
-
-    /**
-     * Unregisters a new InteractionHandler
-     * @param priority The priority of the Handler.
-     * @param handler The handler
-     */
-    public void unregisterInteractionHandler(HandlerPriority priority, InteractionHandler handler) {
-        this.interactionHandlers.remove(priority, handler);
-    }
-
-    /**
-     * Called by Bukkit when Player clicks an Inventory
-     * Calls the InteractionHandlers
-     * @param event The Event
-     */
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player player)) return;
-        GUIView view = this.getView(event.getInventory());
-        if (view == null) return;
-
-        this.handleInteraction(i -> i.onClick(event));
-    }
-
-    /**
-     * Called by Bukkit when Player drags an Inventory
-     * Calls the InteractionHandlers
-     * @param event The Event
-     */
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent event) {
-        if (!(event.getWhoClicked() instanceof Player player)) return;
-        GUIView view = this.getView(event.getInventory());
-        if (view == null) return;
-
-        this.handleInteraction(i -> i.onDrag(event));
-    }
-
-    /**
-     * Calls the InteractionHandlers
-     * @param handler Handler callback. Handler calling breaks if Handler callback returns true
-     */
-    private void handleInteraction(Function<InteractionHandler, Boolean> handler) {
-        outer:
-        for (HandlerPriority priority : this.interactionHandlers.keySet()) {
-            SortedSet<InteractionHandler> pInteractionHandlers = this.interactionHandlers.get(priority);
-            for (InteractionHandler interactionHandler : pInteractionHandlers) {
-                boolean processed = handler.apply(interactionHandler);
-                if (processed) break outer;
-            }
         }
     }
 
@@ -279,27 +200,15 @@ public abstract class GUI implements Listener {
     //  HANDLE GUI REMOVAL
 
     /**
-     * Called by Bukkit when a Player closes an Inventory
-     * @param event The Event
-     */
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player player)) return;
-        GUIView view = this.getView(event.getInventory());
-        if (view != null) {
-            this.removePlayer(view);
-        }
-    }
-
-    /**
      * Removes a player without closing the Inventory of the Player
      * @param view The View of the Player
      */
-    private void removePlayer(GUIView view) {
+    public void removePlayer(GUIView view) {
         this.views.remove(view);
         this.onClose(view.getPlayer());
         if (this.views.size() == 0) {
-            HandlerList.unregisterAll(this);
+            HandlerList.unregisterAll(this.guiListener);
+            HandlerList.unregisterAll(this.itemListener);
         }
     }
 

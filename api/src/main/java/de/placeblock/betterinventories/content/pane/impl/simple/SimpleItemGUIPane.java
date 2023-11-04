@@ -6,6 +6,7 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 /**
@@ -95,5 +96,27 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
             Vector2d newPos = transformation.apply(childData.getPosition());
             childData.setPosition(newPos);
         }
+    }
+
+    /**
+     * Returns an item for a given slot
+     * @param slot The slot
+     * @return The item or null
+     */
+    public GUIItem getItem(int slot) {
+        return this.getItem(this.slotToVector(slot));
+    }
+
+    /**
+     * Returns an item for a given position
+     * @param position The position
+     * @return The item or null
+     */
+    public GUIItem getItem(Vector2d position) {
+        Collection<GUIItem> sections = this.getSections(position);
+        for (GUIItem section : sections) {
+            return section;
+        }
+        return null;
     }
 }
