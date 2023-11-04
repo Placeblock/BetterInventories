@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unchecked")
-public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
+public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
     /**
      * The content currently added to this Pane
      */
@@ -233,5 +233,21 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
          * The child {@link GUISection}
          */
         private final C child;
+    }
+
+    public static abstract class Builder<B extends Builder<B, P>, P extends BaseSimpleGUIPane<?, ?>> extends GUISection.Builder<B, P> {
+        private boolean autoSize;
+        public Builder(GUI gui) {
+            super(gui);
+        }
+
+        public B autoSize(boolean autoSize) {
+            this.autoSize = autoSize;
+            return (B) this;
+        }
+
+        protected boolean isAutoSize() {
+            return this.autoSize;
+        }
     }
 }

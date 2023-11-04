@@ -15,15 +15,7 @@ import java.util.function.Function;
  */
 @SuppressWarnings("unused")
 public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIPane> {
-    /**
-     * Creates a new SimpleGUIPane
-     * @param gui The GUI
-     * @param minSize The minimum size of the Pane
-     * @param maxSize The maximum size of the Pane
-     */
-    public SimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
-        this(gui, minSize, maxSize, false);
-    }
+
     /**
      * Creates a new SimpleGUIPane
      * @param gui The GUI
@@ -32,6 +24,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
+    @Deprecated
     public SimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
@@ -94,6 +87,25 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
         for (ChildData<GUIItem> childData : this.content) {
             Vector2d newPos = transformation.apply(childData.getPosition());
             childData.setPosition(newPos);
+        }
+    }
+
+    public static Builder builder(GUI gui) {
+        return new Builder(gui);
+    }
+
+    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleItemGUIPane> {
+        public Builder(GUI gui) {
+            super(gui);
+        }
+
+        @Override
+        public SimpleItemGUIPane build() {
+            return new SimpleItemGUIPane(this.getGUI(), this.getMinSize(), this.getMaxSize(), this.isAutoSize());
+        }
+        @Override
+        protected SimpleItemGUIPane.Builder self() {
+            return this;
         }
     }
 }

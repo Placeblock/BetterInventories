@@ -5,6 +5,7 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -129,5 +130,54 @@ public abstract class GUISection implements Sizeable {
      */
     public int getWidth() {
         return this.size.getX();
+    }
+
+    @RequiredArgsConstructor
+    public static abstract class Builder<B, P> {
+        private final GUI gui;
+        private Vector2d size;
+        private Vector2d minSize;
+        private Vector2d maxSize;
+
+        public B size(Vector2d size) {
+            this.size = size;
+            return self();
+        }
+
+        public B minSize(Vector2d minSize) {
+            this.minSize = minSize;
+            return self();
+        }
+
+        public B maxSize(Vector2d maxSize) {
+            this.maxSize = maxSize;
+            return self();
+        }
+
+        protected GUI getGUI() {
+            return this.gui;
+        }
+
+        protected Vector2d getMinSize() {
+            if (this.minSize == null) {
+                return this.size;
+            }
+            return this.minSize;
+        }
+
+        protected Vector2d getMaxSize() {
+            if (this.maxSize == null) {
+                return this.size;
+            }
+            return this.maxSize;
+        }
+
+        protected Vector2d getSize() {
+            return this.size;
+        }
+
+        public abstract P build();
+
+        protected abstract B self();
     }
 }

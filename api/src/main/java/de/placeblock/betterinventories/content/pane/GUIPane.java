@@ -120,4 +120,10 @@ public abstract class GUIPane extends GUISection {
             }
         }
     }
+
+    public static abstract class Builder<B extends Builder<B, P>, P extends GUIPane> extends GUISection.Builder<B, P> {
+        public Builder(GUI gui) {
+            super(gui);
+        }
+    }
 }
