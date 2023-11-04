@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.impl.textinput.TextInputGUI;
@@ -78,20 +78,15 @@ public class AnvilGUI extends GUI {
     }
 
     /**
-     * Returns the GUISection at a specific slot.
-     * @param slot The slot
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public GUISection.SearchData searchSection(int slot, boolean onlyPanes) {
-        if (onlyPanes) {
-            throw new IllegalStateException("Cannot search for panes in anvil");
-        }
-        return switch (slot) {
-            case 0 -> this.inputItem.search(0, true);
-            case 1 -> this.additionalItem.search(0, true);
-            case 2 -> this.resultItem.search(0, true);
-            default -> null;
+    public void searchSection(SearchData searchData) {
+        switch (searchData.getSlot()) {
+            case 0 -> this.inputItem.search(searchData);
+            case 1 -> this.additionalItem.search(searchData);
+            case 2 -> this.resultItem.search(searchData);
         };
     }
 

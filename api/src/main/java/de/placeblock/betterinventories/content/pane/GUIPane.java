@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -89,16 +88,14 @@ public abstract class GUIPane extends GUISection {
     /**
      * Can be overridden and is only called when the size of this GUIPane really changes.
      */
-    public void onSizeChange() {
-
-    }
+    public void onSizeChange() {}
 
     /**
      * Implemented by GUIPanes
      * Should return all children sections
      * @return All child sections
      */
-    abstract public Set<GUISection> getChildren();
+    abstract public List<GUISection> getChildren();
 
     /**
      * Renders a child section at a specific position on a list

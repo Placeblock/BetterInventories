@@ -7,6 +7,7 @@ import de.placeblock.betterinventories.gui.GUI;
 /**
  * Builder for creating GUIButtons
  */
+@Deprecated(forRemoval = true)
 public class GUIButtonBuilder extends BaseGUIButtonBuilder<GUIButton, GUIButtonBuilder> {
 
     /**

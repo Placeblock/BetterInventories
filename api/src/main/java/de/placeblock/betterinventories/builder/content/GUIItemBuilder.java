@@ -6,6 +6,7 @@ import de.placeblock.betterinventories.gui.GUI;
 /**
  * Builder for GUIItems
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class GUIItemBuilder extends BaseGUIItemBuilder<GUIItem, GUIItemBuilder> {
     /**

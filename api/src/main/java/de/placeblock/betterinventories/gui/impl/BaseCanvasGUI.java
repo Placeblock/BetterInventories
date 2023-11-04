@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -78,13 +78,14 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     }
 
     /**
-     * Uses recursion to find the GUISection which was clicked
-     * @param slot The slot that got clicked
-     * @return The section which lies at the specific slot, or null if there is no section.
+     * Searches the GUI recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public GUISection.SearchData searchSection(int slot, boolean onlyPanes) {
-        return this.canvas.search(slot, onlyPanes);
+    public void searchSection(SearchData searchData) {
+        Vector2d relativePos = this.canvas.slotToVector(searchData.getSlot());
+        searchData.setRelativePos(relativePos);
+        this.canvas.search(searchData);
     }
 
     @Override

@@ -13,6 +13,9 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("unused")
 public abstract class IOGUIPane extends SimpleItemGUIPane {
 
+    //private final boolean input;
+    //private final boolean output;
+
     /**
      * Creates a new TransferGUIPane
      * @param gui The GUI for the Pane

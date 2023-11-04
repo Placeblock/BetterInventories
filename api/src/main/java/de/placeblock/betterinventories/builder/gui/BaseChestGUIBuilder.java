@@ -13,6 +13,7 @@ import java.util.List;
  * @param <G> The GUI type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @Getter
 @SuppressWarnings("unused")
 public abstract class BaseChestGUIBuilder<P extends GUIPane, G extends BaseChestGUI<P>, B extends BaseChestGUIBuilder<P, G, B>> extends BaseCanvasGUIBuilder<P, G, B> {

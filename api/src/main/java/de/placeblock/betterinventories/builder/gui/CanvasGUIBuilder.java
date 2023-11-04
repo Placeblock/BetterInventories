@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Builder for creating CanvasGUIs
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class CanvasGUIBuilder extends BaseCanvasGUIBuilder<SimpleGUIPane, CanvasGUI, CanvasGUIBuilder> {
 

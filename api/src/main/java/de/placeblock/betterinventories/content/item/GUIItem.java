@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.item;
 
 import de.placeblock.betterinventories.builder.content.GUIItemBuilder;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -50,35 +51,13 @@ public class GUIItem extends GUISection {
     }
 
     /**
-     * Returns the GUISection at a specific slot.
-     * For GUIItems it will always return the GUIItem itself.
-     * @param slot The slot
-     * @param onlyPanes Whether to return only panes even
-     *                  if there is an item at the clicked slot
-     * @return The GUISection
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public SearchData search(int slot, boolean onlyPanes) {
-        if (onlyPanes) {
-            throw new IllegalStateException("Cannot search for panes only in item");
-        }
-        return new SearchData(this, new Vector2d());
-    }
-
-    /**
-     * Returns the GUISection at a specific position.
-     * For GUIItems it will always return the GUIItem itself.
-     * @param position The position
-     * @param onlyPanes Whether to return only panes even
-     *                  if there is an item at the clicked slot
-     * @return The GUISection
-     */
-    @Override
-    public SearchData search(Vector2d position, boolean onlyPanes) {
-        if (onlyPanes) {
-            throw new IllegalStateException("Cannot search for panes only in item");
-        }
-        return new SearchData(this, position);
+    public void search(SearchData searchData) {
+        searchData.setRelativePos(new Vector2d());
+        searchData.setSection(this);
     }
 
 

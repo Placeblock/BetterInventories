@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <G> The type of GUI
  * @param <B> The type of Builder
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings({"unchecked", "unused"})
 @RequiredArgsConstructor
 public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, B>> implements Builder<G, B> {

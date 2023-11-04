@@ -15,6 +15,7 @@ import java.util.function.Function;
 /**
  * Builder for creating PaginatorBuilders
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class PaginatorBuilder extends BaseGUIPaneBuilder<PaginatorGUIPane, PaginatorBuilder> implements ItemAddable<PaginatorBuilder> {
     /**

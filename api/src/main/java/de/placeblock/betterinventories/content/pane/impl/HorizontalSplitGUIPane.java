@@ -3,15 +3,15 @@ package de.placeblock.betterinventories.content.pane.impl;
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.builder.content.HorizontalSplitGUIPaneBuilder;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * A {@link GUIPane} with an upper and lower pane.
@@ -87,8 +87,8 @@ public class HorizontalSplitGUIPane extends GUIPane {
      * @return All children (upper and lower Pane)
      */
     @Override
-    public Set<GUISection> getChildren() {
-        Set<GUISection> children = new HashSet<>();
+    public List<GUISection> getChildren() {
+        List<GUISection> children = new ArrayList<>();
         if (this.upperPane != null) {
             children.add(this.upperPane);
         }
@@ -130,23 +130,30 @@ public class HorizontalSplitGUIPane extends GUIPane {
     }
 
     /**
-     * Returns the GUISection at a specific position.
-     * @param position The position
-     * @param onlyPanes Whether to return only panes even
-     *                  if there is an item at the clicked slot
-     * @return The GUISection
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public SearchData search(Vector2d position, boolean onlyPanes) {
+    public void search(SearchData searchData) {
+        Vector2d relativePos = searchData.getRelativePos();
         if (this.upperPane == null) {
-            if (this.lowerPane == null) return null;
-            return this.lowerPane.search(position.subtract(this.getLowerPanePos()), onlyPanes);
+            if (this.lowerPane == null || !searchData.getPredicate().test(this.lowerPane)) {
+                searchData.setSection(this);
+                return;
+            }
+            searchData.addNode(this);
+            searchData.setRelativePos(relativePos.subtract(this.getLowerPanePos()));
+            this.lowerPane.search(searchData);
         } else {
-            if (this.lowerPane == null ||
-                position.getY() < this.upperPane.getHeight()) {
-                return this.upperPane.search(position, onlyPanes);
+            if ((this.lowerPane == null || relativePos.getY() < this.upperPane.getHeight()) && searchData.getPredicate().test(this.upperPane)) {
+                searchData.addNode(this);
+                this.upperPane.search(searchData);
+            } else if (searchData.getPredicate().test(this.lowerPane)) {
+                searchData.addNode(this);
+                searchData.setRelativePos(relativePos.subtract(this.getLowerPanePos()));
+                this.lowerPane.search(searchData);
             } else {
-                return this.lowerPane.search(position.subtract(this.getLowerPanePos()), onlyPanes);
+                searchData.setSection(this);
             }
         }
     }

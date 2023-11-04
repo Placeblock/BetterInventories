@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
  * Builder for ChestGUIs
  */
 @Getter
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class ChestGUIBuilder extends BaseChestGUIBuilder<SimpleGUIPane, ChestGUI, ChestGUIBuilder> {
     /**

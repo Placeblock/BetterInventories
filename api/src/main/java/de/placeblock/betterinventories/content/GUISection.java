@@ -6,7 +6,6 @@ import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -68,24 +67,10 @@ public abstract class GUISection implements Sizeable {
     public abstract List<ItemStack> render();
 
     /**
-     * Returns the GUISection at a specific slot.
-     * @param slot The slot
-     * @param onlyPanes Whether to return only panes even
-     *                  if there is an item at the clicked slot
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
-    public SearchData search(int slot, boolean onlyPanes) {
-        return this.search(this.slotToVector(slot), onlyPanes);
-    }
-
-    /**
-     * Returns the GUISection at a specific position.
-     * @param position The position
-     * @param onlyPanes Whether to return only panes even
-     *                  if there is an item at the clicked slot
-     * @return The GUISection at the slot or null
-     */
-    public abstract SearchData search(Vector2d position, boolean onlyPanes);
+    public abstract void search(SearchData searchData);
 
     /**
      * Converts a slot to a vector based on the width of this Section
@@ -166,20 +151,4 @@ public abstract class GUISection implements Sizeable {
      * @return Whether this action is allowed.
      */
     public abstract boolean onItemAmount(Vector2d position, int amount);
-
-    /**
-     * Returned by search methods.
-     */
-    @Getter
-    @RequiredArgsConstructor
-    public static class SearchData {
-        /**
-         * The found section.
-         */
-        private final GUISection section;
-        /**
-         * The position of the section relative to its parent.
-         */
-        private final Vector2d relativePos;
-    }
 }
