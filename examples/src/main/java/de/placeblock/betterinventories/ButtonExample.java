@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories;
 
-import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
+import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
@@ -8,6 +8,7 @@ import de.placeblock.betterinventories.gui.impl.CanvasGUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -21,8 +22,8 @@ public class ButtonExample extends CanvasGUI {
 
         // There are multiple ways to create Buttons
         this.canvas.setSectionAt(1, new ExampleButton(this)); // Example Button created below
-        this.canvas.setSectionAt(2, new GUIButtonBuilder(this) // Using Button Builder
-                .item(new ItemStack(Material.ACACIA_BUTTON))
+        this.canvas.setSectionAt(2, new GUIButton.Builder(this) // Using Button Builder
+                .itemStack(new ItemStack(Material.ACACIA_BUTTON))
                 .onClick(data -> {})
                 .build());
 
@@ -31,10 +32,11 @@ public class ButtonExample extends CanvasGUI {
     }
 
     // You don't have to derive the GUIButton, but because of re-usability it is recommended.
-    private static class ExampleButton extends GUIButton {
+    private static class ExampleButton extends BaseGUIButton {
         public ExampleButton(GUI gui) {
             // We use the ItemBuilder to create the ItemStack
-            super(gui, new ItemBuilder(Component.text("Test Button"), Material.ACACIA_BUTTON).build());
+            super(gui, new ItemBuilder(Component.text("Test Button"), Material.ACACIA_BUTTON).build(),
+                    0, Sound.UI_TOAST_IN, null);
         }
 
         @Override

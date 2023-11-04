@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories;
 
-import de.placeblock.betterinventories.builder.content.SimpleGUIPaneBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.impl.ChestGUI;
@@ -18,16 +17,16 @@ public class StructureExample extends ChestGUI {
         super(plugin, Component.text("Test title"), 3);
 
         // Create two Panes
-        SimpleGUIPane pane1 = new SimpleGUIPaneBuilder(this)
+        SimpleGUIPane pane1 = new SimpleGUIPane.Builder(this)
                 .size(new Vector2d(4, 3))
                 .build();
-        SimpleGUIPane pane2 = new SimpleGUIPaneBuilder(this)
+        SimpleGUIPane pane2 = new SimpleGUIPane.Builder(this)
                 .size(new Vector2d(4, 3))
                 .build();
 
         // Add Items to the panes
-        pane1.setSection(new GUIItem(this, new ItemStack(Material.ANVIL)));
-        pane2.setSectionAt(2, new GUIItem(this, new ItemStack(Material.CHEST)));
+        pane1.setSection(new GUIItem.Builder(this).itemStack(new ItemStack(Material.ANVIL)).build());
+        pane1.setSectionAt(2, new GUIItem.Builder(this).itemStack(new ItemStack(Material.ANVIL)).build());
 
         // Add the panes to the GUI
         this.canvas.setSectionAt(0, pane1);

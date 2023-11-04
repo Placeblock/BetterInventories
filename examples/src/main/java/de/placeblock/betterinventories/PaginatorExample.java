@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories;
 
-import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPosition;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
@@ -19,16 +18,19 @@ public class PaginatorExample extends ChestGUI {
         super(plugin, Component.text("Test Title"), 1, 6);
 
         // Creates the PaginatorGUIPane with the according Builder
-        PaginatorGUIPane paginator = new PaginatorBuilder(this)
+        PaginatorGUIPane paginator = new PaginatorGUIPane.Builder(this)
                 // Paginator uses min and max size of the canvas
                 .adoptMinMax(this.canvas)
                 // This line adds controls to the Paginator
-                .defaultControls(PaginatorControlsPosition.RIGHT)
+                .controls(PaginatorControlsPosition.RIGHT)
                 .build();
         // Adds the paginator to the canvas
         this.canvas.setSection(paginator);
         // Adds an item to the paginator
-        paginator.addItem(new GUIItem(this, new ItemStack(Material.STONE)));
+        GUIItem item = new GUIItem.Builder(this)
+                .itemStack(new ItemStack(Material.STONE))
+                .build();
+        paginator.addItem(item);
         // Don't forget to update the inventories
         this.update();
     }

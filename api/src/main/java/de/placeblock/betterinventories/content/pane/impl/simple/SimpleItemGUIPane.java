@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.simple;
 
-import de.placeblock.betterinventories.content.item.GUIItem;
+import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}s.
+ * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link BaseGUIItem}s.
  */
 @SuppressWarnings("unused")
-public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIPane> {
+public class SimpleItemGUIPane extends BaseSimpleGUIPane<BaseGUIItem, SimpleItemGUIPane> {
 
     /**
      * Creates a new SimpleGUIPane
@@ -22,7 +22,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public SimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
@@ -82,7 +82,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
      * @param transformation The transformation
      */
     private void applyTransformation(Function<Vector2d, Vector2d> transformation) {
-        for (ChildData<GUIItem> childData : this.content) {
+        for (ChildData<BaseGUIItem> childData : this.content) {
             Vector2d newPos = transformation.apply(childData.getPosition());
             childData.setPosition(newPos);
         }
@@ -93,7 +93,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
      * @param slot The slot
      * @return The item or null
      */
-    public GUIItem getItem(int slot) {
+    public BaseGUIItem getItem(int slot) {
         return this.getItem(this.slotToVector(slot));
     }
 
@@ -102,9 +102,9 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
      * @param position The position
      * @return The item or null
      */
-    public GUIItem getItem(Vector2d position) {
-        Collection<GUIItem> sections = this.getSections(position);
-        for (GUIItem section : sections) {
+    public BaseGUIItem getItem(Vector2d position) {
+        Collection<BaseGUIItem> sections = this.getSections(position);
+        for (BaseGUIItem section : sections) {
             return section;
         }
         return null;
@@ -118,7 +118,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIP
 
         @Override
         public SimpleItemGUIPane build() {
-            return new SimpleItemGUIPane(this.getGUI(), this.getMinSize(), this.getMaxSize(), this.isAutoSize());
+            return new SimpleItemGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(), this.isAutoSize());
         }
         @Override
         protected SimpleItemGUIPane.Builder self() {

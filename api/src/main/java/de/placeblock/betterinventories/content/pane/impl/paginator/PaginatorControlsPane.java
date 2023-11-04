@@ -1,9 +1,11 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.Sizeable;
+import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIButton;
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
+import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleGUIPane;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
@@ -19,7 +21,9 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     /**
      * The default fill-item for the Pane
      */
-    public static GUIItem FILL_ITEM = new GUIItem(null, new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build());
+    public static BaseGUIItem FILL_ITEM = new GUIItem.Builder(null)
+            .itemStack(new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build())
+            .build();
 
     /**
      * The according Paginator
@@ -55,29 +59,10 @@ public class PaginatorControlsPane extends SimpleGUIPane {
      * @param maxSize The maximum size of the Pane
      * @param autoSize Whether the Pane should synchronize its width with the Paginator.
      * @param position The position where the Buttons should get rendered
-     */
-    public PaginatorControlsPane(GUI gui,
-                                 PaginatorGUIPane paginatorGUIPane,
-                                 Vector2d minSize,
-                                 Vector2d maxSize,
-                                 boolean autoSize,
-                                 PaginatorControlsPosition position) {
-        this(gui, paginatorGUIPane, minSize,
-                maxSize, autoSize, position, new NextPageGUIButton(paginatorGUIPane, gui),
-                new PreviousPageGUIButton(paginatorGUIPane, gui));
-    }
-
-    /**
-     * Creates a new PaginatorControlsPane
-     * @param gui The GUI
-     * @param paginatorGUIPane The according Paginator
-     * @param minSize The minimum size of the Pane
-     * @param maxSize The maximum size of the Pane
-     * @param autoSize Whether the Pane should synchronize its width with the Paginator.
-     * @param position The position where the Buttons should get rendered
      * @param nextButton The custom next-button
      * @param previousButton The custom previous-button
      */
+    @Deprecated(forRemoval = true)
     public PaginatorControlsPane(GUI gui,
                                  PaginatorGUIPane paginatorGUIPane,
                                  Vector2d minSize,
@@ -86,7 +71,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
                                  PaginatorControlsPosition position,
                                  NextPageGUIButton nextButton,
                                  PreviousPageGUIButton previousButton) {
-        super(gui, minSize, maxSize);
+        super(gui, minSize, maxSize, false);
         this.paginatorGUIPane = paginatorGUIPane;
         this.position = position;
         this.autoSize = autoSize;
@@ -131,5 +116,49 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         this.clear();
         this.fill(FILL_ITEM);
         this.updateButtons();
+    }
+
+    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, PaginatorControlsPane> {
+        private final PaginatorGUIPane paginator;
+        private PaginatorControlsPosition position = PaginatorControlsPosition.RIGHT;
+        private NextPageGUIButton nextButton;
+        private PreviousPageGUIButton previousButton;
+
+        public Builder(GUI gui, PaginatorGUIPane paginator) {
+            super(gui);
+            this.paginator = paginator;
+            this.nextButton = new NextPageGUIButton.Builder(gui)
+                    .itemStack(new ItemBuilder(Component.text("Next Page"), Material.ARROW).build())
+                    .build();
+            this.previousButton = new PreviousPageGUIButton.Builder(gui)
+                    .itemStack(new ItemBuilder(Component.text("Previous Page"), Material.ARROW).build())
+                    .build();
+        }
+
+        public Builder position(PaginatorControlsPosition position) {
+            this.position = position;
+            return this;
+        }
+
+        public Builder nextButton(NextPageGUIButton nextButton) {
+            this.nextButton = nextButton;
+            return this;
+        }
+
+        public Builder previousButton(PreviousPageGUIButton previousButton) {
+            this.previousButton = previousButton;
+            return this;
+        }
+
+        @Override
+        public PaginatorControlsPane build() {
+            return new PaginatorControlsPane(this.getGui(), this.paginator, this.getMinSize(),
+                    this.getMaxSize(), this.isAutoSize(), this.position, this.nextButton, this.previousButton);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
     }
 }

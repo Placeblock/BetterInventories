@@ -1,5 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.vanilla;
 
+import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleGUIPane;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
@@ -29,7 +30,6 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
      */
-    @Deprecated
     public BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
         super(gui, minSize, maxSize, autoSize);
         this.input = input;
@@ -39,7 +39,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
     @Override
     public boolean onItemAdd(Vector2d position, ItemStack itemStack) {
         if (!this.input) return false;
-        this.setSectionAt(position, new GUIItem(this.getGui(), itemStack));
+        this.setSectionAt(position, new GUIItem.Builder(this.getGui()).itemStack(itemStack).build());
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
             this.onItemChange(position, itemStack);
             this.getGui().update();
@@ -58,7 +58,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
     }
     @Override
     public boolean onItemAmount(Vector2d position, int amount) {
-        GUIItem item = this.getItem(position);
+        BaseGUIItem item = this.getItem(position);
         int oldAmount = item.getItemStack().getAmount();
         if ((oldAmount < amount && !this.input) || ((oldAmount > amount) && !output)) return false;
         item.getItemStack().setAmount(amount);
@@ -75,7 +75,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
         ItemStack itemClone = itemStack.clone();
         for (int slot = 0; slot < this.getSlots() && itemStack.getAmount() > 0; slot++) {
             Vector2d position = this.slotToVector(slot);
-            GUIItem item = this.getItem(position);
+            BaseGUIItem item = this.getItem(position);
             int accepted;
             if (item != null) {
                 ItemStack currentItemStack = item.getItemStack();
@@ -88,7 +88,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
                 accepted = Math.min(64, itemStack.getAmount());
                 ItemStack slotItem = itemClone.clone();
                 slotItem.setAmount(accepted);
-                this.setSectionAt(slot, new GUIItem(this.getGui(), slotItem));
+                this.setSectionAt(slot, new GUIItem.Builder(this.getGui()).itemStack(slotItem).build());
                 this.onItemChange(position, slotItem);
             }
             itemStack.setAmount(itemStack.getAmount()-accepted);

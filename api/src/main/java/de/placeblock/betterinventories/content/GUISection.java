@@ -5,6 +5,7 @@ import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
@@ -153,6 +154,7 @@ public abstract class GUISection implements Sizeable {
      */
     public abstract boolean onItemAmount(Vector2d position, int amount);
 
+    @Getter(AccessLevel.PROTECTED)
     @RequiredArgsConstructor
     public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> {
         private final GUI gui;
@@ -160,9 +162,19 @@ public abstract class GUISection implements Sizeable {
         private Vector2d minSize;
         private Vector2d maxSize;
 
+        public B adoptMinMax(GUISection section) {
+            this.minSize = section.getMinSize();
+            this.maxSize = section.getMaxSize();
+            return self();
+        }
+
         public B size(Vector2d size) {
             this.size = size;
             return self();
+        }
+
+        public B size(int x, int y) {
+            return this.size(new Vector2d(x, y));
         }
 
         public B minSize(Vector2d minSize) {
@@ -170,13 +182,17 @@ public abstract class GUISection implements Sizeable {
             return self();
         }
 
+        public B minSize(int x, int y) {
+            return this.minSize(new Vector2d(x, y));
+        }
+
         public B maxSize(Vector2d maxSize) {
             this.maxSize = maxSize;
             return self();
         }
 
-        protected GUI getGUI() {
-            return this.gui;
+        public B maxSize(int x, int y) {
+            return this.maxSize(new Vector2d(x, y));
         }
 
         protected Vector2d getMinSize() {
@@ -197,10 +213,6 @@ public abstract class GUISection implements Sizeable {
                 return this.size;
             }
             return this.maxSize;
-        }
-
-        protected Vector2d getSize() {
-            return this.size;
         }
 
         public abstract P build();

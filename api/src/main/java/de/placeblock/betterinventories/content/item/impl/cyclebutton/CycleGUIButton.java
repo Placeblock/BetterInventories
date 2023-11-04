@@ -1,21 +1,23 @@
 package de.placeblock.betterinventories.content.item.impl.cyclebutton;
 
+import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
-import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import lombok.Getter;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * GUIButton which cycles through values of an Enum
  * @param <E> The Enum
  */
 @SuppressWarnings("unused")
-public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
+public abstract class CycleGUIButton<E extends CycleEnum> extends BaseGUIButton {
     /**
      * All Values of the Enum
      */
@@ -30,20 +32,10 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      * Creates a new CycleGUIButton
      * @param gui The GUI
      * @param values The Enum values
-     */
-    @SuppressWarnings("unused")
-    public CycleGUIButton(GUI gui, E[] values) {
-        this(gui, values, values[0]);
-    }
-
-    /**
-     * Creates a new CycleGUIButton
-     * @param gui The GUI
-     * @param values The Enum values
      * @param startValue The Start-value
      */
-    public CycleGUIButton(GUI gui, E[] values, E startValue) {
-        super(gui, null);
+    public CycleGUIButton(GUI gui, int cooldown, Sound sound, E[] values, E startValue) {
+        super(gui, null, cooldown, sound, null);
         this.values = List.of(values);
         this.currentValue = startValue;
         this.updateItem();
@@ -59,6 +51,11 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
         return new ItemBuilder(value.getTitle(), value.getMaterial())
             .lore(value.getLore())
             .build();
+    }
+
+    @Override
+    public void onClick(ClickData data) {
+        this.cycle(data);
     }
 
     /**
@@ -116,4 +113,45 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      * @param newValue The new Enum-value
      */
     protected abstract void onCycle(ClickData data, E newValue);
+
+    public static class Builder<E extends CycleEnum> extends BaseGUIButton.Builder<Builder<E>, CycleGUIButton<E>> {
+        private final E[] values;
+
+        private E startValue;
+
+        private BiConsumer<ClickData, E> onCycle;
+
+        public Builder(GUI gui, E[] values) {
+            super(gui);
+            this.values = values;
+        }
+
+        public Builder<E> startValue(E startValue) {
+            this.startValue = startValue;
+            return this;
+        }
+
+        public Builder<E> onCycle(BiConsumer<ClickData, E> callback) {
+            this.onCycle = callback;
+            return this;
+        }
+
+        @Override
+        public CycleGUIButton<E> build() {
+            return new CycleGUIButton<>(this.getGui(), this.getCooldown(), this.getSound(), this.values, this.startValue) {
+                @Override
+                protected void onCycle(ClickData data, E newValue) {
+                    if (Builder.this.onCycle != null) {
+                        Builder.this.onCycle.accept(data, newValue);
+                    }
+                }
+            };
+        }
+
+        @Override
+        protected Builder<E> self() {
+            return this;
+        }
+    }
+
 }

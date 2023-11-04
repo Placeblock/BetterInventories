@@ -1,7 +1,7 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.Sizeable;
-import de.placeblock.betterinventories.content.item.GUIItem;
+import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -26,7 +26,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
      * @param paginatorGUIPane The according Paginator
      */
     public PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
-        super(gui, minSize, maxSize);
+        super(gui, minSize, maxSize, true);
         this.paginatorGUIPane = paginatorGUIPane;
     }
 
@@ -54,7 +54,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
     public void setItems() {
         this.clear();
         int startIndex = this.getSlots()*this.paginatorGUIPane.getCurrentPage();
-        List<GUIItem> items = this.paginatorGUIPane.getItems();
+        List<BaseGUIItem> items = this.paginatorGUIPane.getItems();
         for (int i = 0; i < this.getSlots() && i < items.size() - startIndex; i++) {
             this.setSectionAt(i, items.get(i+startIndex));
         }

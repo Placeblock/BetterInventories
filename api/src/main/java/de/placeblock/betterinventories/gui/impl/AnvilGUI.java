@@ -1,7 +1,7 @@
 package de.placeblock.betterinventories.gui.impl;
 
 import de.placeblock.betterinventories.content.SearchData;
-import de.placeblock.betterinventories.content.item.GUIItem;
+import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.impl.textinput.TextInputGUI;
 import lombok.Getter;
@@ -26,17 +26,17 @@ public class AnvilGUI extends GUI {
     /**
      * The Item in the input-slot
      */
-    private GUIItem inputItem;
+    private BaseGUIItem inputItem;
 
     /**
      * The Item in the additional-slot
      */
-    private GUIItem additionalItem;
+    private BaseGUIItem additionalItem;
 
     /**
      * The Item in the result-slot
      */
-    private GUIItem resultItem;
+    private BaseGUIItem resultItem;
 
     /**
      * Creates a new AnvilGUI

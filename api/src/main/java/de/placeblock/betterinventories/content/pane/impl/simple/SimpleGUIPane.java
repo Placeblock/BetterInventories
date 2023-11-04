@@ -17,7 +17,7 @@ public class SimpleGUIPane extends BaseSimpleGUIPane<GUISection, SimpleGUIPane> 
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public SimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
@@ -32,7 +32,7 @@ public class SimpleGUIPane extends BaseSimpleGUIPane<GUISection, SimpleGUIPane> 
 
         @Override
         public SimpleGUIPane build() {
-            return new SimpleGUIPane(this.getGUI(), this.getMinSize(), this.getMaxSize(), this.isAutoSize());
+            return new SimpleGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(), this.isAutoSize());
         }
 
         @Override

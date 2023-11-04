@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl.textinput;
 
-import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
+import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.PlayerGUI;
 import de.placeblock.betterinventories.gui.impl.AnvilGUI;
@@ -144,8 +144,8 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     private void setInputItem() {
         TextComponent title = Component.text(this.currentText);
         ItemStack inputItem = new ItemBuilder(title, INPUT_MATERIAL).build();
-        GUIButton inputButton = new GUIButtonBuilder(this)
-                .item(inputItem).build();
+        BaseGUIButton inputButton = new GUIButton.Builder(this)
+                .itemStack(inputItem).build();
         this.setInputItem(inputButton);
     }
 
@@ -155,8 +155,8 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     private void setResultButton() {
         TextComponent title = this.titleConverter.apply(this.currentText);
         ItemStack resultItem = new ItemBuilder(title, RESULT_MATERIAL).build();
-        GUIButton resultButton = new GUIButtonBuilder(this)
-                .item(resultItem)
+        BaseGUIButton resultButton = new GUIButton.Builder(this)
+                .itemStack(resultItem)
                 .onClick(cd -> this.finish(false)).build();
         this.setResultItem(resultButton);
     }

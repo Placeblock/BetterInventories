@@ -25,7 +25,7 @@ public class SynchedGUIPane extends BaseIOGUIPane {
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public SynchedGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize,
                           boolean input, boolean output, SimpleItemGUIPane targetPane) {
         super(gui, minSize, maxSize, autoSize, input, output);
@@ -55,7 +55,7 @@ public class SynchedGUIPane extends BaseIOGUIPane {
             if (this.targetPane == null) {
                 throw new IllegalStateException("targetPane cannot be null");
             }
-            return new SynchedGUIPane(this.getGUI(), this.getMinSize(), this.getMaxSize(),
+            return new SynchedGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(),
                     this.isAutoSize(), this.isInput(), this.isOutput(), this.targetPane);
         }
 
