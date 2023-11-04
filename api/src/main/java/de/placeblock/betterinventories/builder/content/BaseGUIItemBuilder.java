@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * @param <T> The GUIItem type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unchecked")
 public abstract class BaseGUIItemBuilder<T extends GUIItem, B extends BaseGUIItemBuilder<T, B>> extends BaseGUISectionBuilder<T, B> {
     /**

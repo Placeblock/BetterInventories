@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <G> The type of GUI
  * @param <B> The type of Builder
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings({"unchecked", "unused"})
 @RequiredArgsConstructor
 public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, B>> implements Builder<G, B> {
@@ -31,11 +32,6 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
      * The type of the GUI
      */
     private InventoryType type;
-
-    /**
-     * Whether to register default-handlers
-     */
-    private boolean registerDefaultHandlers = true;
 
     /**
      * Sets the title of the Inventory.
@@ -59,17 +55,6 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     }
 
     /**
-     * Sets the type of the Inventory.
-     * Does not need to be set in many implementing GUIBuilders.
-     * @param register Do register
-     * @return this
-     */
-    public B registerDefaultHandlers(boolean register) {
-        this.registerDefaultHandlers = register;
-        return (B) this;
-    }
-
-    /**
      * @return The title of the GUI
      */
     protected TextComponent getTitle() {
@@ -89,11 +74,6 @@ public abstract class BaseGUIBuilder<G extends GUI, B extends BaseGUIBuilder<G, 
     protected Plugin getPlugin() {
         return this.plugin;
     }
-
-    /**
-     * @return Wheter to register default-handlers
-     */
-    protected boolean getRegisterDefaultHandlers() {return this.registerDefaultHandlers;}
 
     /**
      * Builds the GUI

@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Builder for creating CanvasGUIs
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class CanvasGUIBuilder extends BaseCanvasGUIBuilder<SimpleGUIPane, CanvasGUI, CanvasGUIBuilder> {
 
@@ -25,9 +26,9 @@ public class CanvasGUIBuilder extends BaseCanvasGUIBuilder<SimpleGUIPane, Canvas
     @Override
     public CanvasGUI build() {
         if (this.height != null) {
-            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight(), this.getRegisterDefaultHandlers());
+            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getHeight());
         } else {
-            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getType(), this.getRegisterDefaultHandlers());
+            return new CanvasGUI(this.getPlugin(), this.getTitle(), this.getType());
         }
     }
 }

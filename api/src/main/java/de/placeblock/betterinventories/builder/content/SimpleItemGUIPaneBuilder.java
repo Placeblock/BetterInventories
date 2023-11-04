@@ -6,6 +6,7 @@ import de.placeblock.betterinventories.gui.GUI;
 /**
  * Builder for SimpleItemGUIPanes
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 public class SimpleItemGUIPaneBuilder extends BaseGUIPaneBuilder<SimpleItemGUIPane, SimpleItemGUIPaneBuilder> {
     /**

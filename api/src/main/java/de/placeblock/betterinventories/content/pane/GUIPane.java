@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.pane;
 
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
@@ -9,7 +10,6 @@ import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -88,16 +88,14 @@ public abstract class GUIPane extends GUISection {
     /**
      * Can be overridden and is only called when the size of this GUIPane really changes.
      */
-    public void onSizeChange() {
-
-    }
+    public void onSizeChange() {}
 
     /**
      * Implemented by GUIPanes
      * Should return all children sections
      * @return All child sections
      */
-    abstract public Set<GUISection> getChildren();
+    abstract public List<GUISection> getChildren();
 
     /**
      * Renders a child section at a specific position on a list
@@ -117,6 +115,50 @@ public abstract class GUIPane extends GUISection {
                 int slot = this.vectorToSlot(absolute);
                 ItemStack item = childContent.get(i);
                 content.set(slot, item);
+            }
+        }
+    }
+
+    @Override
+    public void onItemClick(ClickData data) {}
+
+    @Override
+    public boolean onItemAdd(Vector2d position, ItemStack itemStack) {
+        return true;
+    }
+
+    @Override
+    public boolean onItemRemove(Vector2d position) {
+        return true;
+    }
+
+    @Override
+    public boolean onItemAmount(Vector2d position, int amount) {
+        return true;
+    }
+
+    /**
+     * Called when an item is provided by an inventory MOVE_TO_OTHER_INVENTORY event
+     * @param itemStack The provided item. Method reduces the amount of the item by the number that got accepted.
+     */
+    public abstract void onItemProvide(ItemStack itemStack);
+
+    /**
+     * Used to provide items recursively
+     * @param itemStack The provided item. Method reduces the amount of the item by the number that got accepted.
+     */
+    public void provideItem(ItemStack itemStack) {
+        this.onItemProvide(itemStack);
+        if (itemStack.getAmount() < 0) {
+            throw new IllegalStateException("A GUIPane accepted more items of the provided itemstack then the itemstack holds");
+        }
+        if (itemStack.getAmount() == 0) {
+            return;
+        }
+        for (GUISection child : this.getChildren()) {
+            if (child instanceof GUIPane pane) {
+                pane.provideItem(itemStack);
+                if (itemStack.getAmount()==0) break;
             }
         }
     }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
  * @param <G> The GUISection type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings({"unchecked", "unused"})
 @RequiredArgsConstructor
 public abstract class BaseGUISectionBuilder<G extends GUISection, B extends BaseGUISectionBuilder<G, B>> implements Builder<G, B> {

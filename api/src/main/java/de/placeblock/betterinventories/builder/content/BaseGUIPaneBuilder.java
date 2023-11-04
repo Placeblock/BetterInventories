@@ -12,6 +12,7 @@ import java.util.List;
  * @param <G> The GUIPane type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @Getter
 @SuppressWarnings({"unchecked", "unused"})
 public abstract class BaseGUIPaneBuilder<G extends GUIPane, B extends BaseGUIPaneBuilder<G, B>> extends BaseGUISectionBuilder<G, B>{

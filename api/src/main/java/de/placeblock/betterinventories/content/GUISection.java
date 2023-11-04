@@ -1,6 +1,7 @@
 package de.placeblock.betterinventories.content;
 
 import de.placeblock.betterinventories.Sizeable;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -67,20 +68,10 @@ public abstract class GUISection implements Sizeable {
     public abstract List<ItemStack> render();
 
     /**
-     * Returns the GUISection at a specific slot.
-     * @param slot The slot
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
-    public GUISection getSectionAt(int slot) {
-        return this.getSectionAt(this.slotToVector(slot));
-    }
-
-    /**
-     * Returns the GUISection at a specific position.
-     * @param position The position
-     * @return The GUISection at the slot or null
-     */
-    public abstract GUISection getSectionAt(Vector2d position);
+    public abstract void search(SearchData searchData);
 
     /**
      * Converts a slot to a vector based on the width of this Section
@@ -131,6 +122,36 @@ public abstract class GUISection implements Sizeable {
     public int getWidth() {
         return this.size.getX();
     }
+
+    /**
+     * Called when a user clicks on an item.
+     * Usually after this method one of the add/remove/amount methods is called.
+     * @param data The clickdata
+     */
+    public abstract void onItemClick(ClickData data);
+
+    /**
+     * Called when an item is added to an empty slot
+     * @param position The relative position of the slot
+     * @param itemStack The itemstack that was added
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemAdd(Vector2d position, ItemStack itemStack);
+
+    /**
+     * Called when an item is removed from an empty slot
+     * @param position The relative position of the slot
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemRemove(Vector2d position);
+
+    /**
+     * Called when the amount of an item in a slot changes
+     * @param position The relative position of the slot
+     * @param amount The new amount of the item
+     * @return Whether this action is allowed.
+     */
+    public abstract boolean onItemAmount(Vector2d position, int amount);
 
     @RequiredArgsConstructor
     public static abstract class Builder<B, P> {

@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.impl.textinput.TextInputGUI;
@@ -46,16 +46,7 @@ public class AnvilGUI extends GUI {
     public AnvilGUI(Plugin plugin, TextComponent title) {
         super(plugin, title, InventoryType.ANVIL);
     }
-    /**
-     * Creates a new AnvilGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param registerDefaultHandlers Wheter to register default-handlers
-     */
-    @SuppressWarnings("unused")
-    public AnvilGUI(Plugin plugin, TextComponent title, boolean registerDefaultHandlers) {
-        super(plugin, title, InventoryType.ANVIL, registerDefaultHandlers);
-    }
+
 
     /**
      * Creates the Bukkit Inventory for this GUI
@@ -87,17 +78,20 @@ public class AnvilGUI extends GUI {
     }
 
     /**
-     * Returns the GUISection at a specific slot.
-     * @param slot The slot
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
     @Override
-    public GUISection getClickedSection(int slot) {
-        return switch (slot) {
-            case 0 -> this.inputItem;
-            case 1 -> this.additionalItem;
-            case 2 -> this.resultItem;
-            default -> null;
+    public void searchSection(SearchData searchData) {
+        switch (searchData.getSlot()) {
+            case 0 -> this.inputItem.search(searchData);
+            case 1 -> this.additionalItem.search(searchData);
+            case 2 -> this.resultItem.search(searchData);
         };
+    }
+
+    @Override
+    public void provideItem(ItemStack itemStack) {
+        // Currently AnvilGUI doesn't support item offers
     }
 }

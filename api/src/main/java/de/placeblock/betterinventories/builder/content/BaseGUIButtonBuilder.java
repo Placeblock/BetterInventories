@@ -12,6 +12,7 @@ import java.util.function.Consumer;
  * @param <G> The GUIButton type
  * @param <B> The Builder type
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class BaseGUIButtonBuilder<G extends GUIButton, B extends BaseGUIButtonBuilder<G, B>> extends BaseGUIItemBuilder<G, B> {
     /**
