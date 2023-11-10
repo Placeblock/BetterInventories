@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl.paginator;
 
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import lombok.AccessLevel;
@@ -9,9 +9,9 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Abstract class for {@link BaseGUIButton}s that belong to a specific {@link PaginatorGUIPane}.
+ * Abstract class for {@link GUIButton}s that belong to a specific {@link PaginatorGUIPane}.
  */
-public abstract class PaginatorGUIButton extends BaseGUIButton {
+public abstract class PaginatorGUIButton extends GUIButton {
 
     /**
      * The according Paginator
@@ -31,21 +31,17 @@ public abstract class PaginatorGUIButton extends BaseGUIButton {
     }
 
     @Getter(AccessLevel.PROTECTED)
-    public static abstract class Builder<B extends Builder<B, P>, P extends PaginatorGUIButton> extends BaseGUIButton.Builder<B, P> {
-        private PaginatorGUIPane paginator;
+    public static abstract class Builder<B extends Builder<B, P>, P extends PaginatorGUIButton> extends AbstractBuilder<B, P> {
+        private final PaginatorGUIPane paginator;
 
         /**
          * Creates a new GUIButton
          *
          * @param gui        The GUI
          */
-        public Builder(GUI gui) {
+        public Builder(GUI gui, PaginatorGUIPane paginator) {
             super(gui);
-        }
-
-        public B paginator(PaginatorGUIPane paginator) {
             this.paginator = paginator;
-            return this.self();
         }
     }
 

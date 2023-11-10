@@ -1,7 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.Sizeable;
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIButton;
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
@@ -21,7 +20,7 @@ public class PaginatorControlsPane extends SimpleGUIPane {
     /**
      * The default fill-item for the Pane
      */
-    public static BaseGUIItem FILL_ITEM = new GUIItem.Builder(null)
+    public static GUIItem FILL_ITEM = new GUIItem.Builder(null)
             .itemStack(new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build())
             .build();
 
@@ -127,10 +126,10 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         public Builder(GUI gui, PaginatorGUIPane paginator) {
             super(gui);
             this.paginator = paginator;
-            this.nextButton = new NextPageGUIButton.Builder(gui)
+            this.nextButton = new NextPageGUIButton.Builder(gui, paginator)
                     .itemStack(new ItemBuilder(Component.text("Next Page"), Material.ARROW).build())
                     .build();
-            this.previousButton = new PreviousPageGUIButton.Builder(gui)
+            this.previousButton = new PreviousPageGUIButton.Builder(gui, paginator)
                     .itemStack(new ItemBuilder(Component.text("Previous Page"), Material.ARROW).build())
                     .build();
         }

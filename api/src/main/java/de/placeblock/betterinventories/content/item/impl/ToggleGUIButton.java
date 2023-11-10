@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl;
 
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 @Getter
-public abstract class ToggleGUIButton extends BaseGUIButton {
+public abstract class ToggleGUIButton extends GUIButton {
     /**
      * Whether the button is currently toggled
      */
@@ -76,7 +76,7 @@ public abstract class ToggleGUIButton extends BaseGUIButton {
 
 
 
-    public static class Builder extends BaseGUIButton.Builder<Builder, ToggleGUIButton> {
+    public static class Builder extends AbstractBuilder<Builder, ToggleGUIButton> {
         private boolean toggled;
         private BiConsumer<ClickData, Boolean> onToggle;
         private Supplier<ItemStack> enabledItem;

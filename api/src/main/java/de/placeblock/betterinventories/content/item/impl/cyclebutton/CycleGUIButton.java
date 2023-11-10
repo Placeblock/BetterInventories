@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl.cyclebutton;
 
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * @param <E> The Enum
  */
 @SuppressWarnings("unused")
-public abstract class CycleGUIButton<E extends CycleEnum> extends BaseGUIButton {
+public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
     /**
      * All Values of the Enum
      */
@@ -114,7 +114,7 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends BaseGUIButton 
      */
     protected abstract void onCycle(ClickData data, E newValue);
 
-    public static class Builder<E extends CycleEnum> extends BaseGUIButton.Builder<Builder<E>, CycleGUIButton<E>> {
+    public static class Builder<E extends CycleEnum> extends AbstractBuilder<Builder<E>, CycleGUIButton<E>> {
         private final E[] values;
 
         private E startValue;

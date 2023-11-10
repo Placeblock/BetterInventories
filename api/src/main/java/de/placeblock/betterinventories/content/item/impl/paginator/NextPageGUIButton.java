@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl.paginator;
 
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -8,7 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A {@link BaseGUIButton} for the {@link PaginatorGUIPane} which skips to the next page.
+ * A {@link GUIButton} for the {@link PaginatorGUIPane} which skips to the next page.
  */
 public class NextPageGUIButton extends PaginatorGUIButton {
     /**
@@ -32,8 +32,8 @@ public class NextPageGUIButton extends PaginatorGUIButton {
          *
          * @param gui The GUI
          */
-        public Builder(GUI gui) {
-            super(gui);
+        public Builder(GUI gui, PaginatorGUIPane paginator) {
+            super(gui, paginator);
         }
 
         @Override

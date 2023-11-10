@@ -8,6 +8,7 @@ import de.placeblock.betterinventories.util.Vector2d;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -33,11 +34,13 @@ public abstract class GUISection implements Sizeable {
     /**
      * The minimum size of the Section
      */
+    @Setter
     protected Vector2d minSize;
 
     /**
      * The maximum size of the Section
      */
+    @Setter
     protected Vector2d maxSize;
 
     /**

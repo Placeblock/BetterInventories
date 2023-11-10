@@ -3,7 +3,7 @@ package de.placeblock.betterinventories.content.pane.impl.simple;
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.SearchData;
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
+import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * The Base for {@link GUIPane}s where content can be just placed with a {@link Vector2d} as the position.
  * @param <C> Which types of {@link GUISection} can be placed inside the BaseSimpleGUIPane
- * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(BaseGUIItem)}
+ * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
@@ -125,7 +125,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
      * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
-    public S addItemEmptySlot(BaseGUIItem item) {
+    public S addItemEmptySlot(GUIItem item) {
         int nextEmptySlot = this.getNextEmptySlot();
         if (nextEmptySlot == -1) return (S) this;
         this.setSectionAt(nextEmptySlot, (C) item);
@@ -138,7 +138,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
      * @return this
      */
     @SuppressWarnings("UnusedReturnValue")
-    public S fill(BaseGUIItem item) {
+    public S fill(GUIItem item) {
         while (this.getNextEmptySlot() != -1) {
             this.addItemEmptySlot(item);
         }

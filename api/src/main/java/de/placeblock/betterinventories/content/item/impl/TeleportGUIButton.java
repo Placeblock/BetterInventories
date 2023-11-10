@@ -1,7 +1,7 @@
 package de.placeblock.betterinventories.content.item.impl;
 
 import de.placeblock.betterinventories.content.item.ClickData;
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A {@link BaseGUIButton} which automatically teleports the player to a specific {@link Location}
+ * A {@link GUIButton} which automatically teleports the player to a specific {@link Location}
  */
 @SuppressWarnings("unused")
-public class TeleportGUIButton extends BaseGUIButton {
+public class TeleportGUIButton extends GUIButton {
     /**
      * The location to which the player is teleported
      */
@@ -36,7 +36,7 @@ public class TeleportGUIButton extends BaseGUIButton {
         player.teleport(location);
     }
 
-    public static class Builder extends BaseGUIButton.Builder<Builder, TeleportGUIButton> {
+    public static class Builder extends AbstractBuilder<Builder, TeleportGUIButton> {
         private Location location;
 
         public Builder(GUI gui) {

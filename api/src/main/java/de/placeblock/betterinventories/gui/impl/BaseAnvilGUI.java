@@ -1,7 +1,7 @@
 package de.placeblock.betterinventories.gui.impl;
 
 import de.placeblock.betterinventories.content.SearchData;
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
+import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.impl.textinput.TextInputGUI;
 import lombok.AccessLevel;
@@ -28,17 +28,17 @@ public abstract class BaseAnvilGUI extends GUI {
     /**
      * The Item in the input-slot
      */
-    private BaseGUIItem inputItem;
+    private GUIItem inputItem;
 
     /**
      * The Item in the additional-slot
      */
-    private BaseGUIItem additionalItem;
+    private GUIItem additionalItem;
 
     /**
      * The Item in the result-slot
      */
-    private BaseGUIItem resultItem;
+    private GUIItem resultItem;
 
     /**
      * Creates a new AnvilGUI
@@ -100,19 +100,19 @@ public abstract class BaseAnvilGUI extends GUI {
     @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, G, P>, G extends BaseAnvilGUI, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
-        private BaseGUIItem inputItem;
-        private BaseGUIItem additionalItem;
-        private BaseGUIItem resultItem;
+        private GUIItem inputItem;
+        private GUIItem additionalItem;
+        private GUIItem resultItem;
 
-        public B inputItem(BaseGUIItem item) {
+        public B inputItem(GUIItem item) {
             this.inputItem = item;
             return this.self();
         }
-        public B additionalItem(BaseGUIItem item) {
+        public B additionalItem(GUIItem item) {
             this.additionalItem = item;
             return this.self();
         }
-        public B resultItem(BaseGUIItem item) {
+        public B resultItem(GUIItem item) {
             this.resultItem = item;
             return this.self();
         }

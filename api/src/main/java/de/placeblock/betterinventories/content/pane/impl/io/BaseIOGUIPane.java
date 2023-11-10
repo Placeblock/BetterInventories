@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.content.pane.impl.io;
 
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleGUIPane;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
@@ -49,7 +48,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
     @Override
     public ItemStack onItemRemove(Vector2d position) {
         if (!this.output) return null;
-        BaseGUIItem item = this.getItem(position);
+        GUIItem item = this.getItem(position);
         boolean removed = this.removeSection(item);
         if (removed) {
             Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
@@ -62,7 +61,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
     }
     @Override
     public boolean onItemAmount(Vector2d position, int amount) {
-        BaseGUIItem item = this.getItem(position);
+        GUIItem item = this.getItem(position);
         int oldAmount = item.getItemStack().getAmount();
         if ((oldAmount < amount && !this.input) || ((oldAmount > amount) && !output)) return false;
         item.getItemStack().setAmount(amount);
@@ -79,7 +78,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
         ItemStack itemClone = itemStack.clone();
         for (int slot = 0; slot < this.getSlots() && itemStack.getAmount() > 0; slot++) {
             Vector2d position = this.slotToVector(slot);
-            BaseGUIItem item = this.getItem(position);
+            GUIItem item = this.getItem(position);
             int accepted;
             if (item != null) {
                 ItemStack currentItemStack = item.getItemStack();

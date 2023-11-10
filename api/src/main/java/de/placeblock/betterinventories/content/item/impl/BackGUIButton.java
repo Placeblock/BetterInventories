@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.item.impl;
 
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import net.kyori.adventure.text.Component;
@@ -14,11 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.function.Function;
 
 /**
- * A {@link BaseGUIButton} which returns back to an {@link GUI}.
+ * A {@link GUIButton} which returns back to an {@link GUI}.
  * Material is set to {@link Material#RED_STAINED_GLASS_PANE}
  */
 @SuppressWarnings("unused")
-public class BackGUIButton extends BaseSwitchGUIButton {
+public class BackGUIButton extends SwitchGUIButton {
     /**
      * Creates a new BackGUIButton
      * @param gui The GUI
@@ -29,7 +29,7 @@ public class BackGUIButton extends BaseSwitchGUIButton {
         super(gui, new ItemBuilder(title, Material.RED_STAINED_GLASS_PANE).build(), cooldown, sound, permission, targetGUI);
     }
 
-    public static class Builder extends BaseSwitchGUIButton.Builder<Builder, BackGUIButton> {
+    public static class Builder extends AbstractBuilder<Builder, BackGUIButton> {
         private TextComponent title = Component.text("Zurück").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);
 
         public Builder(GUI gui) {

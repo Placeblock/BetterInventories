@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
+import de.placeblock.betterinventories.content.item.GUIItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +18,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * Has to return all Items currently added
      * @return All added Items
      */
-    List<BaseGUIItem> getItems();
+    List<GUIItem> getItems();
 
     /**
      * Adds an Item.
@@ -26,7 +26,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * @return this
      */
     @SuppressWarnings({"unchecked", "UnusedReturnValue"})
-    default O addItem(BaseGUIItem item) {
+    default O addItem(GUIItem item) {
         this.getItems().add(item);
         this.onItemAdd();
         return (O) this;
@@ -38,7 +38,7 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default O addItems(Collection<BaseGUIItem> items) {
+    default O addItems(Collection<GUIItem> items) {
         this.getItems().addAll(items);
         this.onItemAdd();
         return (O) this;
@@ -49,19 +49,19 @@ public interface ItemAddable<O extends ItemAddable<O>> {
      * @param items The Items
      * @return this
      */
-    default O addItems(BaseGUIItem... items) {
+    default O addItems(GUIItem... items) {
         return this.addItems(List.of(items));
     }
 
     /**
      * Adds multiple Items.
-     * @param converter The converter to convert the generic type to a {@link BaseGUIItem}
+     * @param converter The converter to convert the generic type to a {@link GUIItem}
      * @param items The Items
      * @param <T> The type of the Items
      * @return this
      */
-    default <T> O addItems(Function<T, BaseGUIItem> converter, Collection<T> items) {
-        List<BaseGUIItem> guiItems = new ArrayList<>();
+    default <T> O addItems(Function<T, GUIItem> converter, Collection<T> items) {
+        List<GUIItem> guiItems = new ArrayList<>();
         for (T item : items) {
             guiItems.add(converter.apply(item));
         }
@@ -70,12 +70,12 @@ public interface ItemAddable<O extends ItemAddable<O>> {
 
     /**
      * Adds multiple Items.
-     * @param converter The converter to convert the generic type to a {@link BaseGUIItem}
+     * @param converter The converter to convert the generic type to a {@link GUIItem}
      * @param items The Items
      * @param <T> The type of the Items
      * @return this
      */
-    default <T> O addItems(Function<T, BaseGUIItem> converter, T[] items) {
+    default <T> O addItems(Function<T, GUIItem> converter, T[] items) {
         return this.addItems(converter, new ArrayList<>(List.of(items)));
     }
 

@@ -1,7 +1,7 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.Sizeable;
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
+import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.content.pane.impl.BaseHorizontalSplitGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -23,7 +23,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      * The Items added to the Paginator
      */
     @Getter
-    private final List<BaseGUIItem> items;
+    private final List<GUIItem> items;
 
     /**
      * The default-controls or null
@@ -61,7 +61,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      */
     @Deprecated
     public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
-                            Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls, List<BaseGUIItem> items) {
+                            Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls, List<GUIItem> items) {
         super(gui, minSize, maxSize, null, null);
         this.items = items;
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
@@ -88,7 +88,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      */
     @Deprecated(forRemoval = true)
     public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
-                            PaginatorControlsPosition defaultControlsPosition, List<BaseGUIItem> items) {
+                            PaginatorControlsPosition defaultControlsPosition, List<GUIItem> items) {
         this(gui, minSize, maxSize, repeat, startPage, (p) -> null, items);
         this.defaultControls = new PaginatorControlsPane.Builder(gui, this)
                 .minSize(minSize.getX(), 1)
@@ -134,7 +134,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      * @return this
      * @param <I> The type of the items
      */
-    public <I extends BaseGUIItem> PaginatorGUIPane setItems(List<I> items) {
+    public <I extends GUIItem> PaginatorGUIPane setItems(List<I> items) {
         this.items.clear();
         this.items.addAll(items);
         this.contentPane.setItems();
@@ -239,10 +239,10 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
     }
 
     public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, PaginatorGUIPane> implements ItemAddable<Builder> {
-        private final List<BaseGUIItem> items = new ArrayList<>();
+        private final List<GUIItem> items = new ArrayList<>();
         private boolean repeat = true;
         private int startPage = 0;
-        private PaginatorControlsPosition controlsPosition;
+        private PaginatorControlsPosition controlsPosition = PaginatorControlsPosition.RIGHT;
         private Function<PaginatorGUIPane, PaginatorControlsPane> controls;
 
         public Builder(GUI gui) {
@@ -285,7 +285,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
         }
 
         @Override
-        public List<BaseGUIItem> getItems() {
+        public List<GUIItem> getItems() {
             return this.items;
         }
     }

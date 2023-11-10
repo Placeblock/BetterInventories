@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.gui;
 
 import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.SearchData;
+import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.listener.GUIItemListener;
 import de.placeblock.betterinventories.gui.listener.GUIListener;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -229,14 +230,14 @@ public abstract class GUI {
         Player player = view.getPlayer();
         if (this.removeItems) {
             for (int i = 0; i < this.getSlots(); i++) {
-                SearchData searchData = new SearchData(i, (s) -> true);
+                SearchData searchData = new SearchData(i, (s) -> s instanceof GUIPane);
                 this.searchSection(searchData);
                 GUISection section = searchData.getSection();
-                if (section != null) {
-                    Vector2d pos = searchData.getRelativePos();
-                    ItemStack removedItemStack = section.onItemRemove(pos);
-                    player.getInventory().addItem(removedItemStack);
-                }
+                if (section == null) continue;
+                Vector2d pos = searchData.getRelativePos();
+                ItemStack removedItemStack = section.onItemRemove(pos);
+                if (removedItemStack == null) continue;
+                player.getInventory().addItem(removedItemStack);
             }
         }
         this.views.remove(view);

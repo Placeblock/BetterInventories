@@ -1,6 +1,6 @@
 package de.placeblock.betterinventories.content.pane.impl.simple;
 
-import de.placeblock.betterinventories.content.item.BaseGUIItem;
+import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link BaseGUIItem}s.
+ * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}s.
  */
 @SuppressWarnings("unused")
-public class SimpleItemGUIPane extends BaseSimpleGUIPane<BaseGUIItem, SimpleItemGUIPane> {
+public class SimpleItemGUIPane extends BaseSimpleGUIPane<GUIItem, SimpleItemGUIPane> {
 
     /**
      * Creates a new SimpleGUIPane
@@ -82,7 +82,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<BaseGUIItem, SimpleItem
      * @param transformation The transformation
      */
     private void applyTransformation(Function<Vector2d, Vector2d> transformation) {
-        for (ChildData<BaseGUIItem> childData : this.content) {
+        for (ChildData<GUIItem> childData : this.content) {
             Vector2d newPos = transformation.apply(childData.getPosition());
             childData.setPosition(newPos);
         }
@@ -93,7 +93,7 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<BaseGUIItem, SimpleItem
      * @param slot The slot
      * @return The item or null
      */
-    public BaseGUIItem getItem(int slot) {
+    public GUIItem getItem(int slot) {
         return this.getItem(this.slotToVector(slot));
     }
 
@@ -102,9 +102,9 @@ public class SimpleItemGUIPane extends BaseSimpleGUIPane<BaseGUIItem, SimpleItem
      * @param position The position
      * @return The item or null
      */
-    public BaseGUIItem getItem(Vector2d position) {
-        Collection<BaseGUIItem> sections = this.getSections(position);
-        for (BaseGUIItem section : sections) {
+    public GUIItem getItem(Vector2d position) {
+        Collection<GUIItem> sections = this.getSections(position);
+        for (GUIItem section : sections) {
             return section;
         }
         return null;

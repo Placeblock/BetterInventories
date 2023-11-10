@@ -3,7 +3,6 @@ package de.placeblock.betterinventories;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.MockPlugin;
 import de.placeblock.betterinventories.content.SearchData;
-import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
@@ -38,7 +37,7 @@ public class SimpleGUIPaneTest {
                 .build();
         fillPane.fill(new GUIItem.Builder(chestGUI).itemStack(new ItemStack(Material.CHEST)).build());
         pane.setSection(fillPane);
-        BaseGUIButton button = new GUIButton.Builder(chestGUI)
+        GUIButton button = new GUIButton.Builder(chestGUI)
                 .itemStack(new ItemStack(Material.DIAMOND))
                 .build();
         pane.setSectionAt(2, button);
