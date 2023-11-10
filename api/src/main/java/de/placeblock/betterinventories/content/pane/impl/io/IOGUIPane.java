@@ -6,7 +6,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.BiConsumer;
 
-public abstract class IOGUIPane extends BaseIOGUIPane {
+/**
+ * GUIPane which allows Items to be inserted and taken out
+ */
+public abstract class IOGUIPane extends BaseIOGUIPane<IOGUIPane> {
     /**
      * Creates a new TransferGUIPane
      *
@@ -23,7 +26,14 @@ public abstract class IOGUIPane extends BaseIOGUIPane {
         super(gui, minSize, maxSize, autoSize, input, output);
     }
 
+    /**
+     * Builder for creating {@link IOGUIPane}
+     */
     public static class Builder extends BaseIOGUIPane.Builder<Builder, IOGUIPane> {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }

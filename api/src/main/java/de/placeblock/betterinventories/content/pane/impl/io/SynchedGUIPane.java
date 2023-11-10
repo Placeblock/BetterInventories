@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * Can be used to synchronize an IOGUIPane with another SimpleItemGUIPane
  */
 @SuppressWarnings("unused")
-public class SynchedGUIPane extends BaseIOGUIPane {
+public class SynchedGUIPane extends BaseIOGUIPane<SynchedGUIPane> {
     /**
      * The pane to keep in sync
      */
@@ -37,14 +37,26 @@ public class SynchedGUIPane extends BaseIOGUIPane {
         this.targetPane.setSectionAt(position, this.getItem(position));
     }
 
+    /**
+     * Builder for creating {@link SynchedGUIPane}
+     */
     public static class Builder extends BaseIOGUIPane.Builder<Builder, SynchedGUIPane> {
 
         private SimpleItemGUIPane targetPane;
 
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the targetPane attribute
+         * @param targetPane The target pane to sync the items to
+         * @return Itself
+         */
         public Builder targetPane(SimpleItemGUIPane targetPane) {
             this.targetPane = targetPane;
             return this;

@@ -4,8 +4,7 @@ import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.item.impl.paginator.NextPageGUIButton;
 import de.placeblock.betterinventories.content.item.impl.paginator.PreviousPageGUIButton;
-import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleGUIPane;
-import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import de.placeblock.betterinventories.util.Vector2d;
@@ -16,7 +15,7 @@ import org.bukkit.Material;
 /**
  * The Controls pane for a {@link PaginatorGUIPane}.
  */
-public class PaginatorControlsPane extends SimpleGUIPane {
+public class PaginatorControlsPane extends BaseSimpleItemGUIPane<PaginatorControlsPane> {
     /**
      * The default fill-item for the Pane
      */
@@ -117,12 +116,20 @@ public class PaginatorControlsPane extends SimpleGUIPane {
         this.updateButtons();
     }
 
-    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, PaginatorControlsPane> {
+    /**
+     * Builder for {@link PaginatorControlsPane}
+     */
+    public static class Builder extends BaseSimpleItemGUIPane.Builder<Builder, PaginatorControlsPane> {
         private final PaginatorGUIPane paginator;
         private PaginatorControlsPosition position = PaginatorControlsPosition.RIGHT;
         private NextPageGUIButton nextButton;
         private PreviousPageGUIButton previousButton;
 
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         * @param paginator The paginator this Pane belongs to
+         */
         public Builder(GUI gui, PaginatorGUIPane paginator) {
             super(gui);
             this.paginator = paginator;
@@ -134,16 +141,31 @@ public class PaginatorControlsPane extends SimpleGUIPane {
                     .build();
         }
 
+        /**
+         * Sets the position attribute
+         * @param position The position of the buttons inside the pane
+         * @return Itself
+         */
         public Builder position(PaginatorControlsPosition position) {
             this.position = position;
             return this;
         }
 
+        /**
+         * Sets the nextButton attribute
+         * @param nextButton The button used to get to the next page
+         * @return Itself
+         */
         public Builder nextButton(NextPageGUIButton nextButton) {
             this.nextButton = nextButton;
             return this;
         }
 
+        /**
+         * Sets the previousButton attribute
+         * @param previousButton The button used to return to the previous page
+         * @return Itself
+         */
         public Builder previousButton(PreviousPageGUIButton previousButton) {
             this.previousButton = previousButton;
             return this;

@@ -1,8 +1,7 @@
 package de.placeblock.betterinventories.content.pane.impl.io;
 
 import de.placeblock.betterinventories.content.item.GUIItem;
-import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleGUIPane;
-import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
+import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 import org.bukkit.Bukkit;
@@ -12,9 +11,10 @@ import java.util.function.BiConsumer;
 
 /**
  * GUIPane which allows Items to be inserted and taken out
+ * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unused")
-public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
+public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUIPane<S> {
 
     private final boolean input;
     private final boolean output;
@@ -107,38 +107,74 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
      */
     public abstract void onItemChange(Vector2d position, ItemStack itemStack);
 
-    public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane> extends BaseSimpleGUIPane.Builder<B, P> {
+    /**
+     * Builder for {@link BaseIOGUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The Product that is Build
+     */
+    public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane<P>> extends BaseSimpleItemGUIPane.Builder<B, P> {
         private boolean input = true;
         private boolean output = true;
         private BiConsumer<Vector2d, ItemStack> onChange = (p, i) -> {};
 
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the input attribute
+         * @param input Whether to accept new items
+         * @return Itself
+         */
         public B input(boolean input) {
             this.input = input;
             return self();
         }
 
+        /**
+         * Sets the output attribute
+         * @param output Whether to allow the player to remove items
+         * @return Itself
+         */
         public B output(boolean output) {
             this.output = output;
             return self();
         }
 
+        /**
+         * Sets the onChange attribute
+         * @param onChange Called when an item changes. {@link BaseIOGUIPane#onItemChange(Vector2d, ItemStack)}
+         * @return Itself
+         */
         public B onChange(BiConsumer<Vector2d, ItemStack> onChange) {
             this.onChange = onChange;
             return self();
         }
 
+        /**
+         * Gets whether input is allowed
+         * @return Whether input is allowed
+         */
         protected boolean isInput() {
             return this.input;
         }
 
+        /**
+         * Gets whether output is allowed
+         * @return Whether output is allowed
+         */
         protected boolean isOutput() {
             return this.output;
         }
 
+        /**
+         * Gets the onchange consumer
+         * @return The onchange consumer
+         */
         protected BiConsumer<Vector2d, ItemStack> getOnChange() {
             return this.onChange;
         }

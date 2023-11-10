@@ -24,18 +24,33 @@ public class BackGUIButton extends SwitchGUIButton {
      * @param gui The GUI
      * @param targetGUI The GUI to be opened on click
      * @param title The title of the Button
+     * @param cooldown The cooldown of the Button. Applied to the material, not the Button alone.
+     * @param sound The sound that is played when pressing that button
+     * @param permission The permission required to press this button
      */
     public BackGUIButton(GUI gui, int cooldown, Sound sound, String permission, Function<Player, GUI> targetGUI, TextComponent title) {
         super(gui, new ItemBuilder(title, Material.RED_STAINED_GLASS_PANE).build(), cooldown, sound, permission, targetGUI);
     }
 
+    /**
+     * The Builder for BackGUIButtons
+     */
     public static class Builder extends AbstractBuilder<Builder, BackGUIButton> {
         private TextComponent title = Component.text("Zurück").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false);
 
+        /**
+         * Creates a new Builder
+         * @param gui The gui the new Buttons belong to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the title attribute
+         * @param title The title of the {@link BackGUIButton}
+         * @return Itself
+         */
         public Builder title(TextComponent title) {
             this.title = title;
             return this;

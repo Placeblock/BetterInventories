@@ -23,6 +23,9 @@ public class TeleportGUIButton extends GUIButton {
      * @param gui The GUI
      * @param item The ItemStack of the GUIButton
      * @param location The location to which the player is teleported
+     * @param cooldown The cooldown of the Button
+     * @param permission The permission required to press this button
+     * @param sound The sound played when pressing this button
      */
     public TeleportGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, Location location) {
         super(gui, item, cooldown, sound, permission);
@@ -36,13 +39,25 @@ public class TeleportGUIButton extends GUIButton {
         player.teleport(location);
     }
 
+    /**
+     * Builder for creating {@link TeleportGUIButton}
+     */
     public static class Builder extends AbstractBuilder<Builder, TeleportGUIButton> {
         private Location location;
 
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the location attribute
+         * @param location The location to which the player is teleported
+         * @return Itself
+         */
         public Builder location(Location location) {
             this.location = location;
             return this;

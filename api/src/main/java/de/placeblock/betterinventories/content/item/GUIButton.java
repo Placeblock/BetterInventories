@@ -154,7 +154,11 @@ public abstract class GUIButton extends GUIItem {
         }
     }
 
-
+    /**
+     * Abstract Builder for creating various {@link GUIButton}
+     * @param <B> The Builder that implements this one
+     * @param <P> The {@link GUIButton} that is built
+     */
     @Getter(AccessLevel.PROTECTED)
     protected static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUIButton> extends GUIItem.AbstractBuilder<B, P> {
         private String permission;
@@ -167,58 +171,113 @@ public abstract class GUIButton extends GUIItem {
         private Consumer<ClickData> onShiftRightClick;
         private Consumer<ClickData> onShiftLeftClick;
 
-        public AbstractBuilder(GUI gui) {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the permission attribute
+         * @param permission The permission that is required to click on the button
+         * @return Itself
+         */
         public B permission(String permission) {
             this.permission = permission;
             return this.self();
         }
 
+        /**
+         * Sets the cooldown attribute
+         * @param cooldown The cooldown after which the button can be pressed again
+         * @return Itself
+         */
         public B cooldown(int cooldown) {
             this.cooldown = cooldown;
             return this.self();
         }
 
+        /**
+         * Sets the sound attribute
+         * @param sound The sound which is played when the button is pressed
+         * @return Itself
+         */
         public B sound(Sound sound) {
             this.sound = sound;
             return this.self();
         }
 
+        /**
+         * Sets the onClick attribute
+         * @param callback Gets executed when the button is clicked
+         * @return Itself
+         */
         public B onClick(Consumer<ClickData> callback) {
             this.onClick = callback;
             return this.self();
         }
 
+        /**
+         * Sets the onShiftClick attribute
+         * @param onShiftClick Gets executed when the button is shift-clicked
+         * @return Itself
+         */
         public B onShiftClick(Consumer<ClickData> onShiftClick) {
             this.onShiftClick = onShiftClick;
             return this.self();
         }
 
+        /**
+         * Sets the onShiftClick attribute
+         * @param onRightClick Gets executed when the button is right-clicked
+         * @return Itself
+         */
         public B onRightClick(Consumer<ClickData> onRightClick) {
             this.onRightClick = onRightClick;
             return this.self();
         }
 
+        /**
+         * Sets the onLeftClick attribute
+         * @param onLeftClick Gets executed when the button is left-clicked
+         * @return Itself
+         */
         public B onLeftClick(Consumer<ClickData> onLeftClick) {
             this.onLeftClick = onLeftClick;
             return this.self();
         }
 
+        /**
+         * Sets the onShiftRightClick attribute
+         * @param onShiftRightClick Gets executed when the button is shift-right-clicked
+         * @return Itself
+         */
         public B onShiftRightClick(Consumer<ClickData> onShiftRightClick) {
             this.onShiftRightClick = onShiftRightClick;
             return this.self();
         }
 
+        /**
+         * Sets the onShiftLeftClick attribute
+         * @param onShiftLeftClick Gets executed when the button is shift-left-clicked
+         * @return Itself
+         */
         public B onShiftLeftClick(Consumer<ClickData> onShiftLeftClick) {
             this.onShiftLeftClick = onShiftLeftClick;
             return this.self();
         }
     }
 
+    /**
+     * Builder for creating {@link GUIButton}
+     */
     public static class Builder extends AbstractBuilder<Builder, GUIButton> {
-
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }

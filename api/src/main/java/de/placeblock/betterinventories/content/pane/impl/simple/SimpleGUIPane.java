@@ -22,7 +22,14 @@ public class SimpleGUIPane extends BaseSimpleGUIPane<GUISection, SimpleGUIPane> 
         super(gui, minSize, maxSize, autoSize);
     }
 
-    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleGUIPane> {
+    /**
+     * Builder for creating {@link SimpleGUIPane}
+     */
+    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleGUIPane, GUISection> {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }

@@ -26,6 +26,8 @@ public abstract class ToggleGUIButton extends GUIButton {
      * @param gui The GUI
      * @param permission The permission required to toggle
      * @param toggled The default value of the toggled-state
+     * @param cooldown The cooldown of the Button
+     * @param sound The sound played when pressing this button
      */
     public ToggleGUIButton(GUI gui, int cooldown, Sound sound, String permission, boolean toggled) {
         super(gui, null, cooldown, sound, permission);
@@ -44,6 +46,7 @@ public abstract class ToggleGUIButton extends GUIButton {
 
     /**
      * Toggles the state of the Button
+     * @param clickData The clickData of the action
      */
     public void toggle(ClickData clickData) {
         this.toggled = !this.toggled;
@@ -70,37 +73,64 @@ public abstract class ToggleGUIButton extends GUIButton {
 
     /**
      * Gets called when the Button gets toggled
+     * @param clickData The clickData of the action
      * @param toggled The current state
      */
     protected abstract void onToggle(ClickData clickData, boolean toggled);
 
 
-
+    /**
+     * Builder for creating {@link ToggleGUIButton}
+     */
     public static class Builder extends AbstractBuilder<Builder, ToggleGUIButton> {
         private boolean toggled;
         private BiConsumer<ClickData, Boolean> onToggle;
         private Supplier<ItemStack> enabledItem;
         private Supplier<ItemStack> disabledItem;
 
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the toggled attribute
+         * @param toggled Default value for the toggled state
+         * @return Itself
+         */
         public Builder toggled(boolean toggled) {
             this.toggled = toggled;
             return this;
         }
 
+        /**
+         * Sets the onToggle attribute
+         * @param onToggle Is called if the button is toggled
+         * @return Itself
+         */
         public Builder onToggle(BiConsumer<ClickData, Boolean> onToggle) {
             this.onToggle = onToggle;
             return this;
         }
 
+        /**
+         * Sets the enabledItem attribute
+         * @param enabledItem This item is shown if the button is toggled
+         * @return Itself
+         */
         public Builder enabledItem(Supplier<ItemStack> enabledItem) {
             this.enabledItem = enabledItem;
             return this;
         }
 
+        /**
+         * Sets the disabledItem attribute
+         * @param disabledItem This item is shown if the button is not toggled
+         * @return Itself
+         */
         public Builder disabledItem(Supplier<ItemStack> disabledItem) {
             this.disabledItem = disabledItem;
             return this;

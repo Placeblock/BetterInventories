@@ -15,6 +15,10 @@ public class PreviousPageGUIButton extends PaginatorGUIButton {
      * Creates a new PreviousPageGUIButton
      * @param paginatorGUIPane The according Paginator
      * @param gui The GUI
+     * @param cooldown The cooldown of the Button
+     * @param permission The permission required to press this button
+     * @param sound The sound played when pressing this button
+     * @param item The ItemStack of the Button
      */
     public PreviousPageGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, PaginatorGUIPane paginatorGUIPane) {
         super(gui, item, cooldown, sound, permission, paginatorGUIPane);
@@ -26,11 +30,14 @@ public class PreviousPageGUIButton extends PaginatorGUIButton {
         this.getGui().update();
     }
 
+    /**
+     * Builder for creating {@link PreviousPageGUIButton}
+     */
     public static class Builder extends PaginatorGUIButton.Builder<Builder, PreviousPageGUIButton> {
         /**
          * Creates a new GUIButton
-         *
          * @param gui The GUI
+         * @param paginator The paginator this button belongs to
          */
         public Builder(GUI gui, PaginatorGUIPane paginator) {
             super(gui, paginator);

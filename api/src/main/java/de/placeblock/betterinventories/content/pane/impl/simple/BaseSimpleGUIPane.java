@@ -273,17 +273,42 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
         private final C child;
     }
 
-    public static abstract class Builder<B extends Builder<B, P>, P extends BaseSimpleGUIPane<?, ?>> extends GUISection.Builder<B, P> {
+    /**
+     * Builder for creating {@link BaseSimpleGUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The BaseSimpleGUIPane that is built
+     * @param <C> The Sections that can be placed inside built panes {@link BaseSimpleGUIPane}
+     */
+    public static abstract class Builder<B extends Builder<B, P, C>, P extends BaseSimpleGUIPane<C, P>, C extends GUISection> extends GUISection.Builder<B, P> {
+        /**
+         * Whether to automatically resize the pane according to the children.
+         * If true it will set the size to the bounding box of all children.
+         */
         private boolean autoSize = true;
-        public Builder(GUI gui) {
+
+        /**
+         * Creates a new Builder
+         * @param gui The gui this Pane belongs to
+         */
+        protected Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the autoSize property
+         * @param autoSize Whether to automatically resize the pane according to the children.
+         *                 If true it will set the size to the bounding box of all children.
+         * @return Itself
+         */
         public B autoSize(boolean autoSize) {
             this.autoSize = autoSize;
             return (B) this;
         }
 
+        /**
+         * Whether this Pane auto-sizes
+         * @return Whether this Pane auto-sizes
+         */
         protected boolean isAutoSize() {
             return this.autoSize;
         }

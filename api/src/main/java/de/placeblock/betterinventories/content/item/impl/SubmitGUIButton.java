@@ -50,7 +50,9 @@ public abstract class SubmitGUIButton extends GUIButton {
      * @param gui The GUI
      * @param item The ItemStack of the Button
      * @param submitItem The item to be displayed on submit
-     * @param permission The permission required to click on this button
+     * @param cooldown The cooldown of the Button
+     * @param permission The permission required to press this button
+     * @param sound The sound played when pressing this button
      * @param submitDelay The delay before the submit item is shown
      */
     public SubmitGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, ItemStack submitItem, int submitDelay) {
@@ -99,39 +101,64 @@ public abstract class SubmitGUIButton extends GUIButton {
      */
     public abstract void onSubmit(ClickData data);
 
+    /**
+     * Abstract Builder for creating {@link SubmitGUIButton}
+     * @param <B> The Builder that implements this one
+     * @param <P> The {@link GUIButton} that is built
+     */
     @Getter(AccessLevel.PROTECTED)
     protected static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends SubmitGUIButton> extends GUIButton.AbstractBuilder<B, P> {
         private ItemStack submitItem = new ItemBuilder(Component.text("Submit"), Material.LIME_DYE).build();
-        private String permission;
         private int submitDelay;
         private Consumer<ClickData> onSubmit;
 
-        public AbstractBuilder(GUI gui) {
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         */
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the submitItem attribute
+         * @param item The item that is shown to submit
+         * @return Itself
+         */
         public B submitItem(ItemStack item) {
             this.submitItem = item;
             return this.self();
         }
 
-        public B permission(String permission) {
-            this.permission = permission;
-            return this.self();
-        }
-
+        /**
+         * Sets the submitDelay attribute
+         * @param submitDelay The delay after which the submit item is shown
+         * @return Itself
+         */
         public B submitDelay(int submitDelay) {
             this.submitDelay = submitDelay;
             return this.self();
         }
 
+        /**
+         * Sets the onSubmit attribute
+         * @param onSubmit Is called when somebody successfully submits
+         * @return Itself
+         */
         public B onSubmit(Consumer<ClickData> onSubmit) {
             this.onSubmit = onSubmit;
             return this.self();
         }
     }
 
+    /**
+     * Builder for creating {@link SubmitGUIButton}
+     */
     public static class Builder extends AbstractBuilder<Builder, SubmitGUIButton> {
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }

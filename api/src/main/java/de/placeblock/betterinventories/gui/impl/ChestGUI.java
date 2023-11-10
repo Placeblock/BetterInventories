@@ -16,6 +16,8 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
      * @param title The title of the GUI
      * @param minHeight The minimum height of the GUI
      * @param maxHeight The maximum height of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     @Deprecated(forRemoval = true)
     public ChestGUI(Plugin plugin, TextComponent title, boolean removeItems, int minHeight, int maxHeight) {
@@ -23,13 +25,24 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
         this.setCanvas(new SimpleGUIPane.Builder(this).adoptMinMax(this).autoSize(true).build());
     }
 
-
+    /**
+     * Builder for creating ChestGUIs
+     * @param <P> The Plugin that uses this builder
+     */
     public static class Builder<P extends JavaPlugin> extends BaseChestGUI.Builder<Builder<P>, ChestGUI, SimpleGUIPane, P> {
-
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         */
         public Builder(P plugin) {
             super(plugin);
         }
 
+        /**
+         * Sets the minHeight and maxHeight attributes
+         * @param height The height of the GUI
+         * @return Itself
+         */
         public Builder<P> height(int height) {
             this.minHeight(height);
             this.maxHeight(height);

@@ -4,6 +4,10 @@ import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
 
+/**
+ * A {@link GUIPane} with an upper and lower pane.
+ * Renders the lower pane always below the upper pane.
+ */
 public class HorizontalSplitGUIPane extends BaseHorizontalSplitGUIPane{
     /**
      * Creates a new HorizontalSplitGUIPane
@@ -19,7 +23,14 @@ public class HorizontalSplitGUIPane extends BaseHorizontalSplitGUIPane{
         super(gui, minSize, maxSize, upperPane, lowerPane);
     }
 
+    /**
+     * Builder for creating {@link HorizontalSplitGUIPane}
+     */
     public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, HorizontalSplitGUIPane> {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }

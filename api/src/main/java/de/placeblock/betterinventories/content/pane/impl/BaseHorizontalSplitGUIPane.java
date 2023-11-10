@@ -161,22 +161,40 @@ public abstract class BaseHorizontalSplitGUIPane extends GUIPane {
         }
     }
 
-
+    /**
+     * Builder for creating {@link BaseHorizontalSplitGUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The BaseHorizontalSplitGUIPane that is built
+     */
     @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseHorizontalSplitGUIPane> extends GUIPane.Builder<B, P> {
         private GUIPane upperPane;
         private GUIPane lowerPane;
 
-        public Builder(GUI gui) {
+        /**
+         * Creates a new Builder
+         * @param gui The gui this Pane belongs to
+         */
+        protected Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the upperPane attribute
+         * @param upperPane The upper pane
+         * @return Itself
+         */
         public B upperPane(GUIPane upperPane) {
             this.upperPane = upperPane;
             return self();
         }
 
+        /**
+         * Sets the lowerPane attribute
+         * @param lowerPane The lower pane
+         * @return Itself
+         */
         public B lowerPane(GUIPane lowerPane) {
             this.lowerPane = lowerPane;
             return self();

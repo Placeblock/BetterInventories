@@ -67,7 +67,8 @@ public abstract class GUI {
     private final GUIItemListener itemListener;
 
     /**
-     * Whether to try to remove Items from the inventory on close
+     * Whether to try to remove Items from the inventory on close.
+     * The first player that closes the gui gets the items
      */
     private final boolean removeItems;
 
@@ -76,6 +77,8 @@ public abstract class GUI {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
         this.plugin = plugin;
@@ -214,6 +217,10 @@ public abstract class GUI {
         }
     }
 
+    /**
+     * Updates the title of the inventory
+     * @param title The new title
+     */
     public void updateTitle(TextComponent title) {
         this.title = title;
         this.reloadViews();
@@ -254,7 +261,12 @@ public abstract class GUI {
      */
     public void onClose(Player player) {}
 
-
+    /**
+     * The generic Builder for GUIs
+     * @param <B> The Builder that implements this one.
+     * @param <G> The GUI that gets build
+     * @param <P> The plugin that uses this builder.
+     */
     @RequiredArgsConstructor
     @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, G, P>, G extends GUI, P extends JavaPlugin> extends de.placeblock.betterinventories.Builder<B, G> {
@@ -263,16 +275,32 @@ public abstract class GUI {
         private InventoryType type;
         private boolean removeItems = true;
 
+        /**
+         * Sets the title attribute
+         * @param title The title of the GUI
+         * @return Itself
+         */
         public B title(TextComponent title) {
             this.title = title;
             return this.self();
         }
 
-        public B removeItems(boolean remove) {
-            this.removeItems = remove;
+        /**
+         * Sets the removeItems attribute
+         * @param removeItems Whether to try to remove Items from the inventory on close.
+         *                    The first player that closes the gui gets the items
+         * @return Itself
+         */
+        public B removeItems(boolean removeItems) {
+            this.removeItems = removeItems;
             return this.self();
         }
 
+        /**
+         * Sets the type attribute
+         * @param type The type of the GUI
+         * @return Itself
+         */
         public B type(InventoryType type) {
             this.type = type;
             return this.self();

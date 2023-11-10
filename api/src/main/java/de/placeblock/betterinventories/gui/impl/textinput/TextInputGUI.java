@@ -73,6 +73,8 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      * @param onUpdate Is called whenever the player types something
      * @param titleConverter Is called to convert the current text to the title of the submit item
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     @Deprecated(forRemoval = true)
     public TextInputGUI(Plugin plugin, TextComponent title, boolean removeItems,
@@ -179,7 +181,10 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
         return this.player;
     }
 
-
+    /**
+     * Builder for creating {@link TextInputGUI}
+     * @param <P> The plugin that uses this builder
+     */
     @SuppressWarnings("unused")
     public static class Builder<P extends JavaPlugin> extends BaseAnvilGUI.Builder<Builder<P>, TextInputGUI, P> {
         private final Player player;
@@ -188,23 +193,51 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
         private Consumer<String> onUpdate = (t) -> {};
         private Function<String, TextComponent> titleConverter = Component::text;
 
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         * @param player The player this GUI belongs to
+         */
         public Builder(P plugin, Player player) {
             super(plugin);
             this.player = player;
         }
 
+        /**
+         * Sets the text attribute
+         * @param text The text that is shown in the anvil at the beginning
+         * @return Itself
+         */
         public Builder<P> text(String text) {
             this.text = text;
             return self();
         }
+
+        /**
+         * Sets the onFinish attribute
+         * @param onFinish Is executed if the text is submitted
+         * @return Itself
+         */
         public Builder<P> onFinish(FinishConsumer onFinish) {
             this.onFinish = onFinish;
             return self();
         }
+
+        /**
+         * Sets the onUpdate attribute
+         * @param onUpdate Is executed if the text is updated
+         * @return Itself
+         */
         public Builder<P> onUpdate(Consumer<String> onUpdate) {
             this.onUpdate = onUpdate;
             return self();
         }
+
+        /**
+         * Sets the titleConverter attribute
+         * @param titleConverter Is called to convert the current text to the title of the submit item
+         * @return Itself
+         */
         public Builder<P> titleConverter(Function<String, TextComponent> titleConverter) {
             this.titleConverter = titleConverter;
             return self();

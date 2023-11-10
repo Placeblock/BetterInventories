@@ -157,6 +157,11 @@ public abstract class GUISection implements Sizeable {
      */
     public abstract boolean onItemAmount(Vector2d position, int amount);
 
+    /**
+     * Builder for creating various {@link GUISection}
+     * @param <B> The Builder that implements this one
+     * @param <P> The Product that is built
+     */
     @Getter(AccessLevel.PROTECTED)
     @RequiredArgsConstructor
     public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> extends de.placeblock.betterinventories.Builder<B, P> {
@@ -165,39 +170,81 @@ public abstract class GUISection implements Sizeable {
         private Vector2d minSize;
         private Vector2d maxSize;
 
-        public B adoptMinMax(Sizeable section) {
-            this.minSize = section.getMinSize();
-            this.maxSize = section.getMaxSize();
+        /**
+         * Adops the min and max size from another {@link Sizeable} e.g. {@link GUI} or {@link GUISection}
+         * @param sizeable The sizeable to adopt the size from
+         * @return Itself
+         */
+        public B adoptMinMax(Sizeable sizeable) {
+            this.minSize = sizeable.getMinSize();
+            this.maxSize = sizeable.getMaxSize();
             return self();
         }
 
+        /**
+         * Sets the size attribute
+         * @param size The sizeable to adopt the size from
+         * @return Itself
+         */
         public B size(Vector2d size) {
             this.size = size;
             return self();
         }
 
+        /**
+         * Sets the size attribute
+         * @param x The x part of the new size
+         * @param y The y part of the new size
+         * @return Itself
+         */
         public B size(int x, int y) {
             return this.size(new Vector2d(x, y));
         }
 
+        /**
+         * Sets the minSize attribute
+         * @param minSize The minimum size of the section
+         * @return Itself
+         */
         public B minSize(Vector2d minSize) {
             this.minSize = minSize;
             return self();
         }
 
+        /**
+         * Sets the minSize attribute
+         * @param x The x part of the new minSize
+         * @param y The y part of the new minSize
+         * @return Itself
+         */
         public B minSize(int x, int y) {
             return this.minSize(new Vector2d(x, y));
         }
 
+        /**
+         * Sets the maxSize attribute
+         * @param maxSize The maximum size of the section
+         * @return Itself
+         */
         public B maxSize(Vector2d maxSize) {
             this.maxSize = maxSize;
             return self();
         }
 
+        /**
+         * Sets the maxSize attribute
+         * @param x The x part of the new maxSize
+         * @param y The y part of the new maxSize
+         * @return Itself
+         */
         public B maxSize(int x, int y) {
             return this.maxSize(new Vector2d(x, y));
         }
 
+        /**
+         * Used to get the current minimum size. Throws an exception if min-size and size are null
+         * @return The current minSize
+         */
         protected Vector2d getMinSize() {
             if (this.minSize == null) {
                 if (this.size == null) {
@@ -208,6 +255,10 @@ public abstract class GUISection implements Sizeable {
             return this.minSize;
         }
 
+        /**
+         * Used to get the current maximum size. Throws an exception if max-size and size are null
+         * @return The current maxSize
+         */
         protected Vector2d getMaxSize() {
             if (this.maxSize == null) {
                 if (this.size == null) {

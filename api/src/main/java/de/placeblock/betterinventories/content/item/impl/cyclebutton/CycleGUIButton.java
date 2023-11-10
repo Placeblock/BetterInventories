@@ -29,10 +29,13 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
     private E currentValue;
 
     /**
-     * Creates a new CycleGUIButton
+     * Creates a new CycleGUIButton.
+     * The permission is passed in the various enum values.
      * @param gui The GUI
      * @param values The Enum values
      * @param startValue The Start-value
+     * @param cooldown The cooldown of the Button. Applied to the material, not the Button alone.
+     * @param sound The sound that is played when pressing that button
      */
     public CycleGUIButton(GUI gui, int cooldown, Sound sound, E[] values, E startValue) {
         super(gui, null, cooldown, sound, null);
@@ -114,6 +117,10 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      */
     protected abstract void onCycle(ClickData data, E newValue);
 
+    /**
+     * Builder for creating {@link CycleGUIButton}
+     * @param <E> The enum that is cycled through
+     */
     public static class Builder<E extends CycleEnum> extends AbstractBuilder<Builder<E>, CycleGUIButton<E>> {
         private final E[] values;
 
@@ -121,16 +128,31 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
 
         private BiConsumer<ClickData, E> onCycle;
 
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         * @param values All possible enum values
+         */
         public Builder(GUI gui, E[] values) {
             super(gui);
             this.values = values;
         }
 
+        /**
+         * Sets the startValue attribute
+         * @param startValue The value this button starts with
+         * @return Itself
+         */
         public Builder<E> startValue(E startValue) {
             this.startValue = startValue;
             return this;
         }
 
+        /**
+         * Sets the onCycle attribute
+         * @param callback Is called when cycling through the Enum-values
+         * @return Itself
+         */
         public Builder<E> onCycle(BiConsumer<ClickData, E> callback) {
             this.onCycle = callback;
             return this;

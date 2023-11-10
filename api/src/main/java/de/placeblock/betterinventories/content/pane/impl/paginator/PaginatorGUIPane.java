@@ -58,6 +58,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      * @param defaultControls The default controls automatically appear if there
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself.
+     * @param items The items to place in this paginator by default
      */
     @Deprecated
     public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
@@ -85,6 +86,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself. To add custom controls
      *                                you can instantiate the {@link PaginatorControlsPane}
+     * @param items The items to place in this paginator by default
      */
     @Deprecated(forRemoval = true)
     public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
@@ -238,6 +240,9 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
         return itemSize > slots && this.defaultControls != null;
     }
 
+    /**
+     * Builder for creating {@link PaginatorGUIPane}
+     */
     public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, PaginatorGUIPane> implements ItemAddable<Builder> {
         private final List<GUIItem> items = new ArrayList<>();
         private boolean repeat = true;
@@ -245,24 +250,49 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
         private PaginatorControlsPosition controlsPosition = PaginatorControlsPosition.RIGHT;
         private Function<PaginatorGUIPane, PaginatorControlsPane> controls;
 
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
         public Builder(GUI gui) {
             super(gui);
         }
 
+        /**
+         * Sets the repeat attribute
+         * @param repeat Wheter to jump to the beginning if at the end and vice versa
+         * @return Itself
+         */
         public Builder repeat(boolean repeat) {
             this.repeat = repeat;
             return this;
         }
+
+        /**
+         * Sets the startPage attribute
+         * @param startPage The first page to start with
+         * @return Itself
+         */
         public Builder startPage(int startPage) {
             this.startPage = startPage;
             return this;
         }
 
+        /**
+         * Sets the controls attribute. You can use either this or {@link Builder#controls(Function)}
+         * @param position The position of the controls
+         * @return Itself
+         */
         public Builder controls(PaginatorControlsPosition position) {
             this.controlsPosition = position;
             return this;
         }
 
+        /**
+         * Sets the controls attribute. You can use either this or {@link Builder#controls(PaginatorControlsPosition)}
+         * @param controls The new controls
+         * @return Itself
+         */
         public Builder controls(Function<PaginatorGUIPane, PaginatorControlsPane> controls) {
             this.controls = controls;
             return this;

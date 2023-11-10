@@ -19,6 +19,8 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param height The height of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     @Deprecated(forRemoval = true)
     public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean removeItems) {
@@ -31,6 +33,8 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     @Deprecated(forRemoval = true)
     public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
@@ -38,20 +42,36 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
         this.setCanvas(new SimpleGUIPane.Builder(this).size(InventoryTypeMapper.getSize(type)).autoSize(false).build());
     }
 
-
+    /**
+     * Builder used for creating CanvasGUIs
+     * @param <P> The Plugin that uses this builder
+     */
     public static class Builder<P extends JavaPlugin> extends BaseCanvasGUI.Builder<Builder<P>, CanvasGUI, SimpleGUIPane, P> {
         private int height = 3;
         private InventoryType type = InventoryType.CHEST;
-
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         */
         public Builder(P plugin) {
             super(plugin);
         }
 
+        /**
+         * Sets the type attribute. You can either specify the type or the height.
+         * @param type The inventory type
+         * @return Itself
+         */
         public Builder<P> type(InventoryType type) {
             this.type = type;
             return this.self();
         }
 
+        /**
+         * Sets the height attribute. You can either specify the type or the height.
+         * @param height The inventory's height. Only used if type is CHEST
+         * @return Itself
+         */
         public Builder<P> height(int height) {
             this.height = height;
             return this.self();

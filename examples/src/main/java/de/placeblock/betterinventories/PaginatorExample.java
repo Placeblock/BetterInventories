@@ -9,10 +9,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-// We use ChestGUI to auto-resize the GUI
-// With gui.showPlayer(Player) you can show the GUI to a player!
+/**
+ * Example for creating a Paginator inside a ChestGUI.
+ * We use ChestGUI to auto-resize the GUI.
+ * With gui.showPlayer(Player) you can show the GUI to a player!
+ */
 @SuppressWarnings("unused")
 public class PaginatorExample extends ChestGUI {
+    /**
+     * You can instantiate your GUI as usual
+     * @param plugin The Plugin that uses this GUI
+     */
     public PaginatorExample(Plugin plugin) {
         // Specifies minHeight and maxHeight to allow auto-resize
         super(plugin, Component.text("Test Title"), true, 1, 6);

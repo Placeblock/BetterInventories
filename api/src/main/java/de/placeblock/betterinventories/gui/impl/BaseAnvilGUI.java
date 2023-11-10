@@ -44,6 +44,8 @@ public abstract class BaseAnvilGUI extends GUI {
      * Creates a new AnvilGUI
      * @param plugin The plugin
      * @param title The title of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
     protected BaseAnvilGUI(Plugin plugin, TextComponent title, boolean removeItems) {
         super(plugin, title, InventoryType.ANVIL, removeItems);
@@ -97,6 +99,12 @@ public abstract class BaseAnvilGUI extends GUI {
         // Currently AnvilGUI doesn't support item offers
     }
 
+    /**
+     * The abstract Builder for BaseAnvilGUIs
+     * @param <B> The Builder that implements this one
+     * @param <G> The GUI that is built
+     * @param <P> The plugin that uses this builder
+     */
     @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, G, P>, G extends BaseAnvilGUI, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
@@ -104,19 +112,38 @@ public abstract class BaseAnvilGUI extends GUI {
         private GUIItem additionalItem;
         private GUIItem resultItem;
 
+        /**
+         * Changes the input item (The left slot)
+         * @param item The new GUIItem
+         * @return Itself
+         */
         public B inputItem(GUIItem item) {
             this.inputItem = item;
             return this.self();
         }
+        /**
+         * Changes the additional item (The slot in the middle)
+         * @param item The new GUIItem
+         * @return Itself
+         */
         public B additionalItem(GUIItem item) {
             this.additionalItem = item;
             return this.self();
         }
+        /**
+         * Changes the result item (The slot in the right)
+         * @param item The new GUIItem
+         * @return Itself
+         */
         public B resultItem(GUIItem item) {
             this.resultItem = item;
             return this.self();
         }
 
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         */
         public Builder(P plugin) {
             super(plugin);
         }
