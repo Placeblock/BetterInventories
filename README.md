@@ -5,7 +5,7 @@ you can place inside the GUI wherever you want. It is highly customizable, DRY, 
 if you need to implement more complex features.
 
 Features:
-- Supports different types of Inventories (Chest, Anvil)
+- Supports different types of Inventories (Chest, Anvil, Hopper, ...)
 - Custom titles
 - Built-in Page system
 - Clean management of different parts of the GUI (Components)
