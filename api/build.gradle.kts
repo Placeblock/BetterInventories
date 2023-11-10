@@ -1,3 +1,5 @@
+import io.papermc.paperweight.util.path
+
 plugins {
     id("java")
     id("io.papermc.paperweight.userdev")
@@ -61,6 +63,10 @@ tasks {
     javadoc {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
         title = "BetterInventories API Documentation"
+    }
+
+    reobfJar {
+        outputJar.set(layout.buildDirectory.file("${project.rootProject.layout.buildDirectory.path}/libs/plugin/${project.rootProject.name}-${project.version}.jar"))
     }
 }
 
