@@ -5,7 +5,10 @@ import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -31,11 +34,13 @@ public abstract class GUISection implements Sizeable {
     /**
      * The minimum size of the Section
      */
+    @Setter
     protected Vector2d minSize;
 
     /**
      * The maximum size of the Section
      */
+    @Setter
     protected Vector2d maxSize;
 
     /**
@@ -45,7 +50,7 @@ public abstract class GUISection implements Sizeable {
      * @param minSize The minimum size of the Section
      * @param maxSize The maximum size of the Section
      */
-    public GUISection(GUI gui, Vector2d size, Vector2d minSize, Vector2d maxSize) {
+    protected GUISection(GUI gui, Vector2d size, Vector2d minSize, Vector2d maxSize) {
         this.gui = gui;
         this.size = size;
         this.minSize = minSize;
@@ -142,7 +147,7 @@ public abstract class GUISection implements Sizeable {
      * @param position The relative position of the slot
      * @return Whether this action is allowed.
      */
-    public abstract boolean onItemRemove(Vector2d position);
+    public abstract ItemStack onItemRemove(Vector2d position);
 
     /**
      * Called when the amount of an item in a slot changes
@@ -151,4 +156,117 @@ public abstract class GUISection implements Sizeable {
      * @return Whether this action is allowed.
      */
     public abstract boolean onItemAmount(Vector2d position, int amount);
+
+    /**
+     * Builder for creating various {@link GUISection}
+     * @param <B> The Builder that implements this one
+     * @param <P> The Product that is built
+     */
+    @Getter(AccessLevel.PROTECTED)
+    @RequiredArgsConstructor
+    public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> extends de.placeblock.betterinventories.Builder<B, P> {
+        private final GUI gui;
+        private Vector2d size;
+        private Vector2d minSize;
+        private Vector2d maxSize;
+
+        /**
+         * Adops the min and max size from another {@link Sizeable} e.g. {@link GUI} or {@link GUISection}
+         * @param sizeable The sizeable to adopt the size from
+         * @return Itself
+         */
+        public B adoptMinMax(Sizeable sizeable) {
+            this.minSize = sizeable.getMinSize();
+            this.maxSize = sizeable.getMaxSize();
+            return self();
+        }
+
+        /**
+         * Sets the size attribute
+         * @param size The sizeable to adopt the size from
+         * @return Itself
+         */
+        public B size(Vector2d size) {
+            this.size = size;
+            return self();
+        }
+
+        /**
+         * Sets the size attribute
+         * @param x The x part of the new size
+         * @param y The y part of the new size
+         * @return Itself
+         */
+        public B size(int x, int y) {
+            return this.size(new Vector2d(x, y));
+        }
+
+        /**
+         * Sets the minSize attribute
+         * @param minSize The minimum size of the section
+         * @return Itself
+         */
+        public B minSize(Vector2d minSize) {
+            this.minSize = minSize;
+            return self();
+        }
+
+        /**
+         * Sets the minSize attribute
+         * @param x The x part of the new minSize
+         * @param y The y part of the new minSize
+         * @return Itself
+         */
+        public B minSize(int x, int y) {
+            return this.minSize(new Vector2d(x, y));
+        }
+
+        /**
+         * Sets the maxSize attribute
+         * @param maxSize The maximum size of the section
+         * @return Itself
+         */
+        public B maxSize(Vector2d maxSize) {
+            this.maxSize = maxSize;
+            return self();
+        }
+
+        /**
+         * Sets the maxSize attribute
+         * @param x The x part of the new maxSize
+         * @param y The y part of the new maxSize
+         * @return Itself
+         */
+        public B maxSize(int x, int y) {
+            return this.maxSize(new Vector2d(x, y));
+        }
+
+        /**
+         * Used to get the current minimum size. Throws an exception if min-size and size are null
+         * @return The current minSize
+         */
+        protected Vector2d getMinSize() {
+            if (this.minSize == null) {
+                if (this.size == null) {
+                    throw new IllegalStateException("minSize and size null");
+                }
+                return this.size;
+            }
+            return this.minSize;
+        }
+
+        /**
+         * Used to get the current maximum size. Throws an exception if max-size and size are null
+         * @return The current maxSize
+         */
+        protected Vector2d getMaxSize() {
+            if (this.maxSize == null) {
+                if (this.size == null) {
+                    throw new IllegalStateException("maxSize and size null");
+                }
+                return this.size;
+            }
+            return this.maxSize;
+        }
+    }
 }

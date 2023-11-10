@@ -1,31 +1,29 @@
 package de.placeblock.betterinventories.content.pane.impl.paginator;
 
 import de.placeblock.betterinventories.Sizeable;
-import de.placeblock.betterinventories.builder.content.PaginatorBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
-import de.placeblock.betterinventories.content.pane.impl.HorizontalSplitGUIPane;
 import de.placeblock.betterinventories.content.pane.GUIPane;
+import de.placeblock.betterinventories.content.pane.impl.BaseHorizontalSplitGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Util;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * A Paginator is a {@link GUIPane} that can contain items. If there are too many items you can switch pages to see all items.
- * <br>
- * Builder: {@link PaginatorBuilder}
  */
 @SuppressWarnings("unused")
-public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAddable<PaginatorGUIPane> {
+public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements ItemAddable<PaginatorGUIPane> {
     /**
      * The Items added to the Paginator
      */
     @Getter
-    private final List<GUIItem> items = new ArrayList<>();
+    private final List<GUIItem> items;
 
     /**
      * The default-controls or null
@@ -60,9 +58,13 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
      * @param defaultControls The default controls automatically appear if there
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself.
+     * @param items The items to place in this paginator by default
      */
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage, Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls) {
-        super(gui, minSize, maxSize);
+    @Deprecated
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
+                            Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls, List<GUIItem> items) {
+        super(gui, minSize, maxSize, null, null);
+        this.items = items;
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
         this.setUpperPane(this.contentPane);
         this.currentPage = startPage;
@@ -70,6 +72,7 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
         if (defaultControls != null) {
             this.defaultControls = defaultControls.apply(this);
         }
+        this.contentPane.setItems();
     }
 
     /**
@@ -83,10 +86,17 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself. To add custom controls
      *                                you can instantiate the {@link PaginatorControlsPane}
+     * @param items The items to place in this paginator by default
      */
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, PaginatorControlsPosition defaultControlsPosition, int startPage) {
-        this(gui, minSize, maxSize, repeat, startPage, null);
-        this.defaultControls = new PaginatorControlsPane(gui, this, new Vector2d(minSize.getX(), 1), new Vector2d(maxSize.getX(), 1), true, defaultControlsPosition);
+    @Deprecated(forRemoval = true)
+    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
+                            PaginatorControlsPosition defaultControlsPosition, List<GUIItem> items) {
+        this(gui, minSize, maxSize, repeat, startPage, (p) -> null, items);
+        this.defaultControls = new PaginatorControlsPane.Builder(gui, this)
+                .minSize(minSize.getX(), 1)
+                .maxSize(maxSize.getX(), 1)
+                .position(defaultControlsPosition)
+                .build();
     }
 
     /**
@@ -229,4 +239,85 @@ public class PaginatorGUIPane extends HorizontalSplitGUIPane implements ItemAdda
     private boolean showDefaultControls(int itemSize, int slots) {
         return itemSize > slots && this.defaultControls != null;
     }
+
+    /**
+     * Builder for creating {@link PaginatorGUIPane}
+     */
+    public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, PaginatorGUIPane> implements ItemAddable<Builder> {
+        private final List<GUIItem> items = new ArrayList<>();
+        private boolean repeat = true;
+        private int startPage = 0;
+        private PaginatorControlsPosition controlsPosition = PaginatorControlsPosition.RIGHT;
+        private Function<PaginatorGUIPane, PaginatorControlsPane> controls;
+
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
+        public Builder(GUI gui) {
+            super(gui);
+        }
+
+        /**
+         * Sets the repeat attribute
+         * @param repeat Wheter to jump to the beginning if at the end and vice versa
+         * @return Itself
+         */
+        public Builder repeat(boolean repeat) {
+            this.repeat = repeat;
+            return this;
+        }
+
+        /**
+         * Sets the startPage attribute
+         * @param startPage The first page to start with
+         * @return Itself
+         */
+        public Builder startPage(int startPage) {
+            this.startPage = startPage;
+            return this;
+        }
+
+        /**
+         * Sets the controls attribute. You can use either this or {@link Builder#controls(Function)}
+         * @param position The position of the controls
+         * @return Itself
+         */
+        public Builder controls(PaginatorControlsPosition position) {
+            this.controlsPosition = position;
+            return this;
+        }
+
+        /**
+         * Sets the controls attribute. You can use either this or {@link Builder#controls(PaginatorControlsPosition)}
+         * @param controls The new controls
+         * @return Itself
+         */
+        public Builder controls(Function<PaginatorGUIPane, PaginatorControlsPane> controls) {
+            this.controls = controls;
+            return this;
+        }
+
+        @Override
+        public PaginatorGUIPane build() {
+            if (this.controlsPosition != null) {
+                return new PaginatorGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(),
+                        this.repeat, this.startPage, this.controlsPosition, this.items);
+            } else {
+                return new PaginatorGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(),
+                        this.repeat, this.startPage, this.controls, this.items);
+            }
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        public List<GUIItem> getItems() {
+            return this.items;
+        }
+    }
+
 }

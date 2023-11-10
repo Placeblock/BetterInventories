@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
@@ -29,9 +30,11 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        super(plugin, title, type);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
+        super(plugin, title, type, removeItems);
     }
 
     /**
@@ -99,6 +102,23 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @SuppressWarnings("unused")
     public C getCanvas() {
         return this.canvas;
+    }
+
+    /**
+     * Builder for creating BaseCanvasGUIs
+     * @param <B> The Builder that implements this one
+     * @param <G> The GUI that is built
+     * @param <C> The Pane that lives inside the ChestGUI
+     * @param <P> The Plugin that uses this builder
+     */
+    public static abstract class Builder<B extends Builder<B, G, C, P>, G extends BaseCanvasGUI<C>, C extends GUIPane, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         */
+        public Builder(P plugin) {
+            super(plugin);
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -65,6 +66,7 @@ public class GUIItemListener implements Listener {
             return;
         }
         int slot = event.getSlot();
+        this.emitClickEvent(event, player);
         SearchData searchData = new SearchData(slot, (s) -> (s instanceof GUIPane));
         this.gui.searchSection(searchData);
         if (searchData.getSection() == null) {
@@ -74,8 +76,6 @@ public class GUIItemListener implements Listener {
         ItemStack currentItem = event.getCurrentItem();
         Vector2d pos = searchData.getRelativePos();
         GUISection section = searchData.getSection();
-        ClickData clickData = new ClickData(player, pos, event.getAction(), event);
-        section.onItemClick(clickData);
         switch (event.getAction()) {
             case PICKUP_HALF -> {
                 assert currentItem != null;
@@ -157,6 +157,18 @@ public class GUIItemListener implements Listener {
         }
     }
 
+    private void emitClickEvent(InventoryClickEvent event, Player player) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) return;
+        SearchData searchData = new SearchData(event.getSlot(), (s) -> true);
+        this.gui.searchSection(searchData);
+        if (searchData.getSection() == null) {
+            return;
+        }
+        Vector2d pos = searchData.getRelativePos();
+        ClickData clickData = new ClickData(player, pos, event.getAction(), event);
+        searchData.getSection().onItemClick(clickData);
+    }
+
     /**
      * Used to get hotbar items from events
      * @param event The Event
@@ -175,7 +187,7 @@ public class GUIItemListener implements Listener {
      * @param item The itemStack that got added
      * @param amount The amount of the itemStack
      */
-    public void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
+    private void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
         item = item.clone();
         item.setAmount(amount);
         if (section.onItemAdd(position, item)) {
@@ -190,7 +202,8 @@ public class GUIItemListener implements Listener {
      * @param position The position
      */
     public void dispatchRemove(Cancellable event, GUISection section, Vector2d position) {
-        if (section.onItemRemove(position)) {
+        ItemStack removedItemStack = section.onItemRemove(position);
+        if (removedItemStack == null) {
             event.setCancelled(true);
         }
     }
@@ -202,7 +215,7 @@ public class GUIItemListener implements Listener {
      * @param position The position
      * @param amount The new amount
      */
-    public void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
+    private void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
         if (section.onItemAmount(position, amount)) {
             event.setCancelled(true);
         }

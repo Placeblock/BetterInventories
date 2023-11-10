@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unchecked")
-public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
+public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
     /**
      * The content currently added to this Pane
      */
@@ -41,7 +41,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    public BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
+    protected BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize);
         this.autoSize = autoSize;
     }
@@ -271,5 +271,46 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
          * The child {@link GUISection}
          */
         private final C child;
+    }
+
+    /**
+     * Builder for creating {@link BaseSimpleGUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The BaseSimpleGUIPane that is built
+     * @param <C> The Sections that can be placed inside built panes {@link BaseSimpleGUIPane}
+     */
+    public static abstract class Builder<B extends Builder<B, P, C>, P extends BaseSimpleGUIPane<C, P>, C extends GUISection> extends GUISection.Builder<B, P> {
+        /**
+         * Whether to automatically resize the pane according to the children.
+         * If true it will set the size to the bounding box of all children.
+         */
+        private boolean autoSize = true;
+
+        /**
+         * Creates a new Builder
+         * @param gui The gui this Pane belongs to
+         */
+        protected Builder(GUI gui) {
+            super(gui);
+        }
+
+        /**
+         * Sets the autoSize property
+         * @param autoSize Whether to automatically resize the pane according to the children.
+         *                 If true it will set the size to the bounding box of all children.
+         * @return Itself
+         */
+        public B autoSize(boolean autoSize) {
+            this.autoSize = autoSize;
+            return (B) this;
+        }
+
+        /**
+         * Whether this Pane auto-sizes
+         * @return Whether this Pane auto-sizes
+         */
+        protected boolean isAutoSize() {
+            return this.autoSize;
+        }
     }
 }

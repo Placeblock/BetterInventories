@@ -29,7 +29,7 @@ public abstract class GUIPane extends GUISection {
      * @param minSize The minimum size of the Pane
      * @param maxSize The maximum size of the Pane
      */
-    public GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+    protected GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
         super(gui, minSize, minSize, maxSize);
     }
 
@@ -128,8 +128,8 @@ public abstract class GUIPane extends GUISection {
     }
 
     @Override
-    public boolean onItemRemove(Vector2d position) {
-        return true;
+    public ItemStack onItemRemove(Vector2d position) {
+        return null;
     }
 
     @Override
@@ -160,6 +160,21 @@ public abstract class GUIPane extends GUISection {
                 pane.provideItem(itemStack);
                 if (itemStack.getAmount()==0) break;
             }
+        }
+    }
+
+    /**
+     * Builder for creating various {@link GUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The Product that is built
+     */
+    public static abstract class Builder<B extends Builder<B, P>, P extends GUIPane> extends GUISection.Builder<B, P> {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
+        public Builder(GUI gui) {
+            super(gui);
         }
     }
 }

@@ -2,9 +2,6 @@ package de.placeblock.betterinventories;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.MockPlugin;
-import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
-import de.placeblock.betterinventories.builder.content.SimpleGUIPaneBuilder;
-import de.placeblock.betterinventories.builder.gui.ChestGUIBuilder;
 import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.GUIItem;
@@ -27,21 +24,21 @@ public class SimpleGUIPaneTest {
 
     @Test
     public void zIndexTest() {
-        ChestGUI chestGUI = new ChestGUIBuilder(this.plugin)
+        ChestGUI chestGUI = new ChestGUI.Builder<>(this.plugin)
                 .height(3)
                 .title(Component.empty())
                 .build();
-        SimpleGUIPane pane = new SimpleGUIPaneBuilder(chestGUI)
+        SimpleGUIPane pane = new SimpleGUIPane.Builder(chestGUI)
                 .adoptMinMax(chestGUI.getCanvas())
                 .build();
         chestGUI.getCanvas().setSection(pane);
-        SimpleGUIPane fillPane = new SimpleGUIPaneBuilder(chestGUI)
+        SimpleGUIPane fillPane = new SimpleGUIPane.Builder(chestGUI)
                 .adoptMinMax(chestGUI.getCanvas())
                 .build();
-        fillPane.fill(new GUIItem(chestGUI, new ItemStack(Material.CHEST)));
+        fillPane.fill(new GUIItem.Builder(chestGUI).itemStack(new ItemStack(Material.CHEST)).build());
         pane.setSection(fillPane);
-        GUIButton button = new GUIButtonBuilder(chestGUI)
-                .item(new ItemStack(Material.DIAMOND))
+        GUIButton button = new GUIButton.Builder(chestGUI)
+                .itemStack(new ItemStack(Material.DIAMOND))
                 .build();
         pane.setSectionAt(2, button);
         chestGUI.update();

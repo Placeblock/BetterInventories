@@ -1,9 +1,14 @@
 package de.placeblock.betterinventories.gui;
 
+import de.placeblock.betterinventories.content.GUISection;
 import de.placeblock.betterinventories.content.SearchData;
+import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.listener.GUIItemListener;
 import de.placeblock.betterinventories.gui.listener.GUIListener;
+import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -12,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +40,7 @@ public abstract class GUI {
     /**
      * The title of the GUI
      */
-    private final TextComponent title;
+    private TextComponent title;
 
     /**
      * The current Views of the GUI
@@ -51,21 +57,36 @@ public abstract class GUI {
      */
     private List<ItemStack> content = new ArrayList<>();
 
+    /**
+     * Listener for gui management
+     */
     private final GUIListener guiListener;
+    /**
+     * Listener for item management
+     */
     private final GUIItemListener itemListener;
+
+    /**
+     * Whether to try to remove Items from the inventory on close.
+     * The first player that closes the gui gets the items
+     */
+    private final boolean removeItems;
 
     /**
      * Creates a new GUI
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
-    public GUI(Plugin plugin, TextComponent title, InventoryType type) {
+    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
         this.guiListener = new GUIListener(this);
         this.itemListener = new GUIItemListener(this);
+        this.removeItems = removeItems;
     }
 
     /**
@@ -131,21 +152,6 @@ public abstract class GUI {
     }
 
     /**
-     * Reloads all Views (Removes all Players and adds all Players).
-     * Needed when resizing the GUI or changing the GUI's title
-     */
-    protected void reloadViews() {
-        List<Player> players = this.getPlayers();
-        List<GUIView> views = new ArrayList<>(this.getViews());
-        for (GUIView view : views) {
-            this.removePlayer(view);
-        }
-        for (Player player : players) {
-            this.showPlayer(player);
-        }
-    }
-
-    /**
      * @return The amount of slots this GUI has
      */
     public abstract int getSlots();
@@ -196,6 +202,30 @@ public abstract class GUI {
         }
     }
 
+    /**
+     * Reloads all Views (Removes all Players and adds all Players).
+     * Needed when resizing the GUI or changing the GUI's title
+     */
+    protected void reloadViews() {
+        List<Player> players = this.getPlayers();
+        List<GUIView> views = new ArrayList<>(this.getViews());
+        for (GUIView view : views) {
+            this.removePlayer(view);
+        }
+        for (Player player : players) {
+            this.showPlayer(player);
+        }
+    }
+
+    /**
+     * Updates the title of the inventory
+     * @param title The new title
+     */
+    public void updateTitle(TextComponent title) {
+        this.title = title;
+        this.reloadViews();
+    }
+
 
     //  HANDLE GUI REMOVAL
 
@@ -204,8 +234,21 @@ public abstract class GUI {
      * @param view The View of the Player
      */
     public void removePlayer(GUIView view) {
+        Player player = view.getPlayer();
+        if (this.removeItems) {
+            for (int i = 0; i < this.getSlots(); i++) {
+                SearchData searchData = new SearchData(i, (s) -> s instanceof GUIPane);
+                this.searchSection(searchData);
+                GUISection section = searchData.getSection();
+                if (section == null) continue;
+                Vector2d pos = searchData.getRelativePos();
+                ItemStack removedItemStack = section.onItemRemove(pos);
+                if (removedItemStack == null) continue;
+                player.getInventory().addItem(removedItemStack);
+            }
+        }
         this.views.remove(view);
-        this.onClose(view.getPlayer());
+        this.onClose(player);
         if (this.views.size() == 0) {
             HandlerList.unregisterAll(this.guiListener);
             HandlerList.unregisterAll(this.itemListener);
@@ -218,4 +261,49 @@ public abstract class GUI {
      */
     public void onClose(Player player) {}
 
+    /**
+     * The generic Builder for GUIs
+     * @param <B> The Builder that implements this one.
+     * @param <G> The GUI that gets build
+     * @param <P> The plugin that uses this builder.
+     */
+    @RequiredArgsConstructor
+    @Getter(AccessLevel.PROTECTED)
+    public static abstract class Builder<B extends Builder<B, G, P>, G extends GUI, P extends JavaPlugin> extends de.placeblock.betterinventories.Builder<B, G> {
+        private final P plugin;
+        private TextComponent title;
+        private InventoryType type;
+        private boolean removeItems = true;
+
+        /**
+         * Sets the title attribute
+         * @param title The title of the GUI
+         * @return Itself
+         */
+        public B title(TextComponent title) {
+            this.title = title;
+            return this.self();
+        }
+
+        /**
+         * Sets the removeItems attribute
+         * @param removeItems Whether to try to remove Items from the inventory on close.
+         *                    The first player that closes the gui gets the items
+         * @return Itself
+         */
+        public B removeItems(boolean removeItems) {
+            this.removeItems = removeItems;
+            return this.self();
+        }
+
+        /**
+         * Sets the type attribute
+         * @param type The type of the GUI
+         * @return Itself
+         */
+        public B type(InventoryType type) {
+            this.type = type;
+            return this.self();
+        }
+    }
 }

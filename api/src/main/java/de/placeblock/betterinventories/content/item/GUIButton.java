@@ -1,20 +1,21 @@
 package de.placeblock.betterinventories.content.item;
 
-import de.placeblock.betterinventories.builder.content.GUIButtonBuilder;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.GUIView;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Consumer;
 
 
 /**
  * A {@link GUIItem} with the ability to get clicked.
  * Various onclick methods can be implemented and overridden.
  * The cooldown is being set for the whole material of the {@link ItemStack}.
- * <br>
- * Builder: {@link GUIButtonBuilder}
  */
 @SuppressWarnings("unused")
 public abstract class GUIButton extends GUIItem {
@@ -32,69 +33,6 @@ public abstract class GUIButton extends GUIItem {
      * The permission the player needs to click the button.
      */
     private final String permission;
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     */
-    public GUIButton(GUI gui, ItemStack item) {
-        this(gui, item, 0, Sound.UI_BUTTON_CLICK);
-    }
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     * @param permission The permission required to click the button
-     */
-    public GUIButton(GUI gui, ItemStack item, String permission) {
-        this(gui, item, 0, Sound.UI_BUTTON_CLICK);
-    }
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     * @param clickSound The sound the button should make on click.
-     *                   null if silent.
-     */
-    public GUIButton(GUI gui, ItemStack item, Sound clickSound) {
-        this(gui, item, 0, clickSound);
-    }
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     * @param cooldown The cooldown after which the button can be clicked again in ticks
-     */
-    public GUIButton(GUI gui, ItemStack item, int cooldown) {
-        this(gui, item, cooldown, null, null);
-    }
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     * @param cooldown The cooldown after which the button can be clicked again in ticks
-     * @param permission The permission required to click the button
-     */
-    public GUIButton(GUI gui, ItemStack item, int cooldown, String permission) {
-        this(gui, item, cooldown, null, permission);
-    }
-
-    /**
-     * Creates a new GUIButton
-     * @param gui The GUI
-     * @param item The ItemStack of the GUIButton
-     * @param cooldown The cooldown after which the button can be clicked again in ticks
-     * @param clickSound The sound the button should make on click.
-     *                   null if silent.
-     */
-    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound) {
-        this(gui, item, cooldown, clickSound, null);
-    }
 
     /**
      * Creates a new GUIButton
@@ -130,7 +68,7 @@ public abstract class GUIButton extends GUIItem {
             this.applyCooldown();
         }
         if (this.clickSound != null) {
-            player.playSound(player.getEyeLocation(), this.clickSound, 1, 1);
+            player.playSound(player.getEyeLocation(), this.clickSound, 0.8F, 1);
         }
     }
 
@@ -199,6 +137,7 @@ public abstract class GUIButton extends GUIItem {
         boolean leftClick = event.isLeftClick();
         boolean rightClick = event.isRightClick();
         boolean shiftClick = event.isShiftClick();
+        this.click(data.getPlayer());
         this.onClick(data);
         if (leftClick) {
             if (shiftClick) {
@@ -215,4 +154,179 @@ public abstract class GUIButton extends GUIItem {
         }
     }
 
+    /**
+     * Abstract Builder for creating various {@link GUIButton}
+     * @param <B> The Builder that implements this one
+     * @param <P> The {@link GUIButton} that is built
+     */
+    @Getter(AccessLevel.PROTECTED)
+    protected static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUIButton> extends GUIItem.AbstractBuilder<B, P> {
+        private String permission;
+        private int cooldown = 0;
+        private Sound sound = Sound.UI_BUTTON_CLICK;
+        private Consumer<ClickData> onClick;
+        private Consumer<ClickData> onShiftClick;
+        private Consumer<ClickData> onLeftClick;
+        private Consumer<ClickData> onRightClick;
+        private Consumer<ClickData> onShiftRightClick;
+        private Consumer<ClickData> onShiftLeftClick;
+
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
+        protected AbstractBuilder(GUI gui) {
+            super(gui);
+        }
+
+        /**
+         * Sets the permission attribute
+         * @param permission The permission that is required to click on the button
+         * @return Itself
+         */
+        public B permission(String permission) {
+            this.permission = permission;
+            return this.self();
+        }
+
+        /**
+         * Sets the cooldown attribute
+         * @param cooldown The cooldown after which the button can be pressed again
+         * @return Itself
+         */
+        public B cooldown(int cooldown) {
+            this.cooldown = cooldown;
+            return this.self();
+        }
+
+        /**
+         * Sets the sound attribute
+         * @param sound The sound which is played when the button is pressed
+         * @return Itself
+         */
+        public B sound(Sound sound) {
+            this.sound = sound;
+            return this.self();
+        }
+
+        /**
+         * Sets the onClick attribute
+         * @param callback Gets executed when the button is clicked
+         * @return Itself
+         */
+        public B onClick(Consumer<ClickData> callback) {
+            this.onClick = callback;
+            return this.self();
+        }
+
+        /**
+         * Sets the onShiftClick attribute
+         * @param onShiftClick Gets executed when the button is shift-clicked
+         * @return Itself
+         */
+        public B onShiftClick(Consumer<ClickData> onShiftClick) {
+            this.onShiftClick = onShiftClick;
+            return this.self();
+        }
+
+        /**
+         * Sets the onShiftClick attribute
+         * @param onRightClick Gets executed when the button is right-clicked
+         * @return Itself
+         */
+        public B onRightClick(Consumer<ClickData> onRightClick) {
+            this.onRightClick = onRightClick;
+            return this.self();
+        }
+
+        /**
+         * Sets the onLeftClick attribute
+         * @param onLeftClick Gets executed when the button is left-clicked
+         * @return Itself
+         */
+        public B onLeftClick(Consumer<ClickData> onLeftClick) {
+            this.onLeftClick = onLeftClick;
+            return this.self();
+        }
+
+        /**
+         * Sets the onShiftRightClick attribute
+         * @param onShiftRightClick Gets executed when the button is shift-right-clicked
+         * @return Itself
+         */
+        public B onShiftRightClick(Consumer<ClickData> onShiftRightClick) {
+            this.onShiftRightClick = onShiftRightClick;
+            return this.self();
+        }
+
+        /**
+         * Sets the onShiftLeftClick attribute
+         * @param onShiftLeftClick Gets executed when the button is shift-left-clicked
+         * @return Itself
+         */
+        public B onShiftLeftClick(Consumer<ClickData> onShiftLeftClick) {
+            this.onShiftLeftClick = onShiftLeftClick;
+            return this.self();
+        }
+    }
+
+    /**
+     * Builder for creating {@link GUIButton}
+     */
+    public static class Builder extends AbstractBuilder<Builder, GUIButton> {
+        /**
+         * Creates a new Builder
+         * @param gui The GUI this Pane belongs to
+         */
+        public Builder(GUI gui) {
+            super(gui);
+        }
+
+        @Override
+        public GUIButton build() {
+            return new GUIButton(this.getGui(), this.getItemStack(), this.getCooldown(), this.getSound(), this.getPermission()) {
+                @Override
+                public void onClick(ClickData data) {
+                    if (Builder.this.getOnClick() != null) {
+                        Builder.this.getOnClick().accept(data);
+                    }
+                }
+                @Override
+                public void onShiftClick(ClickData data) {
+                    if (Builder.this.getOnShiftClick() != null) {
+                        Builder.this.getOnShiftClick().accept(data);
+                    }
+                }
+                @Override
+                public void onRightClick(ClickData data) {
+                    if (Builder.this.getOnRightClick() != null) {
+                        Builder.this.getOnRightClick().accept(data);
+                    }
+                }
+                @Override
+                public void onLeftClick(ClickData data) {
+                    if (Builder.this.getOnLeftClick() != null) {
+                        Builder.this.getOnLeftClick().accept(data);
+                    }
+                }
+                @Override
+                public void onShiftRightClick(ClickData data) {
+                    if (Builder.this.getOnShiftRightClick() != null) {
+                        Builder.this.getOnShiftRightClick().accept(data);
+                    }
+                }
+                @Override
+                public void onShiftLeftClick(ClickData data) {
+                    if (Builder.this.getOnShiftLeftClick() != null) {
+                        Builder.this.getOnShiftLeftClick().accept(data);
+                    }
+                }
+            };
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+    }
 }
