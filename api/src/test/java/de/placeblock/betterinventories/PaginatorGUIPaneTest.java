@@ -98,12 +98,12 @@ public class PaginatorGUIPaneTest {
         paginator.addItems(Collections.nCopies(40, new GUIItem.Builder(gui).itemStack(new ItemStack(Material.DIAMOND_BLOCK)).build()));
         gui.getCanvas().setSection(paginator);
         gui.update();
-        assert paginator.getPages() == 2;
+        assert paginator.getPages() == 3;
         assert paginator.getCurrentPage() == 0;
         paginator.nextPage();
         assert paginator.getCurrentPage() == 1;
         paginator.nextPage();
-        assert paginator.getCurrentPage() == 0;
+        assert paginator.getCurrentPage() == 2;
         paginator.previousPage();
         assert paginator.getCurrentPage() == 1;
         paginator.previousPage();
