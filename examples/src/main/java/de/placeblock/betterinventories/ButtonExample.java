@@ -18,7 +18,7 @@ import org.bukkit.plugin.Plugin;
 @SuppressWarnings("unused")
 public class ButtonExample extends CanvasGUI {
     protected ButtonExample(Plugin plugin) {
-        super(plugin, Component.text("Test title"), InventoryType.HOPPER);
+        super(plugin, Component.text("Test title"), InventoryType.HOPPER, true);
 
         // There are multiple ways to create Buttons
         this.canvas.setSectionAt(1, new ExampleButton(this)); // Example Button created below

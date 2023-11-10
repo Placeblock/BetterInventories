@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.content.pane.impl.vanilla;
+package de.placeblock.betterinventories.content.pane.impl.io;
 
 import de.placeblock.betterinventories.content.item.BaseGUIItem;
 import de.placeblock.betterinventories.content.item.GUIItem;
@@ -30,7 +30,7 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
      */
-    public BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
+    protected BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
         super(gui, minSize, maxSize, autoSize);
         this.input = input;
         this.output = output;
@@ -47,14 +47,18 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
         return false;
     }
     @Override
-    public boolean onItemRemove(Vector2d position) {
-        if (!this.output) return false;
-        boolean removed = this.removeSection(position);
-        Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
-            this.getGui().update();
-            this.onItemChange(position, null);
-        }, 1);
-        return false;
+    public ItemStack onItemRemove(Vector2d position) {
+        if (!this.output) return null;
+        BaseGUIItem item = this.getItem(position);
+        boolean removed = this.removeSection(item);
+        if (removed) {
+            Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
+                this.onItemChange(position, null);
+                this.getGui().update();
+            }, 1);
+            return item.getItemStack();
+        }
+        return null;
     }
     @Override
     public boolean onItemAmount(Vector2d position, int amount) {
@@ -63,8 +67,8 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
         if ((oldAmount < amount && !this.input) || ((oldAmount > amount) && !output)) return false;
         item.getItemStack().setAmount(amount);
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
-            this.getGui().update();
             this.onItemChange(position, item.getItemStack());
+            this.getGui().update();
         }, 1);
         return false;
     }
@@ -92,7 +96,6 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
                 this.onItemChange(position, slotItem);
             }
             itemStack.setAmount(itemStack.getAmount()-accepted);
-            System.out.println(itemStack.getAmount());
         }
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () ->
                 this.getGui().update(), 1);
@@ -104,9 +107,6 @@ public abstract class BaseIOGUIPane extends SimpleItemGUIPane {
      * @param itemStack The new ItemStack
      */
     public abstract void onItemChange(Vector2d position, ItemStack itemStack);
-
-
-
 
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane> extends BaseSimpleGUIPane.Builder<B, P> {
         private boolean input = true;

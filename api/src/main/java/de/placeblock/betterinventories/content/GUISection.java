@@ -47,7 +47,7 @@ public abstract class GUISection implements Sizeable {
      * @param minSize The minimum size of the Section
      * @param maxSize The maximum size of the Section
      */
-    public GUISection(GUI gui, Vector2d size, Vector2d minSize, Vector2d maxSize) {
+    protected GUISection(GUI gui, Vector2d size, Vector2d minSize, Vector2d maxSize) {
         this.gui = gui;
         this.size = size;
         this.minSize = minSize;
@@ -144,7 +144,7 @@ public abstract class GUISection implements Sizeable {
      * @param position The relative position of the slot
      * @return Whether this action is allowed.
      */
-    public abstract boolean onItemRemove(Vector2d position);
+    public abstract ItemStack onItemRemove(Vector2d position);
 
     /**
      * Called when the amount of an item in a slot changes
@@ -156,13 +156,13 @@ public abstract class GUISection implements Sizeable {
 
     @Getter(AccessLevel.PROTECTED)
     @RequiredArgsConstructor
-    public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> {
+    public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> extends de.placeblock.betterinventories.Builder<B, P> {
         private final GUI gui;
         private Vector2d size;
         private Vector2d minSize;
         private Vector2d maxSize;
 
-        public B adoptMinMax(GUISection section) {
+        public B adoptMinMax(Sizeable section) {
             this.minSize = section.getMinSize();
             this.maxSize = section.getMaxSize();
             return self();
@@ -214,9 +214,5 @@ public abstract class GUISection implements Sizeable {
             }
             return this.maxSize;
         }
-
-        public abstract P build();
-
-        protected abstract B self();
     }
 }

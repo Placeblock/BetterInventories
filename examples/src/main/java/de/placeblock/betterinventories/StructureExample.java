@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 @SuppressWarnings("unused")
 public class StructureExample extends ChestGUI {
     public StructureExample(Plugin plugin) {
-        super(plugin, Component.text("Test title"), 3);
+        super(plugin, Component.text("Test title"), true, 3, 3);
 
         // Create two Panes
         SimpleGUIPane pane1 = new SimpleGUIPane.Builder(this)

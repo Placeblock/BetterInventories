@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.content.pane.impl.vanilla;
+package de.placeblock.betterinventories.content.pane.impl.io;
 
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -45,7 +45,7 @@ public class SynchedGUIPane extends BaseIOGUIPane {
             super(gui);
         }
 
-        private Builder targetPane(SimpleItemGUIPane targetPane) {
+        public Builder targetPane(SimpleItemGUIPane targetPane) {
             this.targetPane = targetPane;
             return this;
         }

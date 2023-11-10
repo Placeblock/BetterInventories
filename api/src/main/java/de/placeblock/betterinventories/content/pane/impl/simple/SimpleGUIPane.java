@@ -22,9 +22,6 @@ public class SimpleGUIPane extends BaseSimpleGUIPane<GUISection, SimpleGUIPane> 
         super(gui, minSize, maxSize, autoSize);
     }
 
-    public static Builder builder(GUI gui) {
-        return new Builder(gui);
-    }
     public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleGUIPane> {
         public Builder(GUI gui) {
             super(gui);

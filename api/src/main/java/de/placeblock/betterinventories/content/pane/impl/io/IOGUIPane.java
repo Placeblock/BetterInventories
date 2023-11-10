@@ -1,4 +1,4 @@
-package de.placeblock.betterinventories.content.pane.impl.vanilla;
+package de.placeblock.betterinventories.content.pane.impl.io;
 
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;

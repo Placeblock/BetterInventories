@@ -3,19 +3,22 @@ package de.placeblock.betterinventories.gui.impl;
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Used for creating ChestGUIs. They auto-resize depending on the size of the canvas.
  * If you don't want the gui to resize you should consider setting the minHeight
  * equals the maxHeight or use {@link CanvasGUI}
  * To instantiate use {@link ChestGUI}
- * @param <P> The type of the main canvas
+ * @param <C> The type of the main canvas
  */
-public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> implements Sizeable {
+public abstract class BaseChestGUI<C extends GUIPane> extends BaseCanvasGUI<C> implements Sizeable {
     /**
      * The maximum height of the GUI
      */
@@ -35,8 +38,8 @@ public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> i
      * @param minHeight The minimum height of the GUI
      * @param maxHeight The maximum height of the GUI
      */
-    public BaseChestGUI(Plugin plugin, TextComponent title, int minHeight, int maxHeight) {
-        super(plugin, title, InventoryType.CHEST);
+    protected BaseChestGUI(Plugin plugin, TextComponent title, boolean removeItems, int minHeight, int maxHeight) {
+        super(plugin, title, InventoryType.CHEST, removeItems);
         this.maxHeight = maxHeight;
         this.minHeight = minHeight;
     }
@@ -69,5 +72,26 @@ public abstract class BaseChestGUI<P extends GUIPane> extends BaseCanvasGUI<P> i
     @Override
     public Vector2d getMinSize() {
         return new Vector2d(9, this.minHeight);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    @Getter(AccessLevel.PROTECTED)
+    public static abstract class Builder<B extends Builder<B, G, C, P>, G extends BaseChestGUI<C>, C extends GUIPane, P extends JavaPlugin> extends BaseCanvasGUI.Builder<B, G, C, P> {
+        private int minHeight;
+        private int maxHeight;
+
+        public Builder(P plugin) {
+            super(plugin);
+        }
+
+        public B minHeight(int minHeight) {
+            this.minHeight = minHeight;
+            return this.self();
+        }
+
+        public B maxHeight(int maxHeight) {
+            this.maxHeight = maxHeight;
+            return this.self();
+        }
     }
 }

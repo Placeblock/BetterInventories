@@ -37,7 +37,7 @@ public abstract class BaseHorizontalSplitGUIPane extends GUIPane {
      * @param upperPane The upper pane
      * @param lowerPane The lower pane
      */
-    public BaseHorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, GUIPane upperPane, GUIPane lowerPane) {
+    protected BaseHorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, GUIPane upperPane, GUIPane lowerPane) {
         super(gui, minSize, maxSize);
         this.upperPane = upperPane;
         this.lowerPane = lowerPane;
@@ -162,6 +162,7 @@ public abstract class BaseHorizontalSplitGUIPane extends GUIPane {
     }
 
 
+    @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseHorizontalSplitGUIPane> extends GUIPane.Builder<B, P> {
         private GUIPane upperPane;

@@ -3,7 +3,7 @@ package de.placeblock.betterinventories.gui.impl.textinput;
 import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.PlayerGUI;
-import de.placeblock.betterinventories.gui.impl.AnvilGUI;
+import de.placeblock.betterinventories.gui.impl.BaseAnvilGUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 /**
  * GUI for getting Text Input
  */
-public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
+public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
     /**
      * The input-material
      */
@@ -71,61 +72,16 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
      * @param player The player which enters text
      * @param text The initial Text
      * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
-     */
-    @SuppressWarnings("unused")
-    public TextInputGUI(Plugin plugin, TextComponent title,
-                        Player player, String text,
-                        FinishConsumer onFinish) {
-        this(plugin, title, player, text, onFinish, Component::text);
-    }
-
-    /**
-     * Creates a new TextInputGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param player The player which enters text
-     * @param text The initial Text
-     * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
-     * @param titleConverter Is called to convert the current text to the title of the submit item
-     */
-    public TextInputGUI(Plugin plugin, TextComponent title,
-                        Player player, String text,
-                        FinishConsumer onFinish,
-                        Function<String, TextComponent> titleConverter) {
-        this(plugin, title, player, text, onFinish, t -> {}, titleConverter);
-    }
-
-    /**
-     * Creates a new TextInputGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param player The player which enters text
-     * @param text The initial Text
-     * @param titleConverter Is called to convert the current text to the title of the submit item
-     */
-    @SuppressWarnings("unused")
-    public TextInputGUI(Plugin plugin, TextComponent title,
-                        Player player, String text,
-                        Function<String, TextComponent> titleConverter) {
-        this(plugin, title, player, text, (t, a) -> true, t -> {}, titleConverter);
-    }
-
-    /**
-     * Creates a new TextInputGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param player The player which enters text
-     * @param text The initial Text
-     * @param onFinish Is called when the player finishes renaming (by submitting or by aborting)
      * @param onUpdate Is called whenever the player types something
      * @param titleConverter Is called to convert the current text to the title of the submit item
      */
-    public TextInputGUI(Plugin plugin, TextComponent title,
+    @Deprecated(forRemoval = true)
+    public TextInputGUI(Plugin plugin, TextComponent title, boolean removeItems,
                         Player player, String text,
                         FinishConsumer onFinish,
                         Consumer<String> onUpdate,
                         Function<String, TextComponent> titleConverter) {
-        super(plugin, title);
+        super(plugin, title, removeItems);
         this.player = player;
         this.currentText = text;
         this.onFinish = onFinish;
@@ -166,7 +122,9 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
      * @param text The new text
      */
     public void updateText(String text) {
-        this.onUpdate.accept(text);
+        if (this.onUpdate != null) {
+            this.onUpdate.accept(text);
+        }
         this.onUpdate(text);
         this.currentText = text;
         this.setResultButton();
@@ -190,14 +148,13 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     private void finish(boolean abort) {
         if (!this.closed) {
             this.closed = true;
-            if ((this.onFinish.accept(this.currentText, abort) &&
+            if ((this.onFinish == null || (this.onFinish.accept(this.currentText, abort)) &&
                 this.onFinish(this.currentText, abort)) || abort) {
                 this.packetListener.uninject();
                 this.player.closeInventory();
             }
         }
     }
-
 
     /**
      * Called when a player types
@@ -221,5 +178,48 @@ public class TextInputGUI extends AnvilGUI implements PlayerGUI<Player> {
     @Override
     public Player getPlayer() {
         return this.player;
+    }
+
+
+    @SuppressWarnings("unused")
+    public static class Builder<P extends JavaPlugin> extends BaseAnvilGUI.Builder<Builder<P>, TextInputGUI, P> {
+        private final Player player;
+        private String text = "";
+        private FinishConsumer onFinish = (t, a) -> false;
+        private Consumer<String> onUpdate = (t) -> {};
+        private Function<String, TextComponent> titleConverter = Component::text;
+
+        public Builder(P plugin, Player player) {
+            super(plugin);
+            this.player = player;
+        }
+
+        public Builder<P> text(String text) {
+            this.text = text;
+            return self();
+        }
+        public Builder<P> onFinish(FinishConsumer onFinish) {
+            this.onFinish = onFinish;
+            return self();
+        }
+        public Builder<P> onUpdate(Consumer<String> onUpdate) {
+            this.onUpdate = onUpdate;
+            return self();
+        }
+        public Builder<P> titleConverter(Function<String, TextComponent> titleConverter) {
+            this.titleConverter = titleConverter;
+            return self();
+        }
+
+        @Override
+        public TextInputGUI build() {
+            return new TextInputGUI(this.getPlugin(), this.getTitle(), this.isRemoveItems(), this.player,
+                    this.text, this.onFinish, this.onUpdate, this.titleConverter);
+        }
+
+        @Override
+        protected Builder<P> self() {
+            return this;
+        }
     }
 }

@@ -41,7 +41,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    public BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
+    protected BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize);
         this.autoSize = autoSize;
     }
@@ -274,7 +274,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
     }
 
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseSimpleGUIPane<?, ?>> extends GUISection.Builder<B, P> {
-        private boolean autoSize;
+        private boolean autoSize = true;
         public Builder(GUI gui) {
             super(gui);
         }

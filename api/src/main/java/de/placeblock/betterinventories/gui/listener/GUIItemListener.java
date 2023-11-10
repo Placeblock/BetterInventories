@@ -175,7 +175,7 @@ public class GUIItemListener implements Listener {
      * @param item The itemStack that got added
      * @param amount The amount of the itemStack
      */
-    public void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
+    private void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
         item = item.clone();
         item.setAmount(amount);
         if (section.onItemAdd(position, item)) {
@@ -190,7 +190,8 @@ public class GUIItemListener implements Listener {
      * @param position The position
      */
     public void dispatchRemove(Cancellable event, GUISection section, Vector2d position) {
-        if (section.onItemRemove(position)) {
+        ItemStack removedItemStack = section.onItemRemove(position);
+        if (removedItemStack == null) {
             event.setCancelled(true);
         }
     }
@@ -202,7 +203,7 @@ public class GUIItemListener implements Listener {
      * @param position The position
      * @param amount The new amount
      */
-    public void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
+    private void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
         if (section.onItemAmount(position, amount)) {
             event.setCancelled(true);
         }

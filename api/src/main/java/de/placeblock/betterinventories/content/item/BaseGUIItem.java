@@ -68,8 +68,8 @@ public abstract class BaseGUIItem extends GUISection {
     }
 
     @Override
-    public boolean onItemRemove(Vector2d position) {
-        return true;
+    public ItemStack onItemRemove(Vector2d position) {
+        return null;
     }
 
     @Override

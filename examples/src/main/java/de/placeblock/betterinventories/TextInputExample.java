@@ -13,6 +13,7 @@ public class TextInputExample extends TextInputGUI {
         // Several constructors available
         super(plugin,
                 Component.text("GUI Title"), // The title of the GUI
+                true,
                 player,
                 "Start Text", // The text to start with
                 (text, abort) -> true, // Gets called if the player submits the text or closes the inventory

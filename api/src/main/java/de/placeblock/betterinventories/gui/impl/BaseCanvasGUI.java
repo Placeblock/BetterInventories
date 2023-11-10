@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param title The title of the GUI
      * @param type The type of the GUI
      */
-    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        super(plugin, title, type);
+    protected BaseCanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
+        super(plugin, title, type, removeItems);
     }
 
     /**
@@ -99,6 +100,12 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
     @SuppressWarnings("unused")
     public C getCanvas() {
         return this.canvas;
+    }
+
+    public static abstract class Builder<B extends Builder<B, G, C, P>, G extends BaseCanvasGUI<C>, C extends GUIPane, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
+        public Builder(P plugin) {
+            super(plugin);
+        }
     }
 
 }

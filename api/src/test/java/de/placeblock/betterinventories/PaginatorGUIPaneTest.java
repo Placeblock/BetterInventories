@@ -2,7 +2,6 @@ package de.placeblock.betterinventories;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.MockPlugin;
-import de.placeblock.betterinventories.builder.gui.ChestGUIBuilder;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorControlsPosition;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
@@ -27,7 +26,7 @@ public class PaginatorGUIPaneTest {
 
     @Test
     public void withoutControlsTest() {
-        ChestGUI chestGUI = new ChestGUIBuilder(this.plugin)
+        ChestGUI chestGUI = new ChestGUI.Builder<>(this.plugin)
                 .minHeight(1).maxHeight(6)
                 .title(Component.empty())
                 .build();
@@ -48,7 +47,7 @@ public class PaginatorGUIPaneTest {
 
     @Test
     public void withControlsTest() {
-        ChestGUI gui = new ChestGUIBuilder(this.plugin)
+        ChestGUI gui = new ChestGUI.Builder<>(this.plugin)
                 .minHeight(1).maxHeight(6)
                 .title(Component.empty())
                 .build();
@@ -68,7 +67,7 @@ public class PaginatorGUIPaneTest {
     @Test
     public void resizeTest() {
         int maxHeight = 6;
-        ChestGUI gui = new ChestGUIBuilder(this.plugin)
+        ChestGUI gui = new ChestGUI.Builder<>(this.plugin)
                 .minHeight(1).maxHeight(maxHeight)
                 .title(Component.empty())
                 .build();
@@ -88,7 +87,7 @@ public class PaginatorGUIPaneTest {
 
     @Test
     public void controlsTest() {
-        ChestGUI gui = new ChestGUIBuilder(this.plugin)
+        ChestGUI gui = new ChestGUI.Builder<>(this.plugin)
                 .height(3)
                 .title(Component.empty())
                 .build();

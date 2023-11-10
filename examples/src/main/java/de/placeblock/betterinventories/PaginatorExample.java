@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 public class PaginatorExample extends ChestGUI {
     public PaginatorExample(Plugin plugin) {
         // Specifies minHeight and maxHeight to allow auto-resize
-        super(plugin, Component.text("Test Title"), 1, 6);
+        super(plugin, Component.text("Test Title"), true, 1, 6);
 
         // Creates the PaginatorGUIPane with the according Builder
         PaginatorGUIPane paginator = new PaginatorGUIPane.Builder(this)

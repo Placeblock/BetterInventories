@@ -2,7 +2,6 @@ package de.placeblock.betterinventories;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.MockPlugin;
-import de.placeblock.betterinventories.builder.gui.ChestGUIBuilder;
 import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.BaseGUIButton;
 import de.placeblock.betterinventories.content.item.GUIButton;
@@ -26,7 +25,7 @@ public class SimpleGUIPaneTest {
 
     @Test
     public void zIndexTest() {
-        ChestGUI chestGUI = new ChestGUIBuilder(this.plugin)
+        ChestGUI chestGUI = new ChestGUI.Builder<>(this.plugin)
                 .height(3)
                 .title(Component.empty())
                 .build();

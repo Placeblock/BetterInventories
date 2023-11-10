@@ -29,7 +29,7 @@ public abstract class GUIPane extends GUISection {
      * @param minSize The minimum size of the Pane
      * @param maxSize The maximum size of the Pane
      */
-    public GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
+    protected GUIPane(GUI gui, Vector2d minSize, Vector2d maxSize) {
         super(gui, minSize, minSize, maxSize);
     }
 
@@ -128,8 +128,8 @@ public abstract class GUIPane extends GUISection {
     }
 
     @Override
-    public boolean onItemRemove(Vector2d position) {
-        return true;
+    public ItemStack onItemRemove(Vector2d position) {
+        return null;
     }
 
     @Override
