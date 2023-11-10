@@ -1,18 +1,16 @@
 package de.placeblock.betterinventories.gui.impl;
 
-import de.placeblock.betterinventories.builder.gui.CanvasGUIBuilder;
 import de.placeblock.betterinventories.content.pane.impl.simple.SimpleGUIPane;
 import de.placeblock.betterinventories.util.InventoryTypeMapper;
 import de.placeblock.betterinventories.util.Vector2d;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Used for creating GUIs that only have one canvas e.g. HopperGUIs and a fixed size.
  * Bear in mind that for creating Chest Inventories you should use {@link ChestGUI}
- * <br>
- * Builder: {@link CanvasGUIBuilder}
  */
 @SuppressWarnings("unused")
 public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
@@ -21,20 +19,13 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param height The height of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
-    public CanvasGUI(Plugin plugin, TextComponent title, int height) {
-        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height));
-    }
-
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param height The height of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
-     */
-    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean registerDefaultHandlers) {
-        this(plugin, title, InventoryType.CHEST, new Vector2d(9, height), registerDefaultHandlers);
+    @Deprecated(forRemoval = true)
+    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean removeItems) {
+        super(plugin, title, InventoryType.CHEST, removeItems);
+        this.setCanvas(new SimpleGUIPane.Builder(this).size(new Vector2d(9, height)).autoSize(false).build());
     }
 
     /**
@@ -42,43 +33,62 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param plugin The plugin
      * @param title The title of the GUI
      * @param type The type of the GUI
+     * @param removeItems Whether to remove loose items on close.
+     *                   The first player that closes the gui gets the items
      */
-    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type) {
-        this(plugin, title, type, InventoryTypeMapper.getSize(type));
+    @Deprecated(forRemoval = true)
+    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
+        super(plugin, title, type, removeItems);
+        this.setCanvas(new SimpleGUIPane.Builder(this).size(InventoryTypeMapper.getSize(type)).autoSize(false).build());
     }
 
     /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
+     * Builder used for creating CanvasGUIs
+     * @param <P> The Plugin that uses this builder
      */
-    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean registerDefaultHandlers) {
-        this(plugin, title, type, InventoryTypeMapper.getSize(type), registerDefaultHandlers);
-    }
+    public static class Builder<P extends JavaPlugin> extends BaseCanvasGUI.Builder<Builder<P>, CanvasGUI, SimpleGUIPane, P> {
+        private int height = 3;
+        private InventoryType type = InventoryType.CHEST;
+        /**
+         * Creates a new Builder
+         * @param plugin The plugin that uses this builder
+         */
+        public Builder(P plugin) {
+            super(plugin);
+        }
 
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param size The size of the GUI
-     */
-    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size) {
-        this(plugin, title, type, size, true);
-    }
+        /**
+         * Sets the type attribute. You can either specify the type or the height.
+         * @param type The inventory type
+         * @return Itself
+         */
+        public Builder<P> type(InventoryType type) {
+            this.type = type;
+            return this.self();
+        }
 
-    /**
-     * Creates a new CanvasGUI
-     * @param plugin The plugin
-     * @param title The title of the GUI
-     * @param type The type of the GUI
-     * @param size The size of the GUI
-     * @param registerDefaultHandlers Whether to register default-handlers
-     */
-    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, Vector2d size, boolean registerDefaultHandlers) {
-        super(plugin, title, type, registerDefaultHandlers);
-        this.setCanvas(new SimpleGUIPane(this, size, size, false));
+        /**
+         * Sets the height attribute. You can either specify the type or the height.
+         * @param height The inventory's height. Only used if type is CHEST
+         * @return Itself
+         */
+        public Builder<P> height(int height) {
+            this.height = height;
+            return this.self();
+        }
+
+        @Override
+        public CanvasGUI build() {
+            if (this.type == InventoryType.CHEST) {
+                return new CanvasGUI(this.getPlugin(), this.getTitle(), this.height, this.isRemoveItems());
+            } else {
+                return new CanvasGUI(this.getPlugin(), this.getTitle(), this.type, this.isRemoveItems());
+            }
+        }
+
+        @Override
+        protected Builder<P> self() {
+            return this;
+        }
     }
 }

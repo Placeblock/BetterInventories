@@ -26,7 +26,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
      * @param paginatorGUIPane The according Paginator
      */
     public PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
-        super(gui, minSize, maxSize);
+        super(gui, minSize, maxSize, true);
         this.paginatorGUIPane = paginatorGUIPane;
     }
 
@@ -36,7 +36,9 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
      */
     @Override
     public void updateSize(Sizeable parent) {
-        this.setSize(this.paginatorGUIPane.getContentPaneSize());
+        Vector2d newSize = this.paginatorGUIPane.getContentPaneSize();
+        this.setMinSize(newSize);
+        this.setSize(newSize);
     }
 
     /**

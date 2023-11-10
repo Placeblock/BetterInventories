@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.pane.impl.simple;
 
 import de.placeblock.betterinventories.Sizeable;
 import de.placeblock.betterinventories.content.GUISection;
+import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unchecked")
-public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
+public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane<C, S>> extends GUIPane {
     /**
      * The content currently added to this Pane
      */
@@ -40,7 +41,7 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    public BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
+    protected BaseSimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize);
         this.autoSize = autoSize;
     }
@@ -74,8 +75,12 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @return All children
      */
     @Override
-    public Set<GUISection> getChildren() {
-        return this.content.stream().map(ChildData::getChild).collect(Collectors.toSet());
+    public List<GUISection> getChildren() {
+        return this.content.stream().map(ChildData::getChild).collect(Collectors.toList());
+    }
+
+    @Override
+    public void onItemProvide(ItemStack item) {
     }
 
     /**
@@ -94,22 +99,24 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     /**
-     * Returns the GUISection at a specific position.
-     * @param position The position
-     * @return The GUISection at the slot or null
+     * Searches the GUISection recursively. The SearchData is filled recursively.
+     * @param searchData The searchData that contains all needed information
      */
-    public GUISection getSectionAt(Vector2d position) {
-        if (position == null) return null;
+    public void search(SearchData searchData) {
         for (int i = this.content.size()-1; i >= 0; i--) {
             ChildData<C> childData = this.content.get(i);
             Vector2d pos = childData.getPosition();
+            Vector2d relativePos = searchData.getRelativePos();
             C section = childData.getChild();
-            if (pos.getX() <= position.getX() && pos.getX() + section.getWidth() - 1 >= position.getX()
-                    && pos.getY() <= position.getY() && pos.getY() + section.getHeight() - 1 >= position.getY()) {
-                return section.getSectionAt(position.subtract(pos));
+            if (searchData.getPredicate().test(section) && pos.getX() <= relativePos.getX() && pos.getX() + section.getWidth() - 1 >= relativePos.getX()
+                    && pos.getY() <= relativePos.getY() && pos.getY() + section.getHeight() - 1 >= relativePos.getY()) {
+                searchData.addNode(this);
+                searchData.setRelativePos(relativePos.subtract(pos));
+                section.search(searchData);
+                return;
             }
         }
-        return null;
+        searchData.setSection(this);
     }
 
     /**
@@ -139,11 +146,14 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     }
 
     /**
-     * @return The next empty slot
+     * @return The next empty slot or -1
      */
-    private int getNextEmptySlot() {
+    public int getNextEmptySlot() {
         for (int i = 0; i < this.getSlots(); i++) {
-            if (this.getSectionAt(this.slotToVector(i)) == null) {
+            SearchData searchData = new SearchData(i, (s) -> true);
+            searchData.setRelativePos(this.slotToVector(i));
+            this.search(searchData);
+            if (this.equals(searchData.getSection())) {
                 return i;
             }
         }
@@ -168,6 +178,15 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
             return true;
         }
         return false;
+    }
+
+    /**
+     * Removes a section from the pane
+     * @param position The position of the section
+     * @return Whether the section existed
+     */
+    public boolean removeSection(Vector2d position) {
+        return this.content.removeIf(childData -> childData.getPosition().equals(position));
     }
 
     /**
@@ -203,7 +222,11 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
      * @return this
      */
     public S setSectionAt(Vector2d position, C section) {
-        this.content.add(new ChildData<>(position, section));
+        if (section == null) {
+            this.removeSection(position);
+        } else {
+            this.content.add(new ChildData<>(position, section));
+        }
         return (S) this;
     }
 
@@ -215,6 +238,21 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
     @SuppressWarnings({"unused", "UnusedReturnValue"})
     public S setSection(C section) {
         return this.setSectionAt(new Vector2d(), section);
+    }
+
+    /**
+     * Returns all sections at the given position
+     * @param position The position
+     * @return All sections at the position
+     */
+    public Collection<C> getSections(Vector2d position) {
+        Collection<C> sections = new ArrayList<>();
+        for (ChildData<C> childData : this.content) {
+            if (childData.getPosition().equals(position)) {
+                sections.add(childData.child);
+            }
+        }
+        return sections;
     }
 
     /**
@@ -233,5 +271,46 @@ public class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimpleGUIPane
          * The child {@link GUISection}
          */
         private final C child;
+    }
+
+    /**
+     * Builder for creating {@link BaseSimpleGUIPane}
+     * @param <B> The Builder that implements this one
+     * @param <P> The BaseSimpleGUIPane that is built
+     * @param <C> The Sections that can be placed inside built panes {@link BaseSimpleGUIPane}
+     */
+    public static abstract class Builder<B extends Builder<B, P, C>, P extends BaseSimpleGUIPane<C, P>, C extends GUISection> extends GUISection.Builder<B, P> {
+        /**
+         * Whether to automatically resize the pane according to the children.
+         * If true it will set the size to the bounding box of all children.
+         */
+        private boolean autoSize = true;
+
+        /**
+         * Creates a new Builder
+         * @param gui The gui this Pane belongs to
+         */
+        protected Builder(GUI gui) {
+            super(gui);
+        }
+
+        /**
+         * Sets the autoSize property
+         * @param autoSize Whether to automatically resize the pane according to the children.
+         *                 If true it will set the size to the bounding box of all children.
+         * @return Itself
+         */
+        public B autoSize(boolean autoSize) {
+            this.autoSize = autoSize;
+            return (B) this;
+        }
+
+        /**
+         * Whether this Pane auto-sizes
+         * @return Whether this Pane auto-sizes
+         */
+        protected boolean isAutoSize() {
+            return this.autoSize;
+        }
     }
 }

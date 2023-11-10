@@ -1,12 +1,12 @@
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev") version "1.5.5"
+    id("io.papermc.paperweight.userdev")
     id("maven-publish")
     signing
 }
 
 group = "de.codelix"
-version = "1.3.6c"
+version = "2.0.0"
 
 var artifactID = "BetterInventories"
 
@@ -18,8 +18,8 @@ dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
 
-    compileOnly("org.projectlombok:lombok:1.18.28")
-    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
     testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.9.0")

@@ -1,19 +1,22 @@
 package de.placeblock.betterinventories.content.item.impl.cyclebutton;
 
-import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.content.item.GUIButton;
+import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import lombok.Getter;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * GUIButton which cycles through values of an Enum
  * @param <E> The Enum
  */
+@SuppressWarnings("unused")
 public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
     /**
      * All Values of the Enum
@@ -26,23 +29,16 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
     private E currentValue;
 
     /**
-     * Creates a new CycleGUIButton
-     * @param gui The GUI
-     * @param values The Enum values
-     */
-    @SuppressWarnings("unused")
-    public CycleGUIButton(GUI gui, E[] values) {
-        this(gui, values, values[0]);
-    }
-
-    /**
-     * Creates a new CycleGUIButton
+     * Creates a new CycleGUIButton.
+     * The permission is passed in the various enum values.
      * @param gui The GUI
      * @param values The Enum values
      * @param startValue The Start-value
+     * @param cooldown The cooldown of the Button. Applied to the material, not the Button alone.
+     * @param sound The sound that is played when pressing that button
      */
-    public CycleGUIButton(GUI gui, E[] values, E startValue) {
-        super(gui, null);
+    public CycleGUIButton(GUI gui, int cooldown, Sound sound, E[] values, E startValue) {
+        super(gui, null, cooldown, sound, null);
         this.values = List.of(values);
         this.currentValue = startValue;
         this.updateItem();
@@ -58,6 +54,11 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
         return new ItemBuilder(value.getTitle(), value.getMaterial())
             .lore(value.getLore())
             .build();
+    }
+
+    @Override
+    public void onClick(ClickData data) {
+        this.cycle(data);
     }
 
     /**
@@ -115,4 +116,64 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      * @param newValue The new Enum-value
      */
     protected abstract void onCycle(ClickData data, E newValue);
+
+    /**
+     * Builder for creating {@link CycleGUIButton}
+     * @param <E> The enum that is cycled through
+     */
+    public static class Builder<E extends CycleEnum> extends AbstractBuilder<Builder<E>, CycleGUIButton<E>> {
+        private final E[] values;
+
+        private E startValue;
+
+        private BiConsumer<ClickData, E> onCycle;
+
+        /**
+         * Creates a new Builder
+         * @param gui The gui this button belongs to
+         * @param values All possible enum values
+         */
+        public Builder(GUI gui, E[] values) {
+            super(gui);
+            this.values = values;
+        }
+
+        /**
+         * Sets the startValue attribute
+         * @param startValue The value this button starts with
+         * @return Itself
+         */
+        public Builder<E> startValue(E startValue) {
+            this.startValue = startValue;
+            return this;
+        }
+
+        /**
+         * Sets the onCycle attribute
+         * @param callback Is called when cycling through the Enum-values
+         * @return Itself
+         */
+        public Builder<E> onCycle(BiConsumer<ClickData, E> callback) {
+            this.onCycle = callback;
+            return this;
+        }
+
+        @Override
+        public CycleGUIButton<E> build() {
+            return new CycleGUIButton<>(this.getGui(), this.getCooldown(), this.getSound(), this.values, this.startValue) {
+                @Override
+                protected void onCycle(ClickData data, E newValue) {
+                    if (Builder.this.onCycle != null) {
+                        Builder.this.onCycle.accept(data, newValue);
+                    }
+                }
+            };
+        }
+
+        @Override
+        protected Builder<E> self() {
+            return this;
+        }
+    }
+
 }
