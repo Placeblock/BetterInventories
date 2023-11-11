@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * The cooldown is being set for the whole material of the {@link ItemStack}.
  */
 @SuppressWarnings("unused")
-public abstract class GUIButton extends GUIItem {
+public class GUIButton extends GUIItem {
     /**
      * The cooldown of the Button before it can be clicked again in ticks.
      * The cooldown is being set for the whole material of the {@link ItemStack}.
@@ -35,6 +35,61 @@ public abstract class GUIButton extends GUIItem {
     private final String permission;
 
     /**
+     * Called when the player clicks a button
+     */
+    private final Consumer<ClickData> onClick;
+    /**
+     * Called when the player shift-clicks a button
+     */
+    private final Consumer<ClickData> onShiftClick;
+    /**
+     * Called when the player left-clicks a button
+     */
+    private final Consumer<ClickData> onLeftClick;
+    /**
+     * Called when the player right-clicks a button
+     */
+    private final Consumer<ClickData> onRightClick;
+    /**
+     * Called when the player shift-right-clicks a button
+     */
+    private final Consumer<ClickData> onShiftRightClick;
+    /**
+     * Called when the player shift-left-clicks a button
+     */
+    private final Consumer<ClickData> onShiftLeftClick;
+
+    /**
+     * Creates a new GUIButton
+     * @param gui The GUI
+     * @param item The ItemStack of the GUIButton
+     * @param cooldown The cooldown after which the button can be clicked again in ticks
+     * @param clickSound The sound the button should make on click.
+     *                   null if silent.
+     * @param permission The permission required to click the button
+     * @param onClick Called when the player clicks a button
+     * @param onShiftClick Called when the player shift-clicks a button
+     * @param onLeftClick Called when the player left-clicks a button
+     * @param onRightClick Called when the player right-clicks a button
+     * @param onShiftLeftClick Called when the player shift-right-clicks a button
+     * @param onShiftRightClick Called when the player shift-left-clicks a button
+     */
+    protected GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound, String permission,
+                        Consumer<ClickData> onClick, Consumer<ClickData> onShiftClick, Consumer<ClickData> onLeftClick,
+                        Consumer<ClickData> onRightClick, Consumer<ClickData> onShiftLeftClick,Consumer<ClickData> onShiftRightClick) {
+        super(gui, item);
+        this.cooldown = cooldown;
+        this.clickSound = clickSound;
+        this.permission = permission;
+        this.onClick = onClick;
+        this.onShiftClick = onShiftClick;
+        this.onLeftClick = onLeftClick;
+        this.onRightClick = onRightClick;
+        this.onShiftRightClick = onShiftRightClick;
+        this.onShiftLeftClick = onShiftLeftClick;
+    }
+
+    /**
      * Creates a new GUIButton
      * @param gui The GUI
      * @param item The ItemStack of the GUIButton
@@ -44,10 +99,7 @@ public abstract class GUIButton extends GUIItem {
      * @param permission The permission required to click the button
      */
     protected GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound, String permission) {
-        super(gui, item);
-        this.cooldown = cooldown;
-        this.clickSound = clickSound;
-        this.permission = permission;
+        this(gui, item, cooldown, clickSound, permission, null, null, null, null, null, null);
     }
 
     /**
@@ -93,26 +145,38 @@ public abstract class GUIButton extends GUIItem {
      * Is called when the player clicks on the Button no matter how.
      * @param data The ClickData
      */
-    public abstract void onClick(ClickData data);
+    public void onClick(ClickData data) {
+        if (this.onClick != null) {
+            this.onClick.accept(data);
+        }
+    }
 
     /**
      * Is called when the player left-clicks the Button without sneaking
      * @param data The ClickData
      */
-    public void onLeftClick(ClickData data) {}
+    public void onLeftClick(ClickData data) {
+        if (this.onLeftClick != null) {
+            this.onLeftClick.accept(data);
+        }}
 
     /**
      * Is called when the player right-clicks the Button without sneaking
      * @param data The ClickData
      */
-    public void onRightClick(ClickData data) {}
+    public void onRightClick(ClickData data) {
+        if (this.onRightClick != null) {
+            this.onRightClick.accept(data);
+        }}
 
     /**
      * Is called when the player clicks the Button while sneaking
      * @param data The ClickData
      */
     public void onShiftClick(ClickData data) {
-        this.onClick(data);
+        if (this.onShiftClick != null) {
+            this.onShiftClick.accept(data);
+        }
     }
 
     /**
@@ -120,7 +184,9 @@ public abstract class GUIButton extends GUIItem {
      * @param data The ClickData
      */
     public void onShiftLeftClick(ClickData data) {
-        this.onLeftClick(data);
+        if (this.onShiftLeftClick != null) {
+            this.onShiftLeftClick.accept(data);
+        }
     }
 
     /**
@@ -128,7 +194,9 @@ public abstract class GUIButton extends GUIItem {
      * @param data The ClickData
      */
     public void onShiftRightClick(ClickData data) {
-        this.onRightClick(data);
+        if (this.onShiftRightClick != null) {
+            this.onShiftRightClick.accept(data);
+        }
     }
 
     @Override
@@ -284,44 +352,9 @@ public abstract class GUIButton extends GUIItem {
 
         @Override
         public GUIButton build() {
-            return new GUIButton(this.getGui(), this.getItemStack(), this.getCooldown(), this.getSound(), this.getPermission()) {
-                @Override
-                public void onClick(ClickData data) {
-                    if (Builder.this.getOnClick() != null) {
-                        Builder.this.getOnClick().accept(data);
-                    }
-                }
-                @Override
-                public void onShiftClick(ClickData data) {
-                    if (Builder.this.getOnShiftClick() != null) {
-                        Builder.this.getOnShiftClick().accept(data);
-                    }
-                }
-                @Override
-                public void onRightClick(ClickData data) {
-                    if (Builder.this.getOnRightClick() != null) {
-                        Builder.this.getOnRightClick().accept(data);
-                    }
-                }
-                @Override
-                public void onLeftClick(ClickData data) {
-                    if (Builder.this.getOnLeftClick() != null) {
-                        Builder.this.getOnLeftClick().accept(data);
-                    }
-                }
-                @Override
-                public void onShiftRightClick(ClickData data) {
-                    if (Builder.this.getOnShiftRightClick() != null) {
-                        Builder.this.getOnShiftRightClick().accept(data);
-                    }
-                }
-                @Override
-                public void onShiftLeftClick(ClickData data) {
-                    if (Builder.this.getOnShiftLeftClick() != null) {
-                        Builder.this.getOnShiftLeftClick().accept(data);
-                    }
-                }
-            };
+            return new GUIButton(this.getGui(), this.getItemStack(), this.getCooldown(), this.getSound(), this.getPermission(),
+                    this.getOnClick(), this.getOnShiftClick(), this.getOnLeftClick(), this.getOnRightClick(),
+                    this.getOnShiftLeftClick(), this.getOnShiftRightClick());
         }
 
         @Override

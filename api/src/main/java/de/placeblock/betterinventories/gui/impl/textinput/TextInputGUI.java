@@ -184,6 +184,8 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
 
     /**
      * Abstract Builder for creating {@link TextInputGUI}
+     * @param <B> The Builder that implements this one
+     * @param <G> The GUI that is built
      * @param <P> The plugin that uses this builder
      */
     @Getter(AccessLevel.PROTECTED)
