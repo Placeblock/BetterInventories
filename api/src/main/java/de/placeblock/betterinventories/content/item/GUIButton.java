@@ -43,7 +43,7 @@ public abstract class GUIButton extends GUIItem {
      *                   null if silent.
      * @param permission The permission required to click the button
      */
-    public GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound, String permission) {
+    protected GUIButton(GUI gui, ItemStack item, int cooldown, Sound clickSound, String permission) {
         super(gui, item);
         this.cooldown = cooldown;
         this.clickSound = clickSound;
@@ -85,7 +85,7 @@ public abstract class GUIButton extends GUIItem {
      */
     public void setCooldown(int cooldown) {
         for (GUIView view : this.getGui().getViews()) {
-            view.getPlayer().setCooldown(this.itemStack.getType(), cooldown);
+            view.player().setCooldown(this.itemStack.getType(), cooldown);
         }
     }
 
@@ -133,11 +133,11 @@ public abstract class GUIButton extends GUIItem {
 
     @Override
     public void onItemClick(ClickData data) {
-        InventoryClickEvent event = data.getEvent();
+        InventoryClickEvent event = data.event();
         boolean leftClick = event.isLeftClick();
         boolean rightClick = event.isRightClick();
         boolean shiftClick = event.isShiftClick();
-        this.click(data.getPlayer());
+        this.click(data.player());
         this.onClick(data);
         if (leftClick) {
             if (shiftClick) {

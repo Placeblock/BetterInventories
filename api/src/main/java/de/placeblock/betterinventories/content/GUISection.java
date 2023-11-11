@@ -164,7 +164,7 @@ public abstract class GUISection implements Sizeable {
      */
     @Getter(AccessLevel.PROTECTED)
     @RequiredArgsConstructor
-    public static abstract class Builder<B extends Builder<B, P>, P extends GUISection> extends de.placeblock.betterinventories.Builder<B, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUISection> extends de.placeblock.betterinventories.Builder<B, P> {
         private final GUI gui;
         private Vector2d size;
         private Vector2d minSize;

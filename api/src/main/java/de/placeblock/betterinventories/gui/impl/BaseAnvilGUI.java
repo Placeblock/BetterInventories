@@ -107,7 +107,7 @@ public abstract class BaseAnvilGUI extends GUI {
      */
     @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
-    public static abstract class Builder<B extends Builder<B, G, P>, G extends BaseAnvilGUI, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, G, P>, G extends BaseAnvilGUI, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
         private GUIItem inputItem;
         private GUIItem additionalItem;
         private GUIItem resultItem;
@@ -144,7 +144,7 @@ public abstract class BaseAnvilGUI extends GUI {
          * Creates a new Builder
          * @param plugin The plugin that uses this builder
          */
-        public Builder(P plugin) {
+        public AbstractBuilder(P plugin) {
             super(plugin);
         }
     }

@@ -8,6 +8,7 @@ import de.placeblock.betterinventories.util.Vector2d;
  * A {@link GUIPane} with an upper and lower pane.
  * Renders the lower pane always below the upper pane.
  */
+@SuppressWarnings("unused")
 public class HorizontalSplitGUIPane extends BaseHorizontalSplitGUIPane{
     /**
      * Creates a new HorizontalSplitGUIPane
@@ -18,15 +19,15 @@ public class HorizontalSplitGUIPane extends BaseHorizontalSplitGUIPane{
      * @param upperPane The upper pane
      * @param lowerPane The lower pane
      */
-    @Deprecated(forRemoval = true)
-    public HorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, GUIPane upperPane, GUIPane lowerPane) {
+    protected HorizontalSplitGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, GUIPane upperPane, GUIPane lowerPane) {
         super(gui, minSize, maxSize, upperPane, lowerPane);
     }
 
     /**
      * Builder for creating {@link HorizontalSplitGUIPane}
      */
-    public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, HorizontalSplitGUIPane> {
+    @SuppressWarnings("unused")
+    public static class Builder extends AbstractBuilder<Builder, HorizontalSplitGUIPane> {
         /**
          * Creates a new Builder
          * @param gui The GUI this Pane belongs to

@@ -4,6 +4,8 @@ import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.PlayerGUI;
 import de.placeblock.betterinventories.gui.impl.BaseAnvilGUI;
 import de.placeblock.betterinventories.util.ItemBuilder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
@@ -76,8 +78,7 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    @Deprecated(forRemoval = true)
-    public TextInputGUI(Plugin plugin, TextComponent title, boolean removeItems,
+    protected TextInputGUI(Plugin plugin, TextComponent title, boolean removeItems,
                         Player player, String text,
                         FinishConsumer onFinish,
                         Consumer<String> onUpdate,
@@ -182,11 +183,12 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
     }
 
     /**
-     * Builder for creating {@link TextInputGUI}
+     * Abstract Builder for creating {@link TextInputGUI}
      * @param <P> The plugin that uses this builder
      */
+    @Getter(AccessLevel.PROTECTED)
     @SuppressWarnings("unused")
-    public static class Builder<P extends JavaPlugin> extends BaseAnvilGUI.Builder<Builder<P>, TextInputGUI, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, G, P>, G extends TextInputGUI, P extends JavaPlugin> extends BaseAnvilGUI.AbstractBuilder<B, G, P> {
         private final Player player;
         private String text = "";
         private FinishConsumer onFinish = (t, a) -> false;
@@ -198,7 +200,7 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
          * @param plugin The plugin that uses this builder
          * @param player The player this GUI belongs to
          */
-        public Builder(P plugin, Player player) {
+        public AbstractBuilder(P plugin, Player player) {
             super(plugin);
             this.player = player;
         }
@@ -208,9 +210,9 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
          * @param text The text that is shown in the anvil at the beginning
          * @return Itself
          */
-        public Builder<P> text(String text) {
+        public B text(String text) {
             this.text = text;
-            return self();
+            return this.self();
         }
 
         /**
@@ -218,9 +220,9 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
          * @param onFinish Is executed if the text is submitted
          * @return Itself
          */
-        public Builder<P> onFinish(FinishConsumer onFinish) {
+        public B onFinish(FinishConsumer onFinish) {
             this.onFinish = onFinish;
-            return self();
+            return this.self();
         }
 
         /**
@@ -228,9 +230,9 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
          * @param onUpdate Is executed if the text is updated
          * @return Itself
          */
-        public Builder<P> onUpdate(Consumer<String> onUpdate) {
+        public B onUpdate(Consumer<String> onUpdate) {
             this.onUpdate = onUpdate;
-            return self();
+            return this.self();
         }
 
         /**
@@ -238,15 +240,31 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
          * @param titleConverter Is called to convert the current text to the title of the submit item
          * @return Itself
          */
-        public Builder<P> titleConverter(Function<String, TextComponent> titleConverter) {
+        public B titleConverter(Function<String, TextComponent> titleConverter) {
             this.titleConverter = titleConverter;
-            return self();
+            return this.self();
+        }
+    }
+
+    /**
+     * Builder for creating {@link TextInputGUI}
+     */
+    @SuppressWarnings("unused")
+    public static class Builder<P extends JavaPlugin> extends AbstractBuilder<Builder<P>, TextInputGUI, P> {
+        /**
+         * Creates a new Builder
+         *
+         * @param plugin The plugin that uses this builder
+         * @param player The player this GUI belongs to
+         */
+        public Builder(P plugin, Player player) {
+            super(plugin, player);
         }
 
         @Override
         public TextInputGUI build() {
-            return new TextInputGUI(this.getPlugin(), this.getTitle(), this.isRemoveItems(), this.player,
-                    this.text, this.onFinish, this.onUpdate, this.titleConverter);
+            return new TextInputGUI(this.getPlugin(), this.getTitle(), this.isRemoveItems(), this.getPlayer(),
+                    this.getText(), this.getOnFinish(), this.getOnUpdate(), this.getTitleConverter());
         }
 
         @Override

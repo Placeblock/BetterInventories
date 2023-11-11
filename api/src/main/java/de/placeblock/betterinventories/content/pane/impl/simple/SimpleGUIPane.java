@@ -17,15 +17,14 @@ public class SimpleGUIPane extends BaseSimpleGUIPane<GUISection, SimpleGUIPane> 
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    @Deprecated(forRemoval = true)
-    public SimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
+    protected SimpleGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
 
     /**
      * Builder for creating {@link SimpleGUIPane}
      */
-    public static class Builder extends BaseSimpleGUIPane.Builder<Builder, SimpleGUIPane, GUISection> {
+    public static class Builder extends AbstractBuilder<Builder, SimpleGUIPane, GUISection> {
         /**
          * Creates a new Builder
          * @param gui The GUI this Pane belongs to

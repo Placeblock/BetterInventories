@@ -60,8 +60,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      *                                automatic controls, or you want to handle them yourself.
      * @param items The items to place in this paginator by default
      */
-    @Deprecated
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
+    protected PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
                             Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls, List<GUIItem> items) {
         super(gui, minSize, maxSize, null, null);
         this.items = items;
@@ -88,8 +87,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      *                                you can instantiate the {@link PaginatorControlsPane}
      * @param items The items to place in this paginator by default
      */
-    @Deprecated(forRemoval = true)
-    public PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
+    protected PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
                             PaginatorControlsPosition defaultControlsPosition, List<GUIItem> items) {
         this(gui, minSize, maxSize, repeat, startPage, (p) -> null, items);
         this.defaultControls = new PaginatorControlsPane.Builder(gui, this)
@@ -243,7 +241,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
     /**
      * Builder for creating {@link PaginatorGUIPane}
      */
-    public static class Builder extends BaseHorizontalSplitGUIPane.Builder<Builder, PaginatorGUIPane> implements ItemAddable<Builder> {
+    public static class Builder extends AbstractBuilder<Builder, PaginatorGUIPane> implements ItemAddable<Builder> {
         private final List<GUIItem> items = new ArrayList<>();
         private boolean repeat = true;
         private int startPage = 0;

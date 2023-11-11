@@ -2,6 +2,7 @@ package de.placeblock.betterinventories.content.item.impl.paginator;
 
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
+import de.placeblock.betterinventories.content.item.impl.CommandGUIButton;
 import de.placeblock.betterinventories.content.pane.impl.paginator.PaginatorGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import org.bukkit.Sound;
@@ -20,7 +21,7 @@ public class PreviousPageGUIButton extends PaginatorGUIButton {
      * @param sound The sound played when pressing this button
      * @param item The ItemStack of the Button
      */
-    public PreviousPageGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, PaginatorGUIPane paginatorGUIPane) {
+    protected PreviousPageGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, PaginatorGUIPane paginatorGUIPane) {
         super(gui, item, cooldown, sound, permission, paginatorGUIPane);
     }
 
@@ -31,9 +32,26 @@ public class PreviousPageGUIButton extends PaginatorGUIButton {
     }
 
     /**
+     * Abstract Builder for creating {@link PreviousPageGUIButton}
+     * @param <B> The Builder that implements this one
+     * @param <P> The {@link CommandGUIButton} that is build
+     */
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends PreviousPageGUIButton> extends PaginatorGUIButton.AbstractBuilder<B, P> {
+        /**
+         * Creates a new Builder
+         *
+         * @param gui       The GUI
+         * @param paginator The paginator this button belongs to
+         */
+        protected AbstractBuilder(GUI gui, PaginatorGUIPane paginator) {
+            super(gui, paginator);
+        }
+    }
+
+    /**
      * Builder for creating {@link PreviousPageGUIButton}
      */
-    public static class Builder extends PaginatorGUIButton.Builder<Builder, PreviousPageGUIButton> {
+    public static class Builder extends AbstractBuilder<Builder, PreviousPageGUIButton> {
         /**
          * Creates a new GUIButton
          * @param gui The GUI

@@ -28,14 +28,14 @@ public class CommandGUIButton extends GUIButton {
      * @param sound The sound that is played when pressing that button
      * @param permission The permission required to press this button
      */
-    public CommandGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, String command) {
+    protected CommandGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, String command) {
         super(gui, item, cooldown, sound, permission);
         this.command = command;
     }
 
     @Override
     public void onClick(ClickData data) {
-        data.getPlayer().performCommand(this.command);
+        data.player().performCommand(this.command);
     }
 
     /**

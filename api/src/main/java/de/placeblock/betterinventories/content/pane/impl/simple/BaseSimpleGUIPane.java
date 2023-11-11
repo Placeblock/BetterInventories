@@ -185,6 +185,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
      * @param position The position of the section
      * @return Whether the section existed
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean removeSection(Vector2d position) {
         return this.content.removeIf(childData -> childData.getPosition().equals(position));
     }
@@ -279,7 +280,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
      * @param <P> The BaseSimpleGUIPane that is built
      * @param <C> The Sections that can be placed inside built panes {@link BaseSimpleGUIPane}
      */
-    public static abstract class Builder<B extends Builder<B, P, C>, P extends BaseSimpleGUIPane<C, P>, C extends GUISection> extends GUISection.Builder<B, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P, C>, P extends BaseSimpleGUIPane<C, P>, C extends GUISection> extends GUISection.AbstractBuilder<B, P> {
         /**
          * Whether to automatically resize the pane according to the children.
          * If true it will set the size to the bounding box of all children.
@@ -290,7 +291,7 @@ public abstract class BaseSimpleGUIPane<C extends GUISection, S extends BaseSimp
          * Creates a new Builder
          * @param gui The gui this Pane belongs to
          */
-        protected Builder(GUI gui) {
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
 

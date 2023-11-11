@@ -1,6 +1,5 @@
 package de.placeblock.betterinventories.gui;
 
-import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -9,22 +8,15 @@ import java.util.List;
 
 /**
  * A GUIView is created for each player who opens an inventory.
+ *
+ * @param player    The Player of this View
+ * @param inventory The Bukkit Inventory of this View
  */
-@Getter
-public class GUIView {
-    /**
-     * The Player of this View
-     */
-    private final Player player;
-
-    /**
-     * The Bukkit Inventory of this View
-     */
-    private final Inventory inventory;
-
+public record GUIView(Player player, Inventory inventory) {
     /**
      * Creates a new GUIView
-     * @param player The Player of this View
+     *
+     * @param player    The Player of this View
      * @param inventory The Bukkit Inventory of this View
      */
     public GUIView(Player player, Inventory inventory) {
@@ -36,6 +28,7 @@ public class GUIView {
     /**
      * Gets called when the new rendered content should be showed to the player.
      * Updates only changing items in the player's inventory.
+     *
      * @param content The new rendered content. The size of the list should be equals the slots in the inventory.
      */
     public void update(List<ItemStack> content) {

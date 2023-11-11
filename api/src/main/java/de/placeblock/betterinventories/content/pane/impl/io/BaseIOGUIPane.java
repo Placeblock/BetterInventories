@@ -112,7 +112,7 @@ public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimp
      * @param <B> The Builder that implements this one
      * @param <P> The Product that is Build
      */
-    public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane<P>> extends BaseSimpleItemGUIPane.Builder<B, P> {
+    public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane<P>> extends AbstractBuilder<B, P> {
         private boolean input = true;
         private boolean output = true;
         private BiConsumer<Vector2d, ItemStack> onChange = (p, i) -> {};

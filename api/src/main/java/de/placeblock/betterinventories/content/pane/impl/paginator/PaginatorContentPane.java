@@ -25,7 +25,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
      * @param maxSize The maximum size of the Pane
      * @param paginatorGUIPane The according Paginator
      */
-    public PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
+    protected PaginatorContentPane(GUI gui, Vector2d minSize, Vector2d maxSize, PaginatorGUIPane paginatorGUIPane) {
         super(gui, minSize, maxSize, true);
         this.paginatorGUIPane = paginatorGUIPane;
     }
@@ -45,6 +45,7 @@ public class PaginatorContentPane extends SimpleItemGUIPane {
      * Is called when the size of the Pane changes.
      * Here it resets the Items in the Paginator.
      */
+    @SuppressWarnings("unused")
     @Override
     public void onSizeChange() {
         this.setItems();

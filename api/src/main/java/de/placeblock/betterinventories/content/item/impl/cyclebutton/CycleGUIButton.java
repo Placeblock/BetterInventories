@@ -67,7 +67,7 @@ public abstract class CycleGUIButton<E extends CycleEnum> extends GUIButton {
      */
     @SuppressWarnings("unused")
     public void cycle(ClickData data) {
-        this.currentValue = this.getNextValue(data.getPlayer(), this.currentValue, this.getNextValue(this.currentValue));
+        this.currentValue = this.getNextValue(data.player(), this.currentValue, this.getNextValue(this.currentValue));
         this.updateItem();
         this.getGui().update();
         this.onCycle(data, this.currentValue);

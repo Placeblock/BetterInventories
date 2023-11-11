@@ -19,8 +19,7 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    @Deprecated(forRemoval = true)
-    public ChestGUI(Plugin plugin, TextComponent title, boolean removeItems, int minHeight, int maxHeight) {
+    protected ChestGUI(Plugin plugin, TextComponent title, boolean removeItems, int minHeight, int maxHeight) {
         super(plugin, title, removeItems, minHeight, maxHeight);
         this.setCanvas(new SimpleGUIPane.Builder(this).adoptMinMax(this).autoSize(true).build());
     }
@@ -29,7 +28,8 @@ public class ChestGUI extends BaseChestGUI<SimpleGUIPane> {
      * Builder for creating ChestGUIs
      * @param <P> The Plugin that uses this builder
      */
-    public static class Builder<P extends JavaPlugin> extends BaseChestGUI.Builder<Builder<P>, ChestGUI, SimpleGUIPane, P> {
+    @SuppressWarnings("unused")
+    public static class Builder<P extends JavaPlugin> extends AbstractBuilder<Builder<P>, ChestGUI, SimpleGUIPane, P> {
         /**
          * Creates a new Builder
          * @param plugin The plugin that uses this builder

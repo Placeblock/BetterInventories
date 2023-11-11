@@ -13,6 +13,7 @@ import java.util.function.Function;
  * Implementation of {@link BaseSimpleGUIPane} that can contain only {@link GUIItem}.
  * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
+@SuppressWarnings("unused")
 public abstract class BaseSimpleItemGUIPane<S extends BaseSimpleItemGUIPane<S>> extends BaseSimpleGUIPane<GUIItem, S> {
 
     /**
@@ -23,8 +24,7 @@ public abstract class BaseSimpleItemGUIPane<S extends BaseSimpleItemGUIPane<S>> 
      * @param autoSize Whether to automatically resize the pane according to the children.
      *                 If true it will set the size to the bounding box of all children.
      */
-    @Deprecated(forRemoval = true)
-    public BaseSimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
+    protected BaseSimpleItemGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize) {
         super(gui, minSize, maxSize, autoSize);
     }
 
@@ -116,12 +116,12 @@ public abstract class BaseSimpleItemGUIPane<S extends BaseSimpleItemGUIPane<S>> 
      * @param <B> The Builder that implements this one
      * @param <P> The BaseSimpleGUIPane that is built
      */
-    public static abstract class Builder<B extends Builder<B, P>, P extends BaseSimpleItemGUIPane<P>> extends BaseSimpleGUIPane.Builder<B, P, GUIItem> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends BaseSimpleItemGUIPane<P>> extends BaseSimpleGUIPane.AbstractBuilder<B, P, GUIItem> {
         /**
          * Creates a new Builder
          * @param gui The gui this Pane belongs to
          */
-        protected Builder(GUI gui) {
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
     }
