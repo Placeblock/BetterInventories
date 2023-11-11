@@ -287,7 +287,7 @@ public abstract class GUI {
 
         /**
          * Sets the removeItems attribute
-         * @param removeItems Whether to try to remove Items from the inventory on close.
+         * @param removeItems Whether to try to remove loose Items from the inventory on close.
          *                    The first player that closes the gui gets the items
          * @return Itself
          */

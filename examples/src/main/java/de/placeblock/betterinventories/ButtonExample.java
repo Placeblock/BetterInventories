@@ -25,7 +25,7 @@ public class ButtonExample extends CanvasGUI {
      * @param plugin The Plugin that uses this GUI
      */
     protected ButtonExample(Plugin plugin) {
-        super(plugin, Component.text("Test title"), InventoryType.HOPPER, true);
+        super(plugin, Component.text("Test title"), InventoryType.HOPPER, false);
 
         // There are multiple ways to create Buttons
         this.canvas.setSectionAt(1, new ExampleButton(this)); // Example Button created below

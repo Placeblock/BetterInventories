@@ -20,7 +20,7 @@ public class StructureExample extends ChestGUI {
      * @param plugin The Plugin that uses this GUI
      */
     public StructureExample(Plugin plugin) {
-        super(plugin, Component.text("Test title"), true, 3, 3);
+        super(plugin, Component.text("Test title"), false, 3, 3);
 
         // Create two Panes
         SimpleGUIPane pane1 = new SimpleGUIPane.Builder(this)
