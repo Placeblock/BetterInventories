@@ -4,20 +4,21 @@ import de.placeblock.betterinventories.content.item.GUIItem;
 import de.placeblock.betterinventories.content.pane.impl.simple.BaseSimpleItemGUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.util.Vector2d;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.function.BiConsumer;
 
 /**
  * GUIPane which allows Items to be inserted and taken out
  * @param <S> The implementing class to return this-type correctly e.g. {@link #addItemEmptySlot(GUIItem)}
  */
 @SuppressWarnings("unused")
-public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUIPane<S> {
+public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUIPane<S> {
 
     private final boolean input;
     private final boolean output;
+    private final IOConsumer onItemChange;
 
     /**
      * Creates a new TransferGUIPane
@@ -28,11 +29,14 @@ public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimp
      *                 If true it will set the size to the bounding box of all children.
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
+     * @param onItemChange Executed when an item in the pane changes
      */
-    protected BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
+    protected BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize,
+                            boolean input, boolean output, IOConsumer onItemChange) {
         super(gui, minSize, maxSize, autoSize);
         this.input = input;
         this.output = output;
+        this.onItemChange = onItemChange;
     }
 
     @Override
@@ -106,17 +110,22 @@ public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimp
      * @param position The position of the item that changed
      * @param itemStack The new ItemStack
      */
-    public abstract void onItemChange(Vector2d position, ItemStack itemStack);
+    public void onItemChange(Vector2d position, ItemStack itemStack) {
+        if (this.onItemChange != null) {
+            this.onItemChange.apply(position, itemStack);
+        }
+    }
 
     /**
      * Builder for {@link BaseIOGUIPane}
      * @param <B> The Builder that implements this one
      * @param <P> The Product that is Build
      */
+    @Getter(AccessLevel.PROTECTED)
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane<P>> extends AbstractBuilder<B, P> {
         private boolean input = true;
         private boolean output = true;
-        private BiConsumer<Vector2d, ItemStack> onChange = (p, i) -> {};
+        private IOConsumer onChange = (p, i) -> {};
 
         /**
          * Creates a new Builder
@@ -151,33 +160,9 @@ public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimp
          * @param onChange Called when an item changes. {@link BaseIOGUIPane#onItemChange(Vector2d, ItemStack)}
          * @return Itself
          */
-        public B onChange(BiConsumer<Vector2d, ItemStack> onChange) {
+        public B onChange(IOConsumer onChange) {
             this.onChange = onChange;
             return self();
-        }
-
-        /**
-         * Gets whether input is allowed
-         * @return Whether input is allowed
-         */
-        protected boolean isInput() {
-            return this.input;
-        }
-
-        /**
-         * Gets whether output is allowed
-         * @return Whether output is allowed
-         */
-        protected boolean isOutput() {
-            return this.output;
-        }
-
-        /**
-         * Gets the onchange consumer
-         * @return The onchange consumer
-         */
-        protected BiConsumer<Vector2d, ItemStack> getOnChange() {
-            return this.onChange;
         }
     }
 

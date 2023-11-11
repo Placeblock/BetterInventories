@@ -27,7 +27,7 @@ public class SynchedGUIPane extends BaseIOGUIPane<SynchedGUIPane> {
      */
     protected SynchedGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize,
                           boolean input, boolean output, SimpleItemGUIPane targetPane) {
-        super(gui, minSize, maxSize, autoSize, input, output);
+        super(gui, minSize, maxSize, autoSize, input, output, null);
         this.targetPane = targetPane;
     }
 
