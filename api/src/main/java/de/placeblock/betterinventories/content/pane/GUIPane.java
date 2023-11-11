@@ -168,12 +168,12 @@ public abstract class GUIPane extends GUISection {
      * @param <B> The Builder that implements this one
      * @param <P> The Product that is built
      */
-    public static abstract class Builder<B extends Builder<B, P>, P extends GUIPane> extends GUISection.Builder<B, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUIPane> extends GUISection.AbstractBuilder<B, P> {
         /**
          * Creates a new Builder
          * @param gui The GUI this Pane belongs to
          */
-        public Builder(GUI gui) {
+        public AbstractBuilder(GUI gui) {
             super(gui);
         }
     }

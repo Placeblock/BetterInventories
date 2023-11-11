@@ -19,7 +19,7 @@ public class PaginatorControlsPane extends BaseSimpleItemGUIPane<PaginatorContro
     /**
      * The default fill-item for the Pane
      */
-    public static GUIItem FILL_ITEM = new GUIItem.Builder(null)
+    public static final GUIItem FILL_ITEM = new GUIItem.Builder(null)
             .itemStack(new ItemBuilder(Component.empty(), Material.BLACK_STAINED_GLASS_PANE).build())
             .build();
 
@@ -60,8 +60,7 @@ public class PaginatorControlsPane extends BaseSimpleItemGUIPane<PaginatorContro
      * @param nextButton The custom next-button
      * @param previousButton The custom previous-button
      */
-    @Deprecated(forRemoval = true)
-    public PaginatorControlsPane(GUI gui,
+    protected PaginatorControlsPane(GUI gui,
                                  PaginatorGUIPane paginatorGUIPane,
                                  Vector2d minSize,
                                  Vector2d maxSize,
@@ -119,7 +118,8 @@ public class PaginatorControlsPane extends BaseSimpleItemGUIPane<PaginatorContro
     /**
      * Builder for {@link PaginatorControlsPane}
      */
-    public static class Builder extends BaseSimpleItemGUIPane.Builder<Builder, PaginatorControlsPane> {
+    @SuppressWarnings("unused")
+    public static class Builder extends AbstractBuilder<Builder, PaginatorControlsPane> {
         private final PaginatorGUIPane paginator;
         private PaginatorControlsPosition position = PaginatorControlsPosition.RIGHT;
         private NextPageGUIButton nextButton;

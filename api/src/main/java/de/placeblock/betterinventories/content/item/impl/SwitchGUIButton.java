@@ -31,7 +31,7 @@ public class SwitchGUIButton extends GUIButton {
      * @param permission The permission required to press this button
      * @param sound The sound played when pressing this button
      */
-    public SwitchGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, Function<Player, GUI> targetGUI) {
+    protected SwitchGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, Function<Player, GUI> targetGUI) {
         super(gui, item, cooldown, sound, permission);
         this.targetGUI = targetGUI;
     }
@@ -39,7 +39,7 @@ public class SwitchGUIButton extends GUIButton {
     @Override
     public void onClick(ClickData data) {
         if (this.targetGUI != null) {
-            Player player = data.getPlayer();
+            Player player = data.player();
             this.targetGUI.apply(player).showPlayer(player);
         }
     }

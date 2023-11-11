@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 /**
  * GUIPane which allows Items to be inserted and taken out
  */
+@SuppressWarnings("unused")
 public abstract class IOGUIPane extends BaseIOGUIPane<IOGUIPane> {
     /**
      * Creates a new TransferGUIPane
@@ -21,14 +22,14 @@ public abstract class IOGUIPane extends BaseIOGUIPane<IOGUIPane> {
      * @param input    Whether it should be allowed to input items into the IO-Pane.
      * @param output   Whether it should be allowed to remove items from the IO-Pane.
      */
-    @Deprecated(forRemoval = true)
-    public IOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
+    protected IOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output) {
         super(gui, minSize, maxSize, autoSize, input, output);
     }
 
     /**
      * Builder for creating {@link IOGUIPane}
      */
+    @SuppressWarnings("unused")
     public static class Builder extends BaseIOGUIPane.Builder<Builder, IOGUIPane> {
         /**
          * Creates a new Builder

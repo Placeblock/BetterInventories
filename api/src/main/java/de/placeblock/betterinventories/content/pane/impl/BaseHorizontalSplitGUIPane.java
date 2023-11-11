@@ -168,7 +168,7 @@ public abstract class BaseHorizontalSplitGUIPane extends GUIPane {
      */
     @SuppressWarnings("unused")
     @Getter(AccessLevel.PROTECTED)
-    public static abstract class Builder<B extends Builder<B, P>, P extends BaseHorizontalSplitGUIPane> extends GUIPane.Builder<B, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends BaseHorizontalSplitGUIPane> extends GUIPane.AbstractBuilder<B, P> {
         private GUIPane upperPane;
         private GUIPane lowerPane;
 
@@ -176,7 +176,7 @@ public abstract class BaseHorizontalSplitGUIPane extends GUIPane {
          * Creates a new Builder
          * @param gui The gui this Pane belongs to
          */
-        protected Builder(GUI gui) {
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
 

@@ -85,7 +85,7 @@ public abstract class BaseChestGUI<C extends GUIPane> extends BaseCanvasGUI<C> i
      */
     @SuppressWarnings("UnusedReturnValue")
     @Getter(AccessLevel.PROTECTED)
-    public static abstract class Builder<B extends Builder<B, G, C, P>, G extends BaseChestGUI<C>, C extends GUIPane, P extends JavaPlugin> extends BaseCanvasGUI.Builder<B, G, C, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, G, C, P>, G extends BaseChestGUI<C>, C extends GUIPane, P extends JavaPlugin> extends BaseCanvasGUI.AbstractBuilder<B, G, C, P> {
         private int minHeight;
         private int maxHeight;
 
@@ -93,7 +93,7 @@ public abstract class BaseChestGUI<C extends GUIPane> extends BaseCanvasGUI<C> i
          * Creates a new Builder
          * @param plugin The Plugin that uses this builder
          */
-        public Builder(P plugin) {
+        public AbstractBuilder(P plugin) {
             super(plugin);
         }
 

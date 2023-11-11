@@ -111,12 +111,12 @@ public abstract class BaseCanvasGUI<C extends GUIPane> extends GUI {
      * @param <C> The Pane that lives inside the ChestGUI
      * @param <P> The Plugin that uses this builder
      */
-    public static abstract class Builder<B extends Builder<B, G, C, P>, G extends BaseCanvasGUI<C>, C extends GUIPane, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, G, C, P>, G extends BaseCanvasGUI<C>, C extends GUIPane, P extends JavaPlugin> extends GUI.Builder<B, G, P> {
         /**
          * Creates a new Builder
          * @param plugin The plugin that uses this builder
          */
-        public Builder(P plugin) {
+        public AbstractBuilder(P plugin) {
             super(plugin);
         }
     }

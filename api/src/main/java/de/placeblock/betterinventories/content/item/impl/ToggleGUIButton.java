@@ -3,6 +3,7 @@ package de.placeblock.betterinventories.content.item.impl;
 import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
 import de.placeblock.betterinventories.gui.GUI;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,7 @@ public abstract class ToggleGUIButton extends GUIButton {
      * @param cooldown The cooldown of the Button
      * @param sound The sound played when pressing this button
      */
-    public ToggleGUIButton(GUI gui, int cooldown, Sound sound, String permission, boolean toggled) {
+    protected ToggleGUIButton(GUI gui, int cooldown, Sound sound, String permission, boolean toggled) {
         super(gui, null, cooldown, sound, permission);
         this.toggled = toggled;
         this.updateItem();
@@ -80,9 +81,10 @@ public abstract class ToggleGUIButton extends GUIButton {
 
 
     /**
-     * Builder for creating {@link ToggleGUIButton}
+     * Abstract Builder for creating {@link ToggleGUIButton}
      */
-    public static class Builder extends AbstractBuilder<Builder, ToggleGUIButton> {
+    @Getter(AccessLevel.PROTECTED)
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends ToggleGUIButton> extends GUIButton.AbstractBuilder<B, P> {
         private boolean toggled;
         private BiConsumer<ClickData, Boolean> onToggle;
         private Supplier<ItemStack> enabledItem;
@@ -92,7 +94,7 @@ public abstract class ToggleGUIButton extends GUIButton {
          * Creates a new Builder
          * @param gui The gui this button belongs to
          */
-        public Builder(GUI gui) {
+        protected AbstractBuilder(GUI gui) {
             super(gui);
         }
 
@@ -101,9 +103,9 @@ public abstract class ToggleGUIButton extends GUIButton {
          * @param toggled Default value for the toggled state
          * @return Itself
          */
-        public Builder toggled(boolean toggled) {
+        public B toggled(boolean toggled) {
             this.toggled = toggled;
-            return this;
+            return this.self();
         }
 
         /**
@@ -111,9 +113,9 @@ public abstract class ToggleGUIButton extends GUIButton {
          * @param onToggle Is called if the button is toggled
          * @return Itself
          */
-        public Builder onToggle(BiConsumer<ClickData, Boolean> onToggle) {
+        public B onToggle(BiConsumer<ClickData, Boolean> onToggle) {
             this.onToggle = onToggle;
-            return this;
+            return this.self();
         }
 
         /**
@@ -121,9 +123,9 @@ public abstract class ToggleGUIButton extends GUIButton {
          * @param enabledItem This item is shown if the button is toggled
          * @return Itself
          */
-        public Builder enabledItem(Supplier<ItemStack> enabledItem) {
+        public B enabledItem(Supplier<ItemStack> enabledItem) {
             this.enabledItem = enabledItem;
-            return this;
+            return this.self();
         }
 
         /**
@@ -131,31 +133,46 @@ public abstract class ToggleGUIButton extends GUIButton {
          * @param disabledItem This item is shown if the button is not toggled
          * @return Itself
          */
-        public Builder disabledItem(Supplier<ItemStack> disabledItem) {
+        public B disabledItem(Supplier<ItemStack> disabledItem) {
             this.disabledItem = disabledItem;
-            return this;
+            return this.self();
+        }
+    }
+
+    /**
+     * Builder for creating {@link ToggleGUIButton}
+     */
+    public static class Builder extends AbstractBuilder<Builder, ToggleGUIButton> {
+
+        /**
+         * Creates a new Builder
+         *
+         * @param gui The gui this button belongs to
+         */
+        public Builder(GUI gui) {
+            super(gui);
         }
 
         @Override
         public ToggleGUIButton build() {
-            if (this.enabledItem == null || this.disabledItem == null) {
+            if (this.getEnabledItem() == null || this.getDisabledItem() == null) {
                 throw new IllegalStateException("Enabled and Disabled items have to be set");
             }
             return new ToggleGUIButton(this.getGui(), this.getCooldown(),
-                    this.getSound(), this.getPermission(), this.toggled) {
+                    this.getSound(), this.getPermission(), this.isToggled()) {
                 @Override
                 protected ItemStack getEnabledItem() {
-                    return Builder.this.enabledItem.get();
+                    return Builder.this.getEnabledItem().get();
                 }
 
                 @Override
                 protected ItemStack getDisabledItem() {
-                    return Builder.this.disabledItem.get();
+                    return Builder.this.getDisabledItem().get();
                 }
 
                 @Override
                 protected void onToggle(ClickData clickData, boolean toggled) {
-                    Builder.this.onToggle.accept(clickData, toggled);
+                    Builder.this.getOnToggle().accept(clickData, toggled);
                 }
             };
         }
@@ -164,6 +181,7 @@ public abstract class ToggleGUIButton extends GUIButton {
         protected Builder self() {
             return this;
         }
+
     }
 
 }

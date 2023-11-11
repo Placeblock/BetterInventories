@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * AnvilGUIs are standard BaseAnvilGUIs with basic functionality.
  */
+@SuppressWarnings("unused")
 public class AnvilGUI extends BaseAnvilGUI {
     /**
      * Creates a new AnvilGUI
@@ -16,8 +17,7 @@ public class AnvilGUI extends BaseAnvilGUI {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    @Deprecated(forRemoval = true)
-    public AnvilGUI(Plugin plugin, TextComponent title, boolean removeItems) {
+    protected AnvilGUI(Plugin plugin, TextComponent title, boolean removeItems) {
         super(plugin, title, removeItems);
     }
 
@@ -25,7 +25,8 @@ public class AnvilGUI extends BaseAnvilGUI {
      * Builder for AnvilGUIs
      * @param <P> The plugin that uses the builder
      */
-    public static class Builder<P extends JavaPlugin> extends BaseAnvilGUI.Builder<Builder<P>, AnvilGUI, P> {
+    @SuppressWarnings("unused")
+    public static class Builder<P extends JavaPlugin> extends AbstractBuilder<Builder<P>, AnvilGUI, P> {
 
         /**
          * Creates a new Builder

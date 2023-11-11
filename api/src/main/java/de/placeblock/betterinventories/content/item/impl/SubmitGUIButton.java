@@ -55,7 +55,7 @@ public abstract class SubmitGUIButton extends GUIButton {
      * @param sound The sound played when pressing this button
      * @param submitDelay The delay before the submit item is shown
      */
-    public SubmitGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, ItemStack submitItem, int submitDelay) {
+    protected SubmitGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, ItemStack submitItem, int submitDelay) {
         super(gui, item, cooldown, sound, permission);
         this.item = item;
         this.submitItem = submitItem == null ? SUBMIT_ITEM : submitItem;

@@ -22,8 +22,7 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    @Deprecated(forRemoval = true)
-    public CanvasGUI(Plugin plugin, TextComponent title, int height, boolean removeItems) {
+    protected CanvasGUI(Plugin plugin, TextComponent title, int height, boolean removeItems) {
         super(plugin, title, InventoryType.CHEST, removeItems);
         this.setCanvas(new SimpleGUIPane.Builder(this).size(new Vector2d(9, height)).autoSize(false).build());
     }
@@ -36,8 +35,7 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    @Deprecated(forRemoval = true)
-    public CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
+    protected CanvasGUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
         super(plugin, title, type, removeItems);
         this.setCanvas(new SimpleGUIPane.Builder(this).size(InventoryTypeMapper.getSize(type)).autoSize(false).build());
     }
@@ -46,7 +44,7 @@ public class CanvasGUI extends BaseCanvasGUI<SimpleGUIPane> {
      * Builder used for creating CanvasGUIs
      * @param <P> The Plugin that uses this builder
      */
-    public static class Builder<P extends JavaPlugin> extends BaseCanvasGUI.Builder<Builder<P>, CanvasGUI, SimpleGUIPane, P> {
+    public static class Builder<P extends JavaPlugin> extends AbstractBuilder<Builder<P>, CanvasGUI, SimpleGUIPane, P> {
         private int height = 3;
         private InventoryType type = InventoryType.CHEST;
         /**

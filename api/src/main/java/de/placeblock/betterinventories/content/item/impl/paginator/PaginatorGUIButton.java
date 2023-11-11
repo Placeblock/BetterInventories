@@ -27,7 +27,7 @@ public abstract class PaginatorGUIButton extends GUIButton {
      * @param permission The permission required to press this button
      * @param sound The sound played when pressing this button
      */
-    public PaginatorGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound,
+    protected PaginatorGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound,
                               String permission, PaginatorGUIPane paginatorGUIPane) {
         super(gui, item, cooldown, sound, permission);
         this.paginatorGUIPane = paginatorGUIPane;
@@ -39,15 +39,15 @@ public abstract class PaginatorGUIButton extends GUIButton {
      * @param <P> The {@link GUIButton} that is built
      */
     @Getter(AccessLevel.PROTECTED)
-    public static abstract class Builder<B extends Builder<B, P>, P extends PaginatorGUIButton> extends AbstractBuilder<B, P> {
+    public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends PaginatorGUIButton> extends GUIButton.AbstractBuilder<B, P> {
         private final PaginatorGUIPane paginator;
 
         /**
-         * Creates a new GUIButton
+         * Creates a new Builder
          * @param gui The GUI
          * @param paginator The paginator this button belongs to
          */
-        public Builder(GUI gui, PaginatorGUIPane paginator) {
+        protected AbstractBuilder(GUI gui, PaginatorGUIPane paginator) {
             super(gui);
             this.paginator = paginator;
         }

@@ -80,7 +80,7 @@ public abstract class GUI {
      * @param removeItems Whether to remove loose items on close.
      *                   The first player that closes the gui gets the items
      */
-    public GUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
+    protected GUI(Plugin plugin, TextComponent title, InventoryType type, boolean removeItems) {
         this.plugin = plugin;
         this.type = type;
         this.title = title;
@@ -121,7 +121,7 @@ public abstract class GUI {
      * @return All players, which can see the GUI
      */
     public List<Player> getPlayers() {
-        return this.views.stream().map(GUIView::getPlayer).toList();
+        return this.views.stream().map(GUIView::player).toList();
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class GUI {
      */
     public GUIView getView(Inventory inventory) {
         for (GUIView view : this.views) {
-            if (view.getInventory().equals(inventory)) {
+            if (view.inventory().equals(inventory)) {
                 return view;
             }
         }
@@ -144,7 +144,7 @@ public abstract class GUI {
      */
     public GUIView getView(Player player) {
         for (GUIView view : this.views) {
-            if (view.getPlayer().equals(player)) {
+            if (view.player().equals(player)) {
                 return view;
             }
         }
@@ -234,7 +234,7 @@ public abstract class GUI {
      * @param view The View of the Player
      */
     public void removePlayer(GUIView view) {
-        Player player = view.getPlayer();
+        Player player = view.player();
         if (this.removeItems) {
             for (int i = 0; i < this.getSlots(); i++) {
                 SearchData searchData = new SearchData(i, (s) -> s instanceof GUIPane);

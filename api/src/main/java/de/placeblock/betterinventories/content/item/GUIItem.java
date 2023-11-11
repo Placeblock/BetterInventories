@@ -34,7 +34,7 @@ public class GUIItem extends GUISection {
      * @param gui The GUI
      * @param itemStack The ItemStack. {@link ItemBuilder} may help to create it.
      */
-    public GUIItem(GUI gui, ItemStack itemStack) {
+    protected GUIItem(GUI gui, ItemStack itemStack) {
         super(gui, BUTTON_SIZE, BUTTON_SIZE, BUTTON_SIZE);
         this.itemStack = itemStack;
     }
@@ -83,7 +83,7 @@ public class GUIItem extends GUISection {
      * @param <P> The {@link GUIItem} that is built
      */
     @Getter(AccessLevel.PROTECTED)
-    protected static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUIItem> extends GUISection.Builder<B, P> {
+    protected static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends GUIItem> extends GUISection.AbstractBuilder<B, P> {
         private ItemStack itemStack;
 
         /**

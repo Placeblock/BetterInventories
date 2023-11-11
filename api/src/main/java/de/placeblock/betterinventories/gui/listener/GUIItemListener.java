@@ -7,8 +7,6 @@ import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.GUIView;
 import de.placeblock.betterinventories.util.Vector2d;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -29,18 +27,13 @@ import java.util.Objects;
 
 /**
  * Listener for GUIs that handles item interactions
+ *
+ * @param gui The GUI this listener belongs to
  */
-@Getter
-@RequiredArgsConstructor
-public class GUIItemListener implements Listener {
-
-    /**
-     * The GUI this listener belongs to
-     */
-    private final GUI gui;
-
+public record GUIItemListener(GUI gui) implements Listener {
     /**
      * Called by Bukkit when Player clicks an Inventory
+     *
      * @param event The Event
      */
     @EventHandler
@@ -82,7 +75,7 @@ public class GUIItemListener implements Listener {
                 if (currentItem.getAmount() == 1) {
                     dispatchRemove(event, section, pos);
                 } else {
-                    int newAmount = currentItem.getAmount()/2;
+                    int newAmount = currentItem.getAmount() / 2;
                     dispatchAmount(event, section, pos, newAmount);
                 }
             }
@@ -91,7 +84,7 @@ public class GUIItemListener implements Listener {
                 if (currentItem.getAmount() == 1) {
                     dispatchRemove(event, section, pos);
                 } else {
-                    dispatchAmount(event, section, pos, currentItem.getAmount()-1);
+                    dispatchAmount(event, section, pos, currentItem.getAmount() - 1);
                 }
             }
             case MOVE_TO_OTHER_INVENTORY -> {
@@ -110,7 +103,7 @@ public class GUIItemListener implements Listener {
                 }
                 if (availible == 0) return;
                 if (currentItem.getAmount() > availible) {
-                    dispatchAmount(event, section, pos, currentItem.getAmount()-availible);
+                    dispatchAmount(event, section, pos, currentItem.getAmount() - availible);
                 } else {
                     dispatchRemove(event, section, pos);
                 }
@@ -121,7 +114,7 @@ public class GUIItemListener implements Listener {
                     int newAmount = event.getCursor().getAmount();
                     dispatchAdd(event, section, pos, event.getCursor(), newAmount);
                 } else {
-                    int newAmount = currentItem.getAmount()+event.getCursor().getAmount();
+                    int newAmount = currentItem.getAmount() + event.getCursor().getAmount();
                     dispatchAmount(event, section, pos, newAmount);
                 }
             }
@@ -129,7 +122,7 @@ public class GUIItemListener implements Listener {
                 if (currentItem == null) {
                     dispatchAdd(event, section, pos, event.getCursor(), 1);
                 } else {
-                    dispatchAmount(event, section, pos, currentItem.getAmount()+1);
+                    dispatchAmount(event, section, pos, currentItem.getAmount() + 1);
                 }
             }
             case HOTBAR_SWAP -> {
@@ -171,6 +164,7 @@ public class GUIItemListener implements Listener {
 
     /**
      * Used to get hotbar items from events
+     *
      * @param event The Event
      * @return the hotbar item for the event
      */
@@ -181,11 +175,12 @@ public class GUIItemListener implements Listener {
 
     /**
      * Dispatches an add action
-     * @param event The event
-     * @param section The section
+     *
+     * @param event    The event
+     * @param section  The section
      * @param position The position
-     * @param item The itemStack that got added
-     * @param amount The amount of the itemStack
+     * @param item     The itemStack that got added
+     * @param amount   The amount of the itemStack
      */
     private void dispatchAdd(Cancellable event, GUISection section, Vector2d position, ItemStack item, int amount) {
         item = item.clone();
@@ -197,8 +192,9 @@ public class GUIItemListener implements Listener {
 
     /**
      * Dispatches a remove action
-     * @param event The event
-     * @param section The section
+     *
+     * @param event    The event
+     * @param section  The section
      * @param position The position
      */
     public void dispatchRemove(Cancellable event, GUISection section, Vector2d position) {
@@ -210,10 +206,11 @@ public class GUIItemListener implements Listener {
 
     /**
      * Dispatches an amount action
-     * @param event The event
-     * @param section The section
+     *
+     * @param event    The event
+     * @param section  The section
      * @param position The position
-     * @param amount The new amount
+     * @param amount   The new amount
      */
     private void dispatchAmount(Cancellable event, GUISection section, Vector2d position, int amount) {
         if (section.onItemAmount(position, amount)) {
@@ -223,6 +220,7 @@ public class GUIItemListener implements Listener {
 
     /**
      * Called by Bukkit when Player drags an Inventory
+     *
      * @param event The Event
      */
     @EventHandler(priority = EventPriority.LOW)
@@ -241,16 +239,17 @@ public class GUIItemListener implements Listener {
 
     /**
      * Removes Items from the View
-     * @param view The view
+     *
+     * @param view           The view
      * @param cancelledSlots The cancelled slots
      */
     private void removeItems(GUIView view, Map<Integer, ItemStack> cancelledSlots) {
         Bukkit.getScheduler().runTaskLater(this.gui.getPlugin(), () -> {
             for (Integer slot : cancelledSlots.keySet()) {
-                ItemStack item = view.getInventory().getItem(slot);
+                ItemStack item = view.inventory().getItem(slot);
                 if (item != null) {
                     int amount = cancelledSlots.get(slot).getAmount();
-                    item.setAmount(item.getAmount()- amount);
+                    item.setAmount(item.getAmount() - amount);
                 }
             }
         }, 1);
@@ -258,7 +257,8 @@ public class GUIItemListener implements Listener {
 
     /**
      * Returns cancelled items to the cursor
-     * @param event The event
+     *
+     * @param event          The event
      * @param cancelledSlots The cancelled slots
      */
     private void returnToCursor(InventoryDragEvent event, Map<Integer, ItemStack> cancelledSlots) {
@@ -266,7 +266,7 @@ public class GUIItemListener implements Listener {
         for (Integer slot : cancelledSlots.keySet()) {
             ItemStack itemStack = cancelledSlots.get(slot);
             if (cursor != null) {
-                cursor.setAmount(cursor.getAmount()+ itemStack.getAmount());
+                cursor.setAmount(cursor.getAmount() + itemStack.getAmount());
             } else {
                 cursor = itemStack.clone();
             }
@@ -276,7 +276,8 @@ public class GUIItemListener implements Listener {
 
     /**
      * Calculates the cancelled slots
-     * @param event The event
+     *
+     * @param event        The event
      * @param sectionSlots All slots according to the sections
      * @return The cancelled slots
      */
@@ -293,7 +294,7 @@ public class GUIItemListener implements Listener {
                 }
             } else {
                 if (section.onItemAmount(searchData.getRelativePos(), newItem.getAmount())) {
-                    newItem.setAmount(newItem.getAmount()-existingItem.getAmount());
+                    newItem.setAmount(newItem.getAmount() - existingItem.getAmount());
                     removedItems.put(slot, newItem);
                 }
             }
@@ -303,6 +304,7 @@ public class GUIItemListener implements Listener {
 
     /**
      * Used to get sections for each slot
+     *
      * @param guiSlots The slots
      * @return The sections that belong to the slots
      */
