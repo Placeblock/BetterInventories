@@ -1,14 +1,13 @@
-package de.placeblock.betterinventories.content.item.impl;
+package de.placeblock.betterinventories.content.item.impl.togglebutton;
 
-import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.content.item.ClickData;
+import de.placeblock.betterinventories.content.item.GUIButton;
 import de.placeblock.betterinventories.gui.GUI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**
@@ -16,11 +15,23 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 @Getter
-public abstract class ToggleGUIButton extends GUIButton {
+public class ToggleGUIButton extends GUIButton {
     /**
      * Whether the button is currently toggled
      */
     private boolean toggled;
+    /**
+     * Used to get the item which is displayed when the button is enabled
+     */
+    private final Supplier<ItemStack> enabledItem;
+    /**
+     * Used to get the item which is displayed when the button is disabled
+     */
+    private final Supplier<ItemStack> disabledItem;
+    /**
+     * Executed when the button is toggled
+     */
+    private final ToggleConsumer onToggle;
 
     /**
      * Creates a new ToggleGUIButton
@@ -29,10 +40,17 @@ public abstract class ToggleGUIButton extends GUIButton {
      * @param toggled The default value of the toggled-state
      * @param cooldown The cooldown of the Button
      * @param sound The sound played when pressing this button
+     * @param enabledItem Used to get the item which is displayed when the button is enabled
+     * @param disabledItem Used to get the item which is displayed when the button is disabled
+     * @param onToggle Executed when the button is toggled
      */
-    protected ToggleGUIButton(GUI gui, int cooldown, Sound sound, String permission, boolean toggled) {
+    protected ToggleGUIButton(GUI gui, int cooldown, Sound sound, String permission, boolean toggled,
+                              Supplier<ItemStack> enabledItem, Supplier<ItemStack> disabledItem, ToggleConsumer onToggle) {
         super(gui, null, cooldown, sound, permission);
         this.toggled = toggled;
+        this.enabledItem = enabledItem;
+        this.disabledItem = disabledItem;
+        this.onToggle = onToggle;
         this.updateItem();
     }
 
@@ -65,19 +83,29 @@ public abstract class ToggleGUIButton extends GUIButton {
     /**
      * @return The Item for the enabled-state
      */
-    protected abstract ItemStack getEnabledItem();
+    protected ItemStack getEnabledItem() {
+        if (this.enabledItem == null) throw new IllegalStateException("ToggleGUIButton without enabled item supplier");
+        return this.enabledItem.get();
+    }
 
     /**
      * @return The Item for the disabled-state
      */
-    protected abstract ItemStack getDisabledItem();
+    protected ItemStack getDisabledItem() {
+        if (this.disabledItem == null) throw new IllegalStateException("ToggleGUIButton without disabled item supplier");
+        return this.disabledItem.get();
+    }
 
     /**
      * Gets called when the Button gets toggled
      * @param clickData The clickData of the action
      * @param toggled The current state
      */
-    protected abstract void onToggle(ClickData clickData, boolean toggled);
+    protected void onToggle(ClickData clickData, boolean toggled) {
+        if (this.onToggle != null) {
+            this.onToggle.apply(clickData, toggled);
+        }
+    }
 
 
     /**
@@ -86,7 +114,7 @@ public abstract class ToggleGUIButton extends GUIButton {
     @Getter(AccessLevel.PROTECTED)
     public static abstract class AbstractBuilder<B extends AbstractBuilder<B, P>, P extends ToggleGUIButton> extends GUIButton.AbstractBuilder<B, P> {
         private boolean toggled;
-        private BiConsumer<ClickData, Boolean> onToggle;
+        private ToggleConsumer onToggle;
         private Supplier<ItemStack> enabledItem;
         private Supplier<ItemStack> disabledItem;
 
@@ -113,7 +141,7 @@ public abstract class ToggleGUIButton extends GUIButton {
          * @param onToggle Is called if the button is toggled
          * @return Itself
          */
-        public B onToggle(BiConsumer<ClickData, Boolean> onToggle) {
+        public B onToggle(ToggleConsumer onToggle) {
             this.onToggle = onToggle;
             return this.self();
         }
@@ -159,22 +187,8 @@ public abstract class ToggleGUIButton extends GUIButton {
                 throw new IllegalStateException("Enabled and Disabled items have to be set");
             }
             return new ToggleGUIButton(this.getGui(), this.getCooldown(),
-                    this.getSound(), this.getPermission(), this.isToggled()) {
-                @Override
-                protected ItemStack getEnabledItem() {
-                    return Builder.this.getEnabledItem().get();
-                }
-
-                @Override
-                protected ItemStack getDisabledItem() {
-                    return Builder.this.getDisabledItem().get();
-                }
-
-                @Override
-                protected void onToggle(ClickData clickData, boolean toggled) {
-                    Builder.this.getOnToggle().accept(clickData, toggled);
-                }
-            };
+                    this.getSound(), this.getPermission(), this.isToggled(), this.getEnabledItem(),
+                    this.getDisabledItem(), this.getOnToggle());
         }
 
         @Override

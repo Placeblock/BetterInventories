@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * Button which shows a confirm-item if clicked.
  */
 @SuppressWarnings("unused")
-public abstract class SubmitGUIButton extends GUIButton {
+public class SubmitGUIButton extends GUIButton {
     /**
      * The default submit-item
      */
@@ -44,6 +44,10 @@ public abstract class SubmitGUIButton extends GUIButton {
      *  The delay before the submit item is shown
      */
     private final int submitDelay;
+    /**
+     * Called when a player submits
+     */
+    private final Consumer<ClickData> onSubmit;
 
     /**
      * Creates a new SubmitGUIButton
@@ -54,12 +58,15 @@ public abstract class SubmitGUIButton extends GUIButton {
      * @param permission The permission required to press this button
      * @param sound The sound played when pressing this button
      * @param submitDelay The delay before the submit item is shown
+     * @param onSubmit Called when a player submits
      */
-    protected SubmitGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission, ItemStack submitItem, int submitDelay) {
+    protected SubmitGUIButton(GUI gui, ItemStack item, int cooldown, Sound sound, String permission,
+                              ItemStack submitItem, int submitDelay, Consumer<ClickData> onSubmit) {
         super(gui, item, cooldown, sound, permission);
         this.item = item;
         this.submitItem = submitItem == null ? SUBMIT_ITEM : submitItem;
         this.submitDelay = submitDelay;
+        this.onSubmit = onSubmit;
     }
 
     @Override
@@ -99,7 +106,11 @@ public abstract class SubmitGUIButton extends GUIButton {
      * Is called on submit
      * @param data The ClickData of the click
      */
-    public abstract void onSubmit(ClickData data);
+    public void onSubmit(ClickData data) {
+        if (this.onSubmit != null) {
+            this.onSubmit.accept(data);
+        }
+    }
 
     /**
      * Abstract Builder for creating {@link SubmitGUIButton}
@@ -166,15 +177,7 @@ public abstract class SubmitGUIButton extends GUIButton {
         @Override
         public SubmitGUIButton build() {
             return new SubmitGUIButton(this.getGui(), this.getItemStack(), this.getCooldown(), this.getSound(),
-                    this.getPermission(), this.getSubmitItem(), this.getSubmitDelay()) {
-                @Override
-                public void onSubmit(ClickData data) {
-                    Consumer<ClickData> onSubmit = Builder.this.getOnSubmit();
-                    if (onSubmit != null) {
-                        onSubmit.accept(data);
-                    }
-                }
-            };
+                    this.getPermission(), this.getSubmitItem(), this.getSubmitDelay(), this.getOnSubmit());
         }
 
         @Override

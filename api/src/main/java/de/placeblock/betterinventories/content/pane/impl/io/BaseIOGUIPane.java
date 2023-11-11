@@ -83,12 +83,13 @@ public abstract class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimp
             if (item != null) {
                 ItemStack currentItemStack = item.getItemStack();
                 int currentAmount = currentItemStack.getAmount();
-                if (!currentItemStack.isSimilar(itemStack) || currentAmount >= 64) continue;
-                accepted = Math.min(64-currentAmount, itemStack.getAmount());
+                int maxStackSize = currentItemStack.getMaxStackSize();
+                if (!currentItemStack.isSimilar(itemStack) || currentAmount >= maxStackSize) continue;
+                accepted = Math.min(maxStackSize-currentAmount, itemStack.getAmount());
                 currentItemStack.setAmount(accepted+currentAmount);
                 this.onItemChange(position, currentItemStack);
             } else {
-                accepted = Math.min(64, itemStack.getAmount());
+                accepted = Math.min(itemStack.getMaxStackSize(), itemStack.getAmount());
                 ItemStack slotItem = itemClone.clone();
                 slotItem.setAmount(accepted);
                 this.setSectionAt(slot, new GUIItem.Builder(this.getGui()).itemStack(slotItem).build());
