@@ -28,7 +28,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
     /**
      * The default-controls or null
      */
-    private PaginatorControlsPane defaultControls;
+    private BasePaginatorControlsPane<?> defaultControls;
 
     /**
      * The content-Pane where the Items are placed onto
@@ -61,7 +61,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      * @param items The items to place in this paginator by default
      */
     protected PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
-                            Function<PaginatorGUIPane, PaginatorControlsPane> defaultControls, List<GUIItem> items) {
+                               Function<PaginatorGUIPane, BasePaginatorControlsPane<?>> defaultControls, List<GUIItem> items) {
         super(gui, minSize, maxSize, null, null);
         this.items = items;
         this.contentPane = new PaginatorContentPane(gui, minSize, maxSize, this);
@@ -84,7 +84,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
      * @param defaultControlsPosition The default controls automatically appear if there
      *                                is not enough space for all items. Set to null if you don't want
      *                                automatic controls, or you want to handle them yourself. To add custom controls
-     *                                you can instantiate the {@link PaginatorControlsPane}
+     *                                you can instantiate the {@link BasePaginatorControlsPane}
      * @param items The items to place in this paginator by default
      */
     protected PaginatorGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean repeat, int startPage,
@@ -246,7 +246,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
         private boolean repeat = true;
         private int startPage = 0;
         private PaginatorControlsPosition controlsPosition = PaginatorControlsPosition.RIGHT;
-        private Function<PaginatorGUIPane, PaginatorControlsPane> controls;
+        private Function<PaginatorGUIPane, BasePaginatorControlsPane<?>> controls;
 
         /**
          * Creates a new Builder
@@ -291,7 +291,7 @@ public class PaginatorGUIPane extends BaseHorizontalSplitGUIPane implements Item
          * @param controls The new controls
          * @return Itself
          */
-        public Builder controls(Function<PaginatorGUIPane, PaginatorControlsPane> controls) {
+        public Builder controls(Function<PaginatorGUIPane, BasePaginatorControlsPane<?>> controls) {
             this.controls = controls;
             return this;
         }
