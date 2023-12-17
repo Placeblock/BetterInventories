@@ -5,11 +5,13 @@ import de.placeblock.betterinventories.content.SearchData;
 import de.placeblock.betterinventories.content.pane.GUIPane;
 import de.placeblock.betterinventories.gui.listener.GUIItemListener;
 import de.placeblock.betterinventories.gui.listener.GUIListener;
+import de.placeblock.betterinventories.nms.NMSBridge;
 import de.placeblock.betterinventories.util.Vector2d;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryType;
@@ -19,6 +21,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,29 @@ import java.util.List;
 @Getter
 @SuppressWarnings("unused")
 public abstract class GUI {
+    /**
+     * NMS Bridge is used for NMS specific code
+     */
+    public static NMSBridge NMS_BRIDGE;
+
+    static {
+        String packageName = Bukkit.getServer().getClass().getPackage().getName();
+        String version = packageName.substring(packageName.lastIndexOf('.') + 1);
+        // Testing
+        if ("mockbukkit".equals(version)) {
+            version = "v1_20_R1";
+        }
+        try {
+            Class<?> clazz = Class.forName("de.placeblock.betterinventories." + version + ".NMSBridge");
+            NMS_BRIDGE = (NMSBridge) clazz.getConstructors()[0].newInstance();
+        } catch (ClassNotFoundException e) {
+            Bukkit.getLogger().warning("BetterInventories does not support Bukkit Version " + version + " officially. " +
+                "There might be some components that are not usable!");
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * The plugin
      */
@@ -259,7 +285,7 @@ public abstract class GUI {
      * Is called when the player closes the GUI.
      * @param player The player, who closed the GUI
      */
-    public void onClose(Player player) {}
+    protected void onClose(Player player) {}
 
     /**
      * The generic Builder for GUIs

@@ -14,17 +14,20 @@ var artifactID = "BetterInventories"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    implementation(project(":nms"))
+    implementation(project(":v1_20_R1"))
 
+    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.9.0")
+    testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.58.0")
 }
 
 configurations.testImplementation {
