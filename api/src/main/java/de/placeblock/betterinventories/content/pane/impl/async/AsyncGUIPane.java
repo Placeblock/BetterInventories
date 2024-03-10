@@ -40,7 +40,7 @@ public class AsyncGUIPane<T> extends BaseAsyncGUIPane<T, AsyncGUIPane<T>>{
          * @param gui The gui this Pane belongs to
          * @param task The running task
          */
-        protected Builder(GUI gui, CompletableFuture<T> task) {
+        public Builder(GUI gui, CompletableFuture<T> task) {
             super(gui, task);
         }
 

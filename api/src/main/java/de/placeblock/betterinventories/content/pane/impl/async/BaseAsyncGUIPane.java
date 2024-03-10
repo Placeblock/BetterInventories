@@ -47,7 +47,9 @@ public abstract class BaseAsyncGUIPane<T, S extends BaseAsyncGUIPane<T, S>> exte
         super(gui, minSize, maxSize, autoSize);
         this.onComplete = onComplete;
         this.loadingGUIItem = loadingGUIItem;
-        this.setSectionAt(4, this.loadingGUIItem);
+        int x = (this.getWidth()-1)/2;
+        int y = (this.getHeight()-1)/2;
+        this.setSectionAt(new Vector2d(x, y), this.loadingGUIItem);
         task.thenAccept(this::taskComplete);
     }
 
