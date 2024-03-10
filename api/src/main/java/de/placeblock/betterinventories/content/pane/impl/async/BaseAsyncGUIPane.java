@@ -98,6 +98,7 @@ public abstract class BaseAsyncGUIPane<T, S extends BaseAsyncGUIPane<T, S>> exte
          * @param onComplete Callback that is executed when the task completes
          * @return this
          */
+        @SuppressWarnings("unused")
         public B onComplete(Consumer<T> onComplete) {
             this.onComplete = onComplete;
             return this.self();
@@ -108,6 +109,7 @@ public abstract class BaseAsyncGUIPane<T, S extends BaseAsyncGUIPane<T, S>> exte
          * @param loadingGUIItem The item
          * @return this
          */
+        @SuppressWarnings("unused")
         public B loadingItem(GUIItem loadingGUIItem) {
             this.loadingGUIItem = loadingGUIItem;
             return this.self();
