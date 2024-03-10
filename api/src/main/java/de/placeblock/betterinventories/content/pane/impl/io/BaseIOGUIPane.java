@@ -41,7 +41,7 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
 
     @Override
     public boolean onItemAdd(Vector2d position, ItemStack itemStack) {
-        if (!this.input) return false;
+        if (!this.input) return true;
         this.setSectionAt(position, new GUIItem.Builder(this.getGui()).itemStack(itemStack).build());
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
             this.onItemChange(position, itemStack);
@@ -67,7 +67,7 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
     public boolean onItemAmount(Vector2d position, int amount) {
         GUIItem item = this.getItem(position);
         int oldAmount = item.getItemStack().getAmount();
-        if ((oldAmount < amount && !this.input) || ((oldAmount > amount) && !output)) return false;
+        if ((oldAmount < amount && !this.input) || ((oldAmount > amount) && !this.output)) return true;
         item.getItemStack().setAmount(amount);
         Bukkit.getScheduler().runTaskLater(this.getGui().getPlugin(), () -> {
             this.onItemChange(position, item.getItemStack());

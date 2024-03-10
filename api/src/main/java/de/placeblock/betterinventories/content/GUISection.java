@@ -138,14 +138,14 @@ public abstract class GUISection implements Sizeable {
      * Called when an item is added to an empty slot
      * @param position The relative position of the slot
      * @param itemStack The itemstack that was added
-     * @return Whether this action is allowed.
+     * @return Whether this action should be cancelled.
      */
     public abstract boolean onItemAdd(Vector2d position, ItemStack itemStack);
 
     /**
      * Called when an item is removed from an empty slot
      * @param position The relative position of the slot
-     * @return Whether this action is allowed.
+     * @return The removed Item, if any
      */
     public abstract ItemStack onItemRemove(Vector2d position);
 
@@ -153,7 +153,7 @@ public abstract class GUISection implements Sizeable {
      * Called when the amount of an item in a slot changes
      * @param position The relative position of the slot
      * @param amount The new amount of the item
-     * @return Whether this action is allowed.
+     * @return Whether this action should be cancelled.
      */
     public abstract boolean onItemAmount(Vector2d position, int amount);
 

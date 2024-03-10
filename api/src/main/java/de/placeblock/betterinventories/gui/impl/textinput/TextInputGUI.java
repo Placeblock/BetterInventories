@@ -1,8 +1,10 @@
 package de.placeblock.betterinventories.gui.impl.textinput;
 
 import de.placeblock.betterinventories.content.item.GUIButton;
+import de.placeblock.betterinventories.gui.GUI;
 import de.placeblock.betterinventories.gui.PlayerGUI;
 import de.placeblock.betterinventories.gui.impl.BaseAnvilGUI;
+import de.placeblock.betterinventories.nms.TextInputPacketListener;
 import de.placeblock.betterinventories.util.ItemBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -92,8 +94,8 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
         this.setInputItem();
         this.setResultButton();
         this.update();
-        this.packetListener = new TextInputPacketListener(this);
-        this.packetListener.inject();
+        this.packetListener = GUI.NMS_BRIDGE.getTextInputPacketListener(this.player, this::updateText);
+        this.packetListener.register();
     }
 
     /**
@@ -141,6 +143,7 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
     @Override
     public void onClose(Player player) {
         this.finish(true);
+        super.onClose(player);
     }
 
     /**
@@ -152,7 +155,7 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
             this.closed = true;
             if ((this.onFinish == null || (this.onFinish.accept(this.currentText, abort)) &&
                 this.onFinish(this.currentText, abort)) || abort) {
-                this.packetListener.uninject();
+                this.packetListener.unregister();
                 this.player.closeInventory();
             }
         }
