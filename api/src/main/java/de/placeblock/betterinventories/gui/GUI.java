@@ -131,7 +131,7 @@ public abstract class GUI {
      */
     @SuppressWarnings("UnusedReturnValue")
     public GUIView showPlayer(Player player) {
-        if (this.views.size() == 0) {
+        if (this.views.isEmpty()) {
             PluginManager pluginManager = this.plugin.getServer().getPluginManager();
             pluginManager.registerEvents(this.guiListener, this.plugin);
             pluginManager.registerEvents(this.itemListener, this.plugin);
@@ -275,7 +275,7 @@ public abstract class GUI {
         }
         this.views.remove(view);
         this.onClose(player);
-        if (this.views.size() == 0) {
+        if (this.views.isEmpty()) {
             HandlerList.unregisterAll(this.guiListener);
             HandlerList.unregisterAll(this.itemListener);
         }
