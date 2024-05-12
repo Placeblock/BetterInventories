@@ -268,7 +268,7 @@ public abstract class GUI {
                 GUISection section = searchData.getSection();
                 if (section == null) continue;
                 Vector2d pos = searchData.getRelativePos();
-                ItemStack removedItemStack = section.onItemRemove(pos);
+                ItemStack removedItemStack = section.onItemRemoveTroughInventoryClose(pos);
                 if (removedItemStack == null) continue;
                 player.getInventory().addItem(removedItemStack);
             }

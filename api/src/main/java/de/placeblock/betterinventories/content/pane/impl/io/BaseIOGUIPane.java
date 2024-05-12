@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * GUIPane which allows Items to be inserted and taken out
@@ -18,6 +19,7 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
 
     private final boolean input;
     private final boolean output;
+    private final boolean removeItemsOnInventoryClose;
     private final IOConsumer onItemChange;
 
     /**
@@ -29,13 +31,15 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
      *                 If true it will set the size to the bounding box of all children.
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
+     * @param removeItemsOnInventoryClose Whether to give the items back to the player it the player closes the inventory
      * @param onItemChange Executed when an item in the pane changes
      */
     protected BaseIOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize,
-                            boolean input, boolean output, IOConsumer onItemChange) {
+                            boolean input, boolean output, boolean removeItemsOnInventoryClose, IOConsumer onItemChange) {
         super(gui, minSize, maxSize, autoSize);
         this.input = input;
         this.output = output;
+        this.removeItemsOnInventoryClose = removeItemsOnInventoryClose;
         this.onItemChange = onItemChange;
     }
 
@@ -49,9 +53,21 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
         }, 1);
         return false;
     }
+
     @Override
     public ItemStack onItemRemove(Vector2d position) {
         if (!this.output) return null;
+        return removeItem(position);
+    }
+
+    @Override
+    public ItemStack onItemRemoveTroughInventoryClose(Vector2d position) {
+        if (!this.removeItemsOnInventoryClose) return null;
+        return removeItem(position);
+    }
+
+    @Nullable
+    private ItemStack removeItem(Vector2d position) {
         GUIItem item = this.getItem(position);
         boolean removed = this.removeSection(item);
         if (removed) {
@@ -63,6 +79,7 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
         }
         return null;
     }
+
     @Override
     public boolean onItemAmount(Vector2d position, int amount) {
         GUIItem item = this.getItem(position);
@@ -125,6 +142,7 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
     public static abstract class Builder<B extends Builder<B, P>, P extends BaseIOGUIPane<P>> extends AbstractBuilder<B, P> {
         private boolean input = true;
         private boolean output = true;
+        private boolean removeItemsOnInventoryClose = true;
         private IOConsumer onChange = (p, i) -> {};
 
         /**
@@ -152,6 +170,16 @@ public class BaseIOGUIPane<S extends BaseIOGUIPane<S>> extends BaseSimpleItemGUI
          */
         public B output(boolean output) {
             this.output = output;
+            return self();
+        }
+
+        /**
+         * Sets the removeItemOnInventoryClose attribute
+         * @param remove Whether the player receives items of this IOPane on inventory close
+         * @return Itself
+         */
+        public B removeItemsOnInventoryClose(boolean remove) {
+            this.removeItemsOnInventoryClose = remove;
             return self();
         }
 

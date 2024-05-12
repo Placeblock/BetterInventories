@@ -137,6 +137,9 @@ public abstract class GUIPane extends GUISection {
         return true;
     }
 
+    @Override
+    public ItemStack onItemRemoveTroughInventoryClose(Vector2d position) {return null;}
+
     /**
      * Called when an item is provided by an inventory MOVE_TO_OTHER_INVENTORY event
      * @param itemStack The provided item. Method reduces the amount of the item by the number that got accepted.

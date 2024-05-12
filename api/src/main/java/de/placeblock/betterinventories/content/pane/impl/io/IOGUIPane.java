@@ -18,10 +18,11 @@ public class IOGUIPane extends BaseIOGUIPane<IOGUIPane> {
      *                 If true it will set the size to the bounding box of all children.
      * @param input    Whether it should be allowed to input items into the IO-Pane.
      * @param output   Whether it should be allowed to remove items from the IO-Pane.
+     * @param removeItemsOnInventoryClose Whether to give the items back to the player it the player closes the inventory
      * @param onItemChange Executed when an item in the pane changes
      */
-    protected IOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output, IOConsumer onItemChange) {
-        super(gui, minSize, maxSize, autoSize, input, output, onItemChange);
+    protected IOGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize, boolean input, boolean output, boolean removeItemsOnInventoryClose, IOConsumer onItemChange) {
+        super(gui, minSize, maxSize, autoSize, input, output, removeItemsOnInventoryClose, onItemChange);
     }
 
     /**
@@ -40,7 +41,7 @@ public class IOGUIPane extends BaseIOGUIPane<IOGUIPane> {
         @Override
         public IOGUIPane build() {
             return new IOGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(),
-                    this.isAutoSize(), this.isInput(), this.isOutput(), this.getOnChange());
+                    this.isAutoSize(), this.isInput(), this.isOutput(), this.isRemoveItemsOnInventoryClose(), this.getOnChange());
         }
 
         @Override

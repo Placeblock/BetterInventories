@@ -24,10 +24,11 @@ public class SynchedGUIPane extends BaseIOGUIPane<SynchedGUIPane> {
      * @param autoSize Whether to autoSize
      * @param input Whether it should be allowed to input items into the IO-Pane.
      * @param output Whether it should be allowed to remove items from the IO-Pane.
+     * @param removeItemsOnInventoryClose Whether to give the items back to the player it the player closes the inventory
      */
     protected SynchedGUIPane(GUI gui, Vector2d minSize, Vector2d maxSize, boolean autoSize,
-                          boolean input, boolean output, SimpleItemGUIPane targetPane) {
-        super(gui, minSize, maxSize, autoSize, input, output, null);
+                          boolean input, boolean output, boolean removeItemsOnInventoryClose, SimpleItemGUIPane targetPane) {
+        super(gui, minSize, maxSize, autoSize, input, output, removeItemsOnInventoryClose,  null);
         this.targetPane = targetPane;
     }
 
@@ -67,7 +68,7 @@ public class SynchedGUIPane extends BaseIOGUIPane<SynchedGUIPane> {
                 throw new IllegalStateException("targetPane cannot be null");
             }
             return new SynchedGUIPane(this.getGui(), this.getMinSize(), this.getMaxSize(),
-                    this.isAutoSize(), this.isInput(), this.isOutput(), this.targetPane);
+                    this.isAutoSize(), this.isInput(), this.isOutput(), this.isRemoveItemsOnInventoryClose(), this.targetPane);
         }
 
         @Override

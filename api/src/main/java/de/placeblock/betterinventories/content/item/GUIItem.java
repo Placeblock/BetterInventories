@@ -73,6 +73,11 @@ public class GUIItem extends GUISection {
     }
 
     @Override
+    public ItemStack onItemRemoveTroughInventoryClose(Vector2d position) {
+        return null;
+    }
+
+    @Override
     public boolean onItemAmount(Vector2d position, int amount) {
         return true;
     }

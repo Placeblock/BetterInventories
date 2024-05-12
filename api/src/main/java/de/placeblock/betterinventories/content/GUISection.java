@@ -150,6 +150,13 @@ public abstract class GUISection implements Sizeable {
     public abstract ItemStack onItemRemove(Vector2d position);
 
     /**
+     * Called when the inventory is closed and the item could be added to the players inventory
+     * @param position The relative position of the slot
+     * @return The removed Item, if any
+     */
+    public abstract ItemStack onItemRemoveTroughInventoryClose(Vector2d position);
+
+    /**
      * Called when the amount of an item in a slot changes
      * @param position The relative position of the slot
      * @param amount The new amount of the item
