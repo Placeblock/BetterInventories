@@ -88,9 +88,21 @@ public abstract class BaseAnvilGUI extends GUI {
     @Override
     public void searchSection(SearchData searchData) {
         switch (searchData.getSlot()) {
-            case 0 -> this.inputItem.search(searchData);
-            case 1 -> this.additionalItem.search(searchData);
-            case 2 -> this.resultItem.search(searchData);
+            case 0 -> {
+                if (this.inputItem != null) {
+                    this.inputItem.search(searchData);
+                }
+            }
+            case 1 -> {
+                if (this.additionalItem != null) {
+                    this.additionalItem.search(searchData);
+                }
+            }
+            case 2 -> {
+                if (this.resultItem != null) {
+                    this.resultItem.search(searchData);
+                }
+            }
         }
     }
 

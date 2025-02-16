@@ -3,7 +3,7 @@ plugins {
     id("io.papermc.paperweight.userdev")
 }
 
-group = "de.codelix"
+group = "de.placeblock"
 
 java {
     // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
@@ -15,9 +15,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly(project(":api"))
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
-
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly(project(":nms"))
     compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
+
+    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
 }

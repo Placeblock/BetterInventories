@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.codelix"
-version = "2.2.0"
+version = "2.2.1"
 
 var artifactID = "BetterInventories"
 
@@ -20,25 +20,26 @@ repositories {
 dependencies {
     implementation(project(":nms"))
     implementation(project(":v1_20_R1"))
+    implementation(project(":craftbukkit"))
 
-    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.20:3.58.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation("com.github.seeseemelk:MockBukkit-v1.21:3.133.2")
 }
 
-configurations.testImplementation {
-    exclude(group = "io.papermc.paper", module = "paper-server")
+paperweight {
+    addServerDependencyTo = configurations.named(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME).map { setOf(it) }
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
-    // Configure the java toolchain. This allows gradle to auto-provision JDK 17 on systems that only have JDK 8 installed for example.
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 signing {
@@ -47,6 +48,11 @@ signing {
 
 tasks {
     jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        dependsOn(configurations.runtimeClasspath)
+        from({
+            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        })
         setFinalizedBy(listOf(reobfJar))
     }
 
@@ -56,7 +62,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
-        options.release.set(17)
+        options.release.set(21)
     }
 
     processResources {

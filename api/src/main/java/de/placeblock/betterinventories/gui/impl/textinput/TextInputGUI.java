@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -63,9 +64,6 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
      */
     private String currentText;
 
-    /**
-     * Whether this inventory is closed (Needed for internal stuff)
-     */
     private boolean closed = false;
 
     /**
@@ -151,13 +149,17 @@ public class TextInputGUI extends BaseAnvilGUI implements PlayerGUI<Player> {
      * @param abort Whether the player aborted, e.g. by closing the Inventory
      */
     private void finish(boolean abort) {
-        if (!this.closed) {
-            this.closed = true;
-            if ((this.onFinish == null || (this.onFinish.accept(this.currentText, abort)) &&
+        if ((this.onFinish == null || (this.onFinish.accept(this.currentText, abort)) &&
                 this.onFinish(this.currentText, abort)) || abort) {
-                this.packetListener.unregister();
-                this.player.closeInventory();
-            }
+            if (this.closed) return;
+            this.closed = true;
+            this.packetListener.unregister();
+            this.player.closeInventory();
+        } else {
+            Bukkit.getScheduler().runTaskLater(this.getPlugin(), () -> {
+                this.setInputItem();
+                this.update();
+            }, 1L);
         }
     }
 

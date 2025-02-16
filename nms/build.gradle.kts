@@ -10,5 +10,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.21.4-R0.1-SNAPSHOT")
 }

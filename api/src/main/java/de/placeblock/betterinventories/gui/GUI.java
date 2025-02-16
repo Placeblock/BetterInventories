@@ -45,7 +45,7 @@ public abstract class GUI {
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
         // Testing
         if ("mockbukkit".equals(version)) {
-            version = "v1_20_R1";
+            version = "de/placeblock/betterinventories/craftbukkit";
         }
         try {
             Class<?> clazz = Class.forName("de.placeblock.betterinventories." + version + ".NMSBridge");

@@ -167,7 +167,7 @@ public class ItemBuilder {
      * @return this
      */
     public ItemBuilder attribute(Attribute attribute, double amount, AttributeModifier.Operation operation) {
-        this.attributes.put(attribute, new AttributeModifier(attribute.getKey().getNamespace(), amount, operation));
+        this.attributes.put(attribute, new AttributeModifier(attribute.getKey(), amount, operation));
         return this;
     }
 

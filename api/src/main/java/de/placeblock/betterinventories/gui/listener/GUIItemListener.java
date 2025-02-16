@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 
 /**
  * Listener for GUIs that handles item interactions
@@ -159,7 +160,11 @@ public record GUIItemListener(GUI gui) implements Listener {
         }
         Vector2d pos = searchData.getRelativePos();
         ClickData clickData = new ClickData(player, pos, event.getAction(), event);
-        searchData.getSection().onItemClick(clickData);
+        try {
+            searchData.getSection().onItemClick(clickData);
+        } catch (Exception e) {
+            this.gui.getPlugin().getLogger().log(Level.SEVERE, "Catched Error in GUI Click to prevent Bugs", e);
+        }
     }
 
     /**

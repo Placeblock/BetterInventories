@@ -8,5 +8,6 @@ pluginManagement {
 rootProject.name = "BetterInventories"
 include("api")
 include("examples")
-include("v1_20_R1")
 include("nms")
+include("v1_20_R1")
+include("craftbukkit")
