@@ -36,7 +36,7 @@ public class PaginatorControlsPane extends BasePaginatorControlsPane<PaginatorCo
          * @param gui       The GUI this Pane belongs to
          * @param paginator The paginator this Pane belongs to
          */
-        protected Builder(GUI gui, PaginatorGUIPane paginator) {
+        public Builder(GUI gui, PaginatorGUIPane paginator) {
             super(gui, paginator);
         }
 
