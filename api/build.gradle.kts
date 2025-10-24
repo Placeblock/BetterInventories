@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.codelix"
-version = "2.2.2"
+version = "2.2.3"
 
 var artifactID = "BetterInventories"
 
@@ -22,13 +22,10 @@ dependencies {
     implementation(project(":v1_20_R1"))
     implementation(project(":craftbukkit"))
 
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.9-R0.1-SNAPSHOT")
 
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
-
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.21:3.133.2")
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
 paperweight {
@@ -39,7 +36,7 @@ java {
     withJavadocJar()
     withSourcesJar()
     // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(24))
 }
 
 signing {
@@ -62,7 +59,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
-        options.release.set(21)
+        options.release.set(24)
     }
 
     processResources {
